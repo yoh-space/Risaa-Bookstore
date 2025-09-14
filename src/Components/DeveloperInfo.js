@@ -22,7 +22,7 @@ export default function DeveloperInfo({ contacts, services, onContactPress }) {
       </View>
       {/* Social Media Section */}
       <View style={{ width: '100%', marginBottom: 20, backgroundColor: 'white', borderRadius: 12, padding: 15, shadowColor: '#6C63FF', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 6, elevation: 3 }}>
-        <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 12, color: '#6C63FF', paddingLeft: 5 }}>Connect With Me</Text>
+        <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 12, color: '#6C63FF', paddingLeft: 5 }}>Connect With Us</Text>
         {contacts.map((contact) => (
           <TouchableOpacity
             key={contact.label}
@@ -42,7 +42,7 @@ export default function DeveloperInfo({ contacts, services, onContactPress }) {
       </View>
       {/* Services Section */}
       <View style={{ width: '100%', backgroundColor: 'white', borderRadius: 12, padding: 15, shadowColor: '#6C63FF', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 6, elevation: 3 }}>
-        <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 12, color: '#6C63FF', paddingLeft: 5 }}>My Services</Text>
+        <Text style={{ fontSize: 16, fontWeight: '700', marginBottom: 12, color: '#6C63FF', paddingLeft: 5 }}>Our Services</Text>
         {services.map((service, idx) => (
           <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, paddingVertical: 8, paddingHorizontal: 5, borderRadius: 6, backgroundColor: idx % 2 === 0 ? 'rgba(108, 99, 255, 0.03)' : 'transparent' }}>
             <View style={{ width: 24, height: 24, borderRadius: 6, backgroundColor: 'rgba(108, 99, 255, 0.1)', justifyContent: 'center', alignItems: 'center', marginRight: 12 }}>

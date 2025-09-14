@@ -30,28 +30,28 @@ export default function Home({ navigation }) {
       id: 1,
       title: 'Siitolii',
       description: 'A collection of traditional Oromo folktales and stories.',
-      image: require('../../assets/icon.png'),
+      image: require('../../assets/images/siitolii.jpg'),
       author: 'Kadiir Abdulaxif',
     },
     {
       id: 2,
-      title: 'Seenaa Oromoo',
+      title: 'Dhaloota Sodaa Cabse',
       description: 'An in-depth look at the history and culture of the Oromo people.',
-      image: require('../../assets/icon.png'),
-      author: 'Asafa Jalata',
+      image: require('../../assets/images/dhaloota.jpg'),
+      author: 'Kadiir Abdulaxif',
     },
     {
       id: 3,
-      title: 'Afaan Oromoo',
+      title: 'Wayyoma',
       description: 'A linguistic guide and cultural exploration of the Oromo language.',
-      image: require('../../assets/icon.png'),
+      image: require('../../assets/images/worroma.jpg'),
       author: 'Kadiir Abdulaxif',
     },
     {
       id: 4,
-      title: 'Gadaa System',
+      title: 'Goonni Gosa Dhaala',
       description: 'The social, political, and cultural system of the Oromo people.',
-      image: require('../../assets/icon.png'),
+      image: require('../../assets/images/goomi.jpg'),
       author: 'Asafa Jalata',
     },
   ];
@@ -178,12 +178,12 @@ export default function Home({ navigation }) {
                 loop
                 style={styles.headerAnimation}
               />
-              <Text style={styles.title}>Risaa BookStore</Text>
+              <Text style={styles.title}>📚 Risaa Book Store</Text>
             </View>
 
-            <Text style={[styles.title, { fontSize: 20, marginBottom: 10 }]}>
+            {/* <Text style={[styles.title, { fontSize: 20, marginBottom: 10 }]}>
               Risaa Collections
-            </Text>
+            </Text> */}
 
             <FlatList
               data={RisaaCollections}
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eef3f9',
   },
   collectionTitle: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: '700',
     color: '#ffffffff',
     marginBottom: 4,

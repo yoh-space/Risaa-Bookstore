@@ -17,6 +17,7 @@ import DeveloperInfo from '../Components/DeveloperInfo';
 import ShareApp from '../Components/ShareApp';
 import RateApp from '../Components/RateApp';
 import FooterInfo from '../Components/FooterInfo';
+import LottieView from 'lottie-react-native';
 // Developer info from DeveloperScreen.jsx
 const DEVELOPER_CONTACTS = [
   {
@@ -98,9 +99,9 @@ export default function About({ navigation }) {
         title: 'Author',
         content: (
           <AuthorInfo
-            onEmailPress={() => Linking.openURL("mailto:Ebroseta50@gmail.com?subject=Regarding Handhuuraa Oromo Arsi Book")}
-            onPhonePress={() => Linking.openURL("tel:+16515002991")}
-            onWhatsAppPress={() => Linking.openURL("https://wa.me/+16515002991")}
+            onEmailPress={() => Linking.openURL("mailto:kadiirabdullaxif@gmail.com?subject=Regardin to Risaa Bookstore App")}
+            onPhonePress={() => Linking.openURL("tel:+251928753295")}
+            onWhatsAppPress={() => Linking.openURL("https://wa.me/+251928753295")}
           />
         )
       })
