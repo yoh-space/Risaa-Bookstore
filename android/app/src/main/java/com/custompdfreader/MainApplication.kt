@@ -1,4 +1,4 @@
-package com.custompdfreader
+package com.rissa.bookstore
 
 import android.app.Application
 import android.content.res.Configuration

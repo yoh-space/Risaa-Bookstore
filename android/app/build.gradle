@@ -86,13 +86,13 @@ android {
     buildToolsVersion "34.0.0" // Use latest build tools
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.custompdfreader'
+    namespace 'com.rissa.bookstore' // replace with your app's package name
     defaultConfig {
-        applicationId 'com.custompdfreader'
+        applicationId 'com.rissa.bookstore'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "1.1.12"
+        versionCode 1
+        versionName "1.0.0"
     }
     signingConfigs {
         // debug {

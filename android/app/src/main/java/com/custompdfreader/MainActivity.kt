@@ -1,4 +1,4 @@
-package com.custompdfreader
+package com.rissa.bookstore
 
 import android.os.Build
 import android.os.Bundle
