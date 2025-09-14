@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Handhuuraa Oromoo Arsii",
+    "slug": "custompdfreader",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.custompdfreader"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-7604915619325589~5312563088"
+        }
+      ],
+      [
+        "react-native-edge-to-edge",
+        {
+          "android": {
+            "parentTheme": "Default",
+            "enforceNavigationBarContrast": false
+          }
+        }
+      ]
+    ],
+    "runtimeVersion": "1.0.1",
+    "extra": {
+      "eas": {
+        "projectId": "f2ab7261-4c0f-49f9-859d-bbfd578ed0a0"
+      }
+    },
+    "owner": "yohdam"
+  }
+}
