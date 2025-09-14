@@ -235,7 +235,7 @@ const Quotes = ({ onBack }) => {
       <SystemBars style='light'/>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <Icons name="arrow-left" size={30} color="darkblue" />
+          <Icons name="arrow-left" size={30} color="white" />
         </TouchableOpacity>
         <Text style={styles.header}> Quotes from Book</Text>
       </View>
@@ -270,7 +270,7 @@ const Quotes = ({ onBack }) => {
             delayLongPress={400}
           >
             <View style={styles.quoteContainer}>
-              <Icons name="format-quote-close" size={20} color="black" />
+              <Icons name="format-quote-close" size={20} color="white" />
               <Text style={styles.quoteText}>{quote.text}</Text>
             </View>
           </TouchableOpacity>
@@ -341,13 +341,13 @@ const Quotes = ({ onBack }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "#512904ff",
     paddingHorizontal: 15,
   },
   floatingButtonText:{
     fontSize: 12,
     fontWeight: 300,
-    color: 'black',
+    color: 'white',
   },
   headerContainer: {
     flexDirection: "row",
@@ -361,19 +361,19 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "darkblue",
+    color: "white",
   },
   quoteList: {
     flex: 1,
     paddingBottom: 20,
-    backgroundColor: "mintcream",
+    backgroundColor: "#40250fff",
   },
   quoteContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
     padding: 15,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#605e5dff",
     borderRadius: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   },
   quoteText: {
     fontSize: 16,
-    color: "black",
+    color: "white",
     marginLeft: 10,
     flex: 1,
   },
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "white",
+    backgroundColor: "#512904ff",
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
-    color: "darkred",
+    color: "white",
   },
   modalSource: {
     fontSize: 14,

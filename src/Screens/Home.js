@@ -4,35 +4,66 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Pressable,
   TouchableOpacity,
   Dimensions,
   BackHandler,
   ToastAndroid,
   Modal,
-  StatusBar
+  StatusBar,
+  Image,
+  FlatList,
 } from 'react-native';
 import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from "react-native-edge-to-edge";
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
 export default function Home({ navigation }) {
   const [backPressCount, setBackPressCount] = useState(0);
   const [exitModalVisible, setExitModalVisible] = useState(false);
-  const [ isStatusBarHidden, setIsStatusBarHidden ] = useState(false);
+  const [isStatusBarHidden, setIsStatusBarHidden] = useState(false);
 
+  const RisaaCollections = [
+    {
+      id: 1,
+      title: 'Siitolii',
+      description: 'A collection of traditional Oromo folktales and stories.',
+      image: require('../../assets/icon.png'),
+      author: 'Kadiir Abdulaxif',
+    },
+    {
+      id: 2,
+      title: 'Seenaa Oromoo',
+      description: 'An in-depth look at the history and culture of the Oromo people.',
+      image: require('../../assets/icon.png'),
+      author: 'Asafa Jalata',
+    },
+    {
+      id: 3,
+      title: 'Afaan Oromoo',
+      description: 'A linguistic guide and cultural exploration of the Oromo language.',
+      image: require('../../assets/icon.png'),
+      author: 'Kadiir Abdulaxif',
+    },
+    {
+      id: 4,
+      title: 'Gadaa System',
+      description: 'The social, political, and cultural system of the Oromo people.',
+      image: require('../../assets/icon.png'),
+      author: 'Asafa Jalata',
+    },
+  ];
+
+  // Back press handler
   useEffect(() => {
     let backPressTimer;
     const onBackPress = () => {
       if (exitModalVisible) return true;
       if (backPressCount === 0) {
         setBackPressCount(1);
-        ToastAndroid.show('please double click to exit the app', ToastAndroid.SHORT);
+        ToastAndroid.show('Double press to exit', ToastAndroid.SHORT);
         backPressTimer = setTimeout(() => setBackPressCount(0), 2000);
         return true;
       } else {
@@ -46,16 +77,17 @@ export default function Home({ navigation }) {
       clearTimeout(backPressTimer);
     };
   }, [backPressCount, exitModalVisible]);
-  // Lock orientation to portrait for Home screen
+
+  // Orientation lock
   useEffect(() => {
     const Orientation = require('react-native-orientation-locker').default;
     Orientation.lockToPortrait();
     return () => {
       Orientation.lockToPortrait();
     };
-  });
-  const [expanded, setExpanded] = React.useState(false);
+  }, []);
 
+  // Interstitial Ads
   const adUnitId = 'ca-app-pub-7604915619325589/3947033537';
   const interstitial = useRef(
     InterstitialAd.createForAdRequest(adUnitId, {
@@ -63,21 +95,18 @@ export default function Home({ navigation }) {
     })
   );
   const [interstitialLoaded, setInterstitialLoaded] = useState(false);
+  const openBookClickedRef = useRef(false);
 
   useEffect(() => {
     const unsubscribeLoaded = interstitial.current.addAdEventListener(
       AdEventType.LOADED,
-      () => {
-        setInterstitialLoaded(true);
-        // console.log('Interstitial ad loaded:', true);
-      }
+      () => setInterstitialLoaded(true)
     );
     const unsubscribeClosed = interstitial.current.addAdEventListener(
       AdEventType.CLOSED,
       () => {
         setInterstitialLoaded(false);
         interstitial.current.load();
-        // Only navigate to Read if user clicked Open Book
         if (openBookClickedRef.current) {
           navigation.navigate('Read');
           openBookClickedRef.current = false;
@@ -90,13 +119,10 @@ export default function Home({ navigation }) {
       unsubscribeClosed();
     };
   }, []);
-  
-  // Track if user clicked Open Book
-  const openBookClickedRef = useRef(false);
+
   const handleOpenBook = () => {
     openBookClickedRef.current = true;
     try {
-      // console.log('Interstitial ad loaded state:', interstitialLoaded);
       if (interstitialLoaded && interstitial.current) {
         interstitial.current.show();
       } else {
@@ -105,159 +131,161 @@ export default function Home({ navigation }) {
         openBookClickedRef.current = false;
       }
     } catch (error) {
-      // console.log('Error in handleOpenBook:', error);
       openBookClickedRef.current = false;
     }
   };
 
-  const shortDescription = (
-    <Text style={styles.description}>
-      Handhuuraa Oromoo Arsii is a unique and comprehensive resource in Afan Oromo that delves into the rich cultural heritage, values, and traditions of the Arsi Oromo people.
-    </Text>
+  // Render book card
+  const renderCollectionItem = ({ item }) => (
+    <View style={styles.collectionCard}>
+      <Image source={item.image} style={styles.collectionImage} />
+      <Text style={styles.collectionTitle}>{item.title}</Text>
+      {/* <Text style={styles.collectionDescription}>{item.description}</Text> */}
+      <Text style={styles.collectionAuthor}>By: {item.author}</Text>
+      <TouchableOpacity
+        style={styles.readMoreButton}
+        onPress={handleOpenBook}
+      >
+        <Text style={styles.readMoreButtonText}>📖 Read Now</Text>
+      </TouchableOpacity>
+    </View>
   );
-  
-  const fullDescription = (
-    <>
-      <Text style={styles.description}>
-        Welcome to <Text style={styles.bold}>Handhuurraa Oromo Arsi</Text> a unique and comprehensive resource in Afan Oromo that delves into the rich cultural heritage, values, and traditions of the Arsi Oromo people.
-        {"\n\n"}This book brings together essential topics such as:
-      </Text>
-      <View style={styles.bulletList}>
-        <View style={styles.bulletItem}>
-          <Icon name="history" size={18} color="#4a6fa5" style={styles.bulletIcon} />
-          <Text style={styles.bullet}>History & Indigenous Knowledge</Text>
-        </View>
-        <View style={styles.bulletItem}>
-          <Icon name="people" size={18} color="#4a6fa5" style={styles.bulletIcon} />
-          <Text style={styles.bullet}>Folklore & Cultural Practices</Text>
-        </View>
-        <View style={styles.bulletItem}>
-          <Icon name="public" size={18} color="#4a6fa5" style={styles.bulletIcon} />
-          <Text style={styles.bullet}>Religious Beliefs & Gadaa System</Text>
-        </View>
-        <View style={styles.bulletItem}>
-          <Icon name="shield" size={18} color="#4a6fa5" style={styles.bulletIcon} />
-          <Text style={styles.bullet}>Resistance, Resilience & Identity</Text>
-        </View>
-      </View>
-      <Text style={styles.description}>
-        Whether you're here to explore the treasures of Oromo wisdom or understand how heritage shapes identity, this book is your guide to celebrating the vibrant Arsi Oromo legacy.{"\n\n"}Enjoy Your Reading! 🌱
-      </Text>
-    </>
-  );
-  // Remove auto-show on every render
 
   return (
-    <View style={{ flex: 1}}>
-    <LinearGradient
-      colors={['#1a5f9c', '#2284c9', '#2aa8f5']}
-      style={styles.background}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-    >
-      <SystemBars style="light" />    
-      {/* Background shapes */}
-      <View style={styles.topShape} />
-      <View style={styles.bottomShape} />
-      <StatusBar 
-          translucent 
-                backgroundColor="#1a5f9c" 
-                barStyle="light-content" 
-                hidden={isStatusBarHidden} 
-              />  
-      
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.contentWrapper}>
-          <View style={styles.header}>
-            <LottieView
-              source={require('../../assets/animations/Book.json')}
-              autoPlay
-              loop
-              style={styles.headerAnimation}
-            />
-            <Text style={styles.title}>Handhuuraa Oromoo Arsii</Text>
-            <Text style={styles.subtitle}>Discover the Cultural Heritage</Text>
-          </View>
+    <View style={{ flex: 1 }}>
+      <LinearGradient
+        colors={['#512904ff', '#211c30ff', '#b5babeff']}
+        style={styles.background}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+      >
+        <SystemBars style="light" />
+        <View style={styles.topShape} />
+        <View style={styles.bottomShape} />
 
-          <View style={styles.card}>
-            {expanded ? fullDescription : shortDescription}
-            <TouchableOpacity 
-              onPress={() => setExpanded(!expanded)} 
-              style={styles.seeMoreButton}
-            >
-              <Text style={styles.seeMoreText}>
-                {expanded ? 'Show Less' : 'Read More'} 
-                <Icon name={expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} size={20} />
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          hidden={isStatusBarHidden}
+        />
+
+        <View style={styles.container}>
+          <View style={styles.contentWrapper}>
+            <View style={styles.header}>
+              <LottieView
+                source={require('../../assets/animations/Book.json')}
+                autoPlay
+                loop
+                style={styles.headerAnimation}
+              />
+              <Text style={styles.title}>Risaa BookStore</Text>
+            </View>
+
+            <Text style={[styles.title, { fontSize: 20, marginBottom: 10 }]}>
+              Risaa Collections
+            </Text>
+
+            <FlatList
+              data={RisaaCollections}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderCollectionItem}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginBottom: 10,
+              }}
+              contentContainerStyle={{ paddingVertical: 10 }}
+            />
+          </View>
+        </View>
+
+        {/* Exit Modal */}
+        <Modal
+          visible={exitModalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setExitModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalBox}>
+              <Text style={styles.modalText}>
+                Are you sure you want to exit?
               </Text>
-            </TouchableOpacity>
+              <View style={styles.modalActions}>
+                <TouchableOpacity
+                  onPress={() => BackHandler.exitApp()}
+                  style={styles.modalButtonPrimary}
+                >
+                  <Text style={styles.modalButtonTextPrimary}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setExitModalVisible(false)}
+                  style={styles.modalButtonSecondary}
+                >
+                  <Text style={styles.modalButtonTextSecondary}>No</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-
-          <View style={styles.animationContainer}>
-            <LottieView
-              source={require('../../assets/animations/Readingbook.json')}
-              autoPlay
-              loop
-              style={styles.mainAnimation}
-            />
-          </View>
-
-          <Pressable
-            onPress={handleOpenBook}
-            android_ripple={{ color: 'rgba(255,255,255,0.3)' }}
-            style={({ pressed }) => [
-              styles.openBookButton,
-              pressed && styles.buttonPressed,
-            ]}
-          >
-            <LinearGradient
-              colors={['#ffffff', '#e6f2ff']}
-              style={styles.buttonGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-            >
-              <Icon name="menu-book" size={24} color="#1a5f9c" style={styles.buttonIcon} />
-              <Text style={styles.openBookText}>Open The Book</Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
-      </ScrollView>
-    {/* Exit Confirmation Modal */}
-    <Modal
-      visible={exitModalVisible}
-      transparent
-      animationType="fade"
-      onRequestClose={() => setExitModalVisible(false)}
-    >
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ backgroundColor: '#fff', borderRadius: 16, padding: 30, minWidth: 260, alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 15 }}>Are you sure to exit the app?</Text>
-          <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <TouchableOpacity
-              onPress={() => BackHandler.exitApp()}
-              style={{ backgroundColor: '#1a5f9c', paddingHorizontal: 24, paddingVertical: 10, borderRadius: 8, marginRight: 10 }}
-            >
-              <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>Yes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setExitModalVisible(false)}
-              style={{ backgroundColor: '#e0e0e0', paddingHorizontal: 24, paddingVertical: 10, borderRadius: 8 }}
-            >
-              <Text style={{ color: '#333', fontWeight: '600', fontSize: 16 }}>No</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </Modal>
-    </LinearGradient>      
+        </Modal>
+      </LinearGradient>
     </View>
-
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
+  collectionCard: {
+    marginHorizontal: 5,
+    backgroundColor: '#512904ff',
+    borderRadius: 16,
     flex: 1,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
+  collectionImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 12,
+    marginBottom: 8,
+    resizeMode: 'contain',
+    backgroundColor: '#eef3f9',
+  },
+  collectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#ffffffff',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  collectionDescription: {
+    fontSize: 12,
+    color: '#aab6c5ff',
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  collectionAuthor: {
+    fontSize: 11,
+    color: '#bab0b0ff',
+    marginBottom: 8,
+    fontStyle: 'italic',
+  },
+  readMoreButton: {
+    backgroundColor: '#1a5f9c',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+  },
+  readMoreButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  background: { flex: 1 },
   topShape: {
     position: 'absolute',
     top: -height * 0.15,
@@ -276,138 +304,44 @@ const styles = StyleSheet.create({
     borderRadius: width * 0.35,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
-  container: {
-    flexGrow: 1,
-    paddingBottom: 20,
-  },
-  contentWrapper: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-    minHeight: '100%',
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  headerAnimation: {
-    width: 70,
-    height: 70,
-    marginBottom: 10,
-  },
+  container: { flexGrow: 1, paddingBottom: 20 },
+  contentWrapper: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
+  header: { alignItems: 'center', marginBottom: 20, marginTop: 10 },
+  headerAnimation: { width: 70, height: 70, marginBottom: 10 },
   title: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 5,
     textAlign: 'center',
-    fontFamily: 'sans-serif-condensed',
-    textShadowColor: 'rgba(0,0,0,0.2)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
   },
-  subtitle: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.8)',
-    fontWeight: '500',
-    marginBottom: 15,
-  },
-  card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: 22,
-    borderRadius: 18,
-    marginBottom: 25,
-    width: '100%',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 15,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 8,
-  },
-  description: {
-    fontSize: 16,
-    color: '#34495e',
-    lineHeight: 24,
-    marginBottom: 12,
-  },
-  bold: {
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  bulletList: {
-    marginBottom: 15,
-    marginLeft: 5,
-  },
-  bulletItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  bulletIcon: {
-    marginRight: 10,
-  },
-  bullet: {
-    fontSize: 15,
-    color: '#2c3e50',
-    lineHeight: 22,
-  },
-  seeMoreButton: {
-    alignSelf: 'flex-end',
-    marginTop: 5,
-  },
-  seeMoreText: {
-    color: '#1a5f9c',
-    fontWeight: '600',
-    fontSize: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  animationContainer: {
-    width: width * 0.55,
-    height: width * 0.55,
-    alignSelf: 'center',
-  },
-  mainAnimation: {
-    width: '100%',
-    height: '100%',
-  },
-  openBookButton: {
-    borderRadius: 30,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5,
-    marginHorizontal: 10,
-  },
-  buttonGradient: {
-    paddingVertical: 16,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-    flexDirection: 'row',
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonPressed: {
-    transform: [{ scale: 0.98 }],
-    opacity: 0.9,
+  modalBox: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 25,
+    minWidth: 260,
+    alignItems: 'center',
   },
-  buttonIcon: {
-    marginRight: 12,
+  modalText: { fontSize: 17, fontWeight: '700', marginBottom: 15 },
+  modalActions: { flexDirection: 'row', marginTop: 10 },
+  modalButtonPrimary: {
+    backgroundColor: '#1a5f9c',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginRight: 10,
   },
-  openBookText: {
-    color: '#1a5f9c',
-    fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+  modalButtonSecondary: {
+    backgroundColor: '#e0e0e0',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 8,
   },
-  adContainer: {
-    marginTop: 30,
-    alignSelf: 'center',
-    width: '100%',
-    maxWidth: 400,
-  },
+  modalButtonTextPrimary: { color: '#fff', fontWeight: '600', fontSize: 15 },
+  modalButtonTextSecondary: { color: '#333', fontWeight: '600', fontSize: 15 },
 });

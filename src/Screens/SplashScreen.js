@@ -20,8 +20,8 @@ export default function SplashScreen({ onFinish }) {
         loop={false}
         style={styles.lottie}
       />
-      <Text style={styles.title}>Handhuuraa Oromoo Arisi</Text>
-      <Text style={styles.caption}>Enjoy your reading</Text>
+      <Text style={styles.title}>Risaa BookStore</Text>
+      <Text style={styles.caption}>Risaa Colletions</Text>
     </View>
   );
 }

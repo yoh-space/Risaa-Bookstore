@@ -201,7 +201,7 @@ const Notes = ({ onBack, initialTitle = "", initialContent = "" }) => {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#1a73e8", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#581601ff", flex: 1 }}>
       <View style={styles.backgroundAnimation} pointerEvents="none">
       <SystemBars style='light'/>
         <LottieView
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a73e8',
+    backgroundColor: '#512904ff',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderBottomLeftRadius: 18,
@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
   },
   viewDate: {
     fontSize: 12,
-    color: '#888',
+    color: '#605e5dff',
     marginTop: 20,
     marginBottom: 30,
   },
