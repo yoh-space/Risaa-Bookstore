@@ -10,65 +10,13 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import { SystemBars } from 'react-native-edge-to-edge';
-import AuthorInfo from '../Components/About/AuthorInfo';
-import DeveloperInfo from '../Components/About/DeveloperInfo';
-import ShareApp from '../Components/ShareApp';
-import RateApp from '../Components/RateApp';
 import FooterInfo from '../Components/FooterInfo';
 import LottieView from 'lottie-react-native';
-// Developer info from DeveloperScreen.jsx
-const DEVELOPER_CONTACTS = [
-  {
-    icon: 'mail',
-    label: 'Email',
-    value: 'yohansdam@gmail.com',
-    link: 'mailto:yohansdam@gmail.com',
-  },
-  {
-    icon: 'call',
-    label: 'Phone',
-    value: '+251 911 701 858',
-    link: 'tel:+251911701858',
-  },
-  {
-    icon: 'send-outline',
-    label: 'Telegram',
-    value: '@Yoh_Space',
-    link: 'https://t.me/yoh_space',
-  },
-  {
-    icon: 'play-circle',
-    label: 'YouTube',
-    value: '@Yoh_space',
-    link: 'https://youtube.com/@yoh_space',
-  },
-  {
-    icon: 'logo-twitter',
-    label: 'Twitter',
-    value: '@Yoh_space',
-    link: 'https://x.com/yoh_space',
-  },
-  {
-    icon: 'logo-web-component',
-    label: 'Website',
-    value: 'yotech.space',
-    link: 'https://yotech.space',
-  },
-];
-
-const DEVELOPER_SERVICES = [
-  'Full Stack Web Development',
-  'Mobile App Development',
-  'UI/UX Design',
-  'API Integration',
-  'Google Admob Integration',
-  'Technical Support',
-];
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function About({ navigation }) {
-  const handleShare = async () => {
+    const handleShare = async () => {
     try {
       await Share.share({
         message: 'Check out Risaa Bookstore App! Download now from the Play Store.',
@@ -83,39 +31,27 @@ export default function About({ navigation }) {
       title: 'Author',
       icon: 'person',
       color: '#166d67',
-      action: () => navigation.navigate('AuthorInfoScreen', {
-        onEmailPress: () => Linking.openURL("mailto:kadiirabdullaxif@gmail.com?subject=Regardin to Risaa Bookstore App"),
-        onPhonePress: () => Linking.openURL("tel:+251928753295"),
-        onWhatsAppPress: () => Linking.openURL("https://wa.me/+251928753295")
-      })
+      action: () => navigation.navigate('AuthorInfoScreen')
     },
     {
       title: 'Developer',
       icon: 'code',
       color: '#6C63FF',
-      action: () => navigation.navigate('DeveloperInfoScreen', {
-        contacts: DEVELOPER_CONTACTS,
-        services: DEVELOPER_SERVICES,
-        onContactPress: (link) => Linking.openURL(link)
-      })
+      action: () => navigation.navigate('DeveloperInfoScreen')
     },
     {
       title: 'Share App',
       icon: 'share',
       color: '#e67e22',
-      action: () => openModal({
-        title: 'Share App',
-        content: <ShareApp onShare={handleShare} />
+      action: () => navigation.navigate('ShareAppScreen', {
+        onShare: handleShare
       })
     },
     {
       title: 'Rate App',
       icon: 'star',
       color: '#f1c40f',
-      action: () => openModal({
-        title: 'Rate App',
-        content: <RateApp />
-      })
+      action: () => navigation.navigate('RateAppScreen')
     },
 {
   title: 'More Apps',
@@ -126,7 +62,7 @@ export default function About({ navigation }) {
   ];
 
   return (
-    <View style={styles.background}>
+    <View style={{ flex: 1, backgroundColor: '#7d2e00ff' }}>
       <ScrollView contentContainerStyle={styles.container}>
       <LinearGradient
         colors={['#512904ff', '#211c30ff', '#753704ff']}

@@ -6,7 +6,55 @@ import { SystemBars } from 'react-native-edge-to-edge';
 
 const { width } = Dimensions.get('window');
 
-export default function DeveloperInfo({ contacts, services, onContactPress, navigation }) {
+const CONTACTS = [
+  {
+    icon: 'mail',
+    label: 'Email',
+    value: 'yohansdam@gmail.com',
+    link: 'mailto:yohansdam@gmail.com',
+  },
+  {
+    icon: 'call',
+    label: 'Phone',
+    value: '+251 911 701 858',
+    link: 'tel:+251911701858',
+  },
+  {
+    icon: 'send-outline',
+    label: 'Telegram',
+    value: '@Yoh_Space',
+    link: 'https://t.me/yoh_space',
+  },
+  {
+    icon: 'play-circle',
+    label: 'YouTube',
+    value: '@Yoh_space',
+    link: 'https://youtube.com/@yoh_space',
+  },
+  {
+    icon: 'logo-twitter',
+    label: 'Twitter',
+    value: '@Yoh_space',
+    link: 'https://x.com/yoh_space',
+  },
+  {
+    icon: 'logo-web-component',
+    label: 'Website',
+    value: 'yotech.space',
+    link: 'https://yotech.space',
+  },
+];
+
+const SERVICES = [
+  'Full Stack Web Development',
+  'Mobile App Development',
+  'UI/UX Design',
+  'API Integration',
+  'Google Admob Integration',
+  'Technical Support',
+];
+
+export default function DeveloperInfo() {
   const scrollY = new Animated.Value(0);
   
   // Animated header background
@@ -130,7 +178,7 @@ export default function DeveloperInfo({ contacts, services, onContactPress, navi
           }}>
             Connect With Us
           </Text>
-          {contacts.map((contact, index) => (
+          {CONTACTS.map((contact, index) => (
             <TouchableOpacity
               key={contact.label}
               style={{ 
@@ -142,7 +190,7 @@ export default function DeveloperInfo({ contacts, services, onContactPress, navi
                 marginBottom: 8,
               }}
               activeOpacity={0.7}
-              onPress={() => onContactPress(contact.link)}
+              onPress={() => Linking.openURL(contact.link)}
             >
               <View style={{ 
                 backgroundColor: 'rgba(108, 99, 255, 0.1)', 
@@ -185,7 +233,7 @@ export default function DeveloperInfo({ contacts, services, onContactPress, navi
           }}>
             Our Services
           </Text>
-          {services.map((service, idx) => (
+          {SERVICES.map((service, idx) => (
             <View 
               key={idx} 
               style={{ 

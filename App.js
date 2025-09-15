@@ -16,6 +16,8 @@ import SplashScreen from './src/Screens/SplashScreen';
 import MoreAppsScreen from './src/Screens/MoreAppsScreen';
 import AuthorInfo from './src/Components/About/AuthorInfo';
 import DeveloperInfo from './src/Components/About/DeveloperInfo';
+import ShareApp from './src/Components/About/ShareApp';
+import RateApp from './src/Components/About/RateApp';
 import mobileAds, { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 // Interstitial ad setup
 const INTERSTITIAL_AD_UNIT_ID = 'ca-app-pub-7604915619325589/3947033537';
@@ -275,6 +277,10 @@ export default function App() {
           <Stack.Screen name="DeveloperInfoScreen">
             {({ route }) => <DeveloperInfo {...route.params} />}
           </Stack.Screen>
+          <Stack.Screen name="ShareAppScreen">
+            {({ route }) => <ShareApp {...route.params} />}
+          </Stack.Screen>
+          <Stack.Screen name="RateAppScreen" component={RateApp} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

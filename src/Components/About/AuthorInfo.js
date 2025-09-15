@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Animated, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Linking } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 
 const { width } = Dimensions.get('window');
 
-export default function AuthorInfo({ onEmailPress, onPhonePress, onWhatsAppPress, navigation }) {
+export default function AuthorInfo() {
   const [scaleValue] = useState(new Animated.Value(1));
   
   const handlePressIn = () => {
@@ -25,6 +26,15 @@ export default function AuthorInfo({ onEmailPress, onPhonePress, onWhatsAppPress
     }).start();
   };
 
+  const handleEmail = () => {
+    Linking.openURL("mailto:kadiirabdullaxif@gmail.com?subject=Regardin to Risaa Bookstore App");
+  };
+  const handlePhone = () => {
+    Linking.openURL("tel:+251928753295");
+  };
+  const handleWhatsApp = () => {
+    Linking.openURL("https://wa.me/+251928753295");
+  };
   return (
     <SafeAreaView style={{ 
       alignItems: 'center', 
@@ -103,8 +113,7 @@ export default function AuthorInfo({ onEmailPress, onPhonePress, onWhatsAppPress
       <View style={{ width: '100%' }}>
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
-            onPress={onEmailPress}
-            onPressIn={handlePressIn}
+            onPress={handleEmail}
             onPressOut={handlePressOut}
             activeOpacity={0.8}
             style={{ 
@@ -151,8 +160,7 @@ export default function AuthorInfo({ onEmailPress, onPhonePress, onWhatsAppPress
         
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
-            onPress={onPhonePress}
-            onPressIn={handlePressIn}
+            onPress={handlePhone}
             onPressOut={handlePressOut}
             activeOpacity={0.8}
             style={{ 
@@ -199,8 +207,7 @@ export default function AuthorInfo({ onEmailPress, onPhonePress, onWhatsAppPress
         
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
-            onPress={onWhatsAppPress}
-            onPressIn={handlePressIn}
+            onPress={handleWhatsApp}
             onPressOut={handlePressOut}
             activeOpacity={0.8}
             style={{ 

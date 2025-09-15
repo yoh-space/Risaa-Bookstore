@@ -6,7 +6,7 @@ export default function ShareApp({ onShare }) {
   return (
     <View style={{ alignItems: 'center', padding: 20 }}>
       <LottieView
-        source={require('../../assets/animations/share.json')}
+        source={require('../../../assets/animations/share.json')}
         autoPlay
         loop
         style={{ width: 60, height: 60, marginBottom: 10 }}

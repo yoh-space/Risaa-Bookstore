@@ -28,12 +28,12 @@ export default function MoreAppsScreen({ navigation }) {
       return () => subscription.remove();
     }, [navigation]);
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-    <SystemBars style="dark" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#7d2e00ff' }}>
+    <SystemBars style="white" />
     <>
     <ScrollView contentContainerStyle={styles.container}>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20}}>
-        <Icon name='arrow-back' size={24} color="#8e44ad" style={{ marginBottom: 20 }} onPress={() => navigation.goBack()} />
+        <Icon name='arrow-back' size={24} color="white" style={{ marginBottom: 20 }} onPress={() => navigation.goBack()} />
         <Text style={styles.header}>More Apps by Developer</Text>            
         </View>
       {/* Kadiir Tech App Card */}
@@ -133,12 +133,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#7d2e00ff',
   },
   header: {
     fontSize: 23,
     fontWeight: '800',
-    color: '#8e44ad',
+    color: 'white',
     marginBottom: 24,
     textAlign: 'center',
     marginLeft: 20,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
      backgroundColor: '#fff',
    },
   iconCircle: {
-    backgroundColor: 'rgba(142, 68, 173, 0.1)',
+    backgroundColor: 'rgba(244, 244, 244, 0.63)',
     width: 44,
     height: 44,
     borderRadius: 12,
