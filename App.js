@@ -14,6 +14,8 @@ import About from './src/Screens/About';
 import Read from './src/Screens/Read';
 import SplashScreen from './src/Screens/SplashScreen';
 import MoreAppsScreen from './src/Screens/MoreAppsScreen';
+import AuthorInfo from './src/Components/About/AuthorInfo';
+import DeveloperInfo from './src/Components/About/DeveloperInfo';
 import mobileAds, { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 // Interstitial ad setup
 const INTERSTITIAL_AD_UNIT_ID = 'ca-app-pub-7604915619325589/3947033537';
@@ -267,6 +269,12 @@ export default function App() {
             )}
           </Stack.Screen>
           <Stack.Screen name="MoreAppsScreen" component={MoreAppsScreen} />
+          <Stack.Screen name="AuthorInfoScreen">
+            {({ route }) => <AuthorInfo {...route.params} />}
+          </Stack.Screen>
+          <Stack.Screen name="DeveloperInfoScreen">
+            {({ route }) => <DeveloperInfo {...route.params} />}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

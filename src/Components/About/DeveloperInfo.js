@@ -1,0 +1,252 @@
+import React from 'react';
+import { ScrollView, View, Text, TouchableOpacity, Dimensions, Animated, Platform, Image, Linking} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SystemBars } from 'react-native-edge-to-edge';
+
+const { width } = Dimensions.get('window');
+
+export default function DeveloperInfo({ contacts, services, onContactPress, navigation }) {
+  const scrollY = new Animated.Value(0);
+  
+  // Animated header background
+  const headerBackgroundOpacity = scrollY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, 1],
+    extrapolate: 'clamp'
+  });
+  
+  // Animated profile scale
+  const profileScale = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [1, 0.8],
+    extrapolate: 'clamp'
+  });
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
+      <SystemBars style='dark' />
+      
+      {/* Animated Header Background */}
+      <Animated.View 
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: Platform.OS === 'ios' ? 100 : 80,
+          backgroundColor: '#6C63FF',
+          opacity: headerBackgroundOpacity,
+          zIndex: 10,
+        }}
+      />
+      
+      <Animated.ScrollView 
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+        contentContainerStyle={{ padding: 20, paddingTop: 100 }}
+      >
+        {/* Profile Header */}
+        <Animated.View 
+          style={{ 
+            alignItems: 'center', 
+            marginBottom: 30,
+            transform: [{ scale: profileScale }]
+          }}
+        >
+          <View style={{ 
+            backgroundColor: 'white', 
+            width: 120, 
+            height: 120, 
+            borderRadius: 60, 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            marginBottom: 20,
+            borderWidth: 4, 
+            borderColor: '#6C63FF',
+            shadowColor: '#6C63FF',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 6
+          }}>
+            <Image style={{ width: 110, height: 110, borderRadius: 55 }} source={require('../../../assets/images/yo-tech-logo.webp')} />
+          </View>
+          <Text style={{ 
+            fontSize: 28, 
+            fontWeight: '800', 
+            marginBottom: 6, 
+            color: '#2D3748', 
+            letterSpacing: 0.5 
+          }}>
+            Yo-Tech
+          </Text>
+          <Text style={{ 
+            fontSize: 16, 
+            color: '#6C63FF', 
+            fontWeight: '600', 
+            marginBottom: 16,
+            backgroundColor: 'rgba(108, 99, 255, 0.1)',
+            paddingHorizontal: 12,
+            paddingVertical: 4,
+            borderRadius: 12
+          }}>
+            @Yoh_Space
+          </Text>
+          <Text style={{ 
+            fontSize: 16, 
+            color: '#4A5568', 
+            textAlign: 'center', 
+            lineHeight: 24, 
+            paddingHorizontal: 10 
+          }}>
+            We are passionate full stack developers creating beautiful, scalable cross-platform 
+            mobile and web applications for clients worldwide.
+          </Text>
+        </Animated.View>
+        
+        {/* Social Media Section */}
+        <View style={{ 
+          width: '100%', 
+          marginBottom: 24, 
+          backgroundColor: 'white', 
+          borderRadius: 16, 
+          padding: 20, 
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 8,
+          elevation: 2
+        }}>
+          <Text style={{ 
+            fontSize: 20, 
+            fontWeight: '700', 
+            marginBottom: 16, 
+            color: '#2D3748', 
+          }}>
+            Connect With Us
+          </Text>
+          {contacts.map((contact, index) => (
+            <TouchableOpacity
+              key={contact.label}
+              style={{ 
+                flexDirection: 'row', 
+                alignItems: 'center', 
+                backgroundColor: index % 2 === 0 ? 'rgba(108, 99, 255, 0.03)' : 'transparent', 
+                borderRadius: 12, 
+                padding: 16, 
+                marginBottom: 8,
+              }}
+              activeOpacity={0.7}
+              onPress={() => onContactPress(contact.link)}
+            >
+              <View style={{ 
+                backgroundColor: 'rgba(108, 99, 255, 0.1)', 
+                width: 44, 
+                height: 44, 
+                borderRadius: 12, 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                marginRight: 16 
+              }}>
+                <Ionicons name={contact.icon} size={22} color="#6C63FF" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontWeight: '600', color: '#2D3748', fontSize: 16 }}>{contact.label}</Text>
+                <Text style={{ color: '#718096', fontSize: 14 }}>{contact.value}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#A0AEC0" />
+            </TouchableOpacity>
+          ))}
+        </View>
+        
+        {/* Services Section */}
+        <View style={{ 
+          width: '100%', 
+          backgroundColor: 'white', 
+          borderRadius: 16, 
+          padding: 20, 
+          marginBottom: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.05,
+          shadowRadius: 8,
+          elevation: 2
+        }}>
+          <Text style={{ 
+            fontSize: 20, 
+            fontWeight: '700', 
+            marginBottom: 16, 
+            color: '#2D3748', 
+          }}>
+            Our Services
+          </Text>
+          {services.map((service, idx) => (
+            <View 
+              key={idx} 
+              style={{ 
+                flexDirection: 'row', 
+                alignItems: 'center', 
+                marginBottom: 12, 
+                paddingVertical: 10, 
+                paddingHorizontal: 8, 
+                borderRadius: 10, 
+                backgroundColor: idx % 2 === 0 ? 'rgba(108, 99, 255, 0.03)' : 'transparent' 
+              }}
+            >
+              <View style={{ 
+                width: 28, 
+                height: 28, 
+                borderRadius: 8, 
+                backgroundColor: 'rgba(108, 99, 255, 0.1)', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                marginRight: 16 
+              }}>
+                <Ionicons name="checkmark" size={16} color="#6C63FF" />
+              </View>
+              <Text style={{ color: '#4A5568', fontSize: 16, flex: 1 }}>{service}</Text>
+            </View>
+          ))}
+        </View>
+        
+        {/* Call to Action Button */}
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#6C63FF',
+            paddingVertical: 16,
+            borderRadius: 14,
+            alignItems: 'center',
+            marginBottom: 24,
+            shadowColor: '#6C63FF',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 8,
+            elevation: 4
+          }}
+          activeOpacity={0.8}
+          onPress={() => {Linking.openURL('https://yotech.space/contact');}}
+        >
+          <Text style={{ color: 'white', fontSize: 18, fontWeight: '600' }}>
+            Get In Touch
+          </Text>
+        </TouchableOpacity>
+        
+        {/* Footer Note */}
+        <Text style={{ 
+          fontSize: 14, 
+          color: '#A0AEC0', 
+          textAlign: 'center', 
+          fontStyle: 'italic',
+          marginBottom: 30
+        }}>
+          Let's build something amazing together!
+        </Text>
+      </Animated.ScrollView>
+    </SafeAreaView>
+  );
+}

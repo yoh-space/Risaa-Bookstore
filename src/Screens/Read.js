@@ -23,7 +23,12 @@ import { SystemBars } from 'react-native-edge-to-edge';
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {keywords: ['book', 'oromo history','afaan oromo books']});
 
-export default function Read({ navigation }) {
+export default function Read({ navigation, route }) {
+  // Accept pdfPath, title, chapterPage, chapterTitle from navigation params, fallback to default
+  const { pdfPath: navPdfPath, title: navTitle, chapterPage, chapterTitle } = route?.params || {};
+  const defaultSource = { uri: 'bundle-assets://ormoo.pdf' };
+  const pdfSource = navPdfPath && navPdfPath.uri ? navPdfPath : defaultSource;
+  const bookTitle = navTitle || 'Risaa BookStore';
   // State management
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('');
@@ -58,7 +63,6 @@ export default function Read({ navigation }) {
 
   // Refs
   const pdfRef = useRef(null);
-  const defaultSource = { uri: 'bundle-assets://ormoo.pdf' };
 
   // Handle back button press
   useEffect(() => {
@@ -102,8 +106,6 @@ export default function Read({ navigation }) {
       AdEventType.ERROR,
       () => {
         setInterstitialLoaded(false);
-        Alert.alert('Ad failed to load', 'Unable to load ad. Please try again later.');
-        interstitial.load();
       }
     );
     interstitial.load();
@@ -141,16 +143,16 @@ export default function Read({ navigation }) {
 
   // Handle chapter selection
 const premiumChapters = React.useMemo(() => ({
-  48: { title: 'Chapter 1: Handhuuraa Fi Ilmaan Arsee', uri: 'bundle-assets://ormoo-48-80.pdf' },
-  81: { title: 'Chapter 2: Gosoota Oromoo Arsii', uri: 'bundle-assets://ormoo-81-187.pdf' },
-  188: { title: 'Chapter 3: Gameeyii Oromoo Arsii', uri: 'bundle-assets://ormoo-188-276.pdf' },
-  277: { title: 'Chapter 4: Handhuuraa Qabeenya Arsi', uri: 'bundle-assets://ormoo-277-285.pdf' },
-  286: { title: 'Chapter 5: Aadaa Oromoo Arsii', uri: 'bundle-assets://ormoo-286-367.pdf' },
-  368: { title: 'Chapter 6: Amantii Oromoo Arsii', uri: 'bundle-assets://ormoo-368-389.pdf' },
-  390: { title: 'Chapter 7: Heeraa Fi Sirna Gadaa Oromoo Arsii', uri: 'bundle-assets://ormoo-390-438.pdf' },
-  439: { title: 'Chapter 8: Gita Bittaa Habashaa fi Diddaa Gabrummaa Oromoo Arsii', uri: 'bundle-assets://ormoo-439-482.pdf' },
-  483: { title: 'Chapter 9: Medda Beekkumsa Bulchinsa Arsii', uri: 'bundle-assets://ormoo-483-532.pdf' },
-  533: { title: 'Chapter 10: Goolaba', uri: 'bundle-assets://ormoo-533-544.pdf' },
+  48: { title: 'Chapter 1: Risaa BookStore', uri: 'bundle-assets://ormoo-48-80.pdf' },
+  81: { title: 'Chapter 2: Risaa BookStore', uri: 'bundle-assets://ormoo-81-187.pdf' },
+  188: { title: 'Chapter 3: Risaa BookStore', uri: 'bundle-assets://ormoo-188-276.pdf' },
+  277: { title: 'Chapter 4: Risaa BookStore', uri: 'bundle-assets://ormoo-277-285.pdf' },
+  286: { title: 'Chapter 5: Risaa BookStore', uri: 'bundle-assets://ormoo-286-367.pdf' },
+  368: { title: 'Chapter 6: Risaa BookStore', uri: 'bundle-assets://ormoo-368-389.pdf' },
+  390: { title: 'Chapter 7: Risaa BookStore', uri: 'bundle-assets://ormoo-390-438.pdf' },
+  439: { title: 'Chapter 8: Risaa BookStore', uri: 'bundle-assets://ormoo-439-482.pdf' },
+  483: { title: 'Chapter 9: Risaa BookStore', uri: 'bundle-assets://ormoo-483-532.pdf' },
+  533: { title: 'Chapter 10: Risaa BookStore', uri: 'bundle-assets://ormoo-533-544.pdf' },
 }), []);
 
 const handleChapterSelect = async (pageNumber) => {
@@ -231,14 +233,6 @@ const onSlidingComplete = (value) => {
     );
   }
 
-  if (isNoteVisible) {
-    return <Notes onBack={() => setIsNoteVisible(false)} />;
-  }
-
-  if (isQuoteVisible) {
-    return <Quotes onBack={() => setIsQuoteVisible(false)} />;
-  }
-
 if (isPremiumVisible) {
   if (selectedPremiumKey && premiumChapters[selectedPremiumKey]) {
     const chapter = premiumChapters[selectedPremiumKey];
@@ -305,7 +299,7 @@ if (isPremiumVisible) {
             <View style={styles.pdfContainer}>
               <Pdf
                 ref={pdfRef}
-                source={premiumSource || { uri: chapter.uri }}
+                source={{ uri: chapter.uri }}
                 style={styles.pdf}
                 onLoadComplete={handlePdfLoadComplete}
                 onPageChanged={(page) => setCurrentPage(page)}
@@ -336,6 +330,8 @@ if (isPremiumVisible) {
             <LinearGradient 
               colors={["#3B82F6", "#1E3A8A"]} 
               style={styles.footer}
+              start={{x: 0, y: 1}}
+              end={{x: 0, y: 1}}
             >
               <View style={styles.footerContent}>
                 <View style={styles.pageInfo}>
@@ -423,8 +419,7 @@ if (isPremiumVisible) {
                         <TouchableOpacity
                           style={styles.optionCard}
                           onPress={() => {
-                            setIsNoteVisible(true);
-                            setIsModalVisible(false);
+                            navigation.navigate('Notes', { page: currentPage, chapter: premiumTitle || chapter.title });
                           }}
                         >
                           <View style={styles.optionIconContainer}>
@@ -441,8 +436,7 @@ if (isPremiumVisible) {
                         <TouchableOpacity
                           style={styles.optionCard}
                           onPress={() => {
-                            setIsQuoteVisible(true);
-                            setIsModalVisible(false);
+                            navigation.navigate('Quotes', { page: currentPage, chapter: premiumTitle || chapter.title }); 
                           }}
                         >
                           <View style={styles.optionIconContainer}>
@@ -526,7 +520,7 @@ if (isPremiumVisible) {
       <Animated.View style={[styles.mainContainer, { opacity: fadeAnim }]}>
         <StatusBar 
           translucent 
-          backgroundColor="#1E3A8A" 
+          backgroundColor="#412c06ff" 
           barStyle="light-content" 
           hidden={isStatusBarHidden} 
         />
@@ -535,7 +529,7 @@ if (isPremiumVisible) {
         {/* Header */}
         {isHeaderFooterVisible && (
         <LinearGradient 
-          colors={["#1E3A8A", "#3B82F6"]} 
+          colors={["#2d0b00ff", "#b95503ff"]} 
           style={styles.header}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
@@ -548,7 +542,7 @@ if (isPremiumVisible) {
             >
               <Icons name="view-list" size={24} color="white" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Handhuurraa Oromo Arsi</Text>
+            <Text style={styles.headerTitle}>{bookTitle}</Text>
             <View style={styles.searchContainer}>
               <TextInput
                 placeholder="Go to page..."
@@ -576,6 +570,8 @@ if (isPremiumVisible) {
         <ChapterDrawer
           visible={isDrawerVisible}
           currentPage={currentPage}
+          chapterTitle={chapterTitle}
+          chapterPage={chapterPage}
           onClose={() => setIsDrawerVisible(false)}
           onChapterSelect={handleChapterSelect}
           unlockedPremiumChapters={unlockedPremiumChapters}
@@ -585,7 +581,7 @@ if (isPremiumVisible) {
         <View style={styles.pdfContainer}>
           <Pdf
             ref={pdfRef}
-            source={defaultSource}
+            source={navPdfPath}
             onLoadComplete={handlePdfLoadComplete}
             onPageChanged={(page) => setCurrentPage(page)}
             onError={(error) => {}}
@@ -600,7 +596,7 @@ if (isPremiumVisible) {
               minimumValue={1}
               maximumValue={totalPage}
               step={1}
-              minimumTrackTintColor="#3B82F6"
+              minimumTrackTintColor="#f36d0eff"
               maximumTrackTintColor="#E5E7EB"
               thumbTintColor="#FF7E5F"
               vertical={true}
@@ -615,8 +611,10 @@ if (isPremiumVisible) {
         {/* Footer */}
         { isHeaderFooterVisible && (
         <LinearGradient 
-          colors={["#3B82F6", "#1E3A8A"]} 
+          colors={["#2d0b00ff", "#b95503ff"]} 
           style={styles.footer}
+          start={{x: 1, y: 0}}
+          end={{x: 0, y: 1}}
         >
           <View style={styles.footerContent}>
             <View style={styles.pageInfo}>
@@ -747,9 +745,9 @@ if (isPremiumVisible) {
                         style={styles.optionCard}
                         onPress={() => {
                           setIsModalVisible(false);
-                          Share.share({
-                            message: 'Check out this amazing book: Handhuuraa Oromoo Arsii',
-                          });
+                            Share.share({
+                              message: 'Check out this amazing book: Risaa BookStore',
+                            });
                         }}
                       >
                         <View style={styles.optionIconContainer}>
@@ -786,7 +784,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#4d1200ff',
   },
   loadingAnimation: {
     width: 200,
@@ -818,7 +816,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   headerTitle: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '600',
     color: 'white',
     flex: 1,
@@ -896,7 +894,7 @@ const styles = StyleSheet.create({
   },
   bottomSheet: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(103, 43, 4, 0.9)',
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     maxHeight: '60%',
@@ -917,7 +915,7 @@ const styles = StyleSheet.create({
   bottomSheetTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: '#ffffffff',
     textAlign: 'center',
     marginBottom: 15,
   },

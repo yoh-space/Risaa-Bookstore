@@ -12,8 +12,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { SystemBars } from 'react-native-edge-to-edge';
-import AuthorInfo from '../Components/AuthorInfo';
-import DeveloperInfo from '../Components/DeveloperInfo';
+import AuthorInfo from '../Components/About/AuthorInfo';
+import DeveloperInfo from '../Components/About/DeveloperInfo';
 import ShareApp from '../Components/ShareApp';
 import RateApp from '../Components/RateApp';
 import FooterInfo from '../Components/FooterInfo';
@@ -68,22 +68,10 @@ const DEVELOPER_SERVICES = [
 ];
 
 export default function About({ navigation }) {
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [modalContent, setModalContent] = React.useState(null);
-
-  const openModal = (content) => {
-    setModalContent(content);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-    setModalContent(null);
-  };
   const handleShare = async () => {
     try {
       await Share.share({
-        message: 'Check out Handhuuraa Oromo Arsi app! Download now from the Play Store.',
+        message: 'Check out Risaa Bookstore App! Download now from the Play Store.',
       });
     } catch (error) {
       alert('Error sharing app');
@@ -95,38 +83,22 @@ export default function About({ navigation }) {
       title: 'Author',
       icon: 'person',
       color: '#166d67',
-      action: () => openModal({
-        title: 'Author',
-        content: (
-          <AuthorInfo
-            onEmailPress={() => Linking.openURL("mailto:kadiirabdullaxif@gmail.com?subject=Regardin to Risaa Bookstore App")}
-            onPhonePress={() => Linking.openURL("tel:+251928753295")}
-            onWhatsAppPress={() => Linking.openURL("https://wa.me/+251928753295")}
-          />
-        )
+      action: () => navigation.navigate('AuthorInfoScreen', {
+        onEmailPress: () => Linking.openURL("mailto:kadiirabdullaxif@gmail.com?subject=Regardin to Risaa Bookstore App"),
+        onPhonePress: () => Linking.openURL("tel:+251928753295"),
+        onWhatsAppPress: () => Linking.openURL("https://wa.me/+251928753295")
       })
     },
- {
-  title: 'Developer',
-  icon: 'code',
-  color: '#6C63FF',
-  action: () => openModal({
-    title: 'About Us',
-    content: (
-      <DeveloperInfo
-        contacts={DEVELOPER_CONTACTS}
-        services={DEVELOPER_SERVICES}
-        onContactPress={link => Linking.openURL(link)}
-      />
-    ),
-    modalStyle: {
-      backgroundColor: '#F8FAFC',
-      borderRadius: 16,
-      padding: 0,
-      overflow: 'hidden'
-    }
-  })
-},
+    {
+      title: 'Developer',
+      icon: 'code',
+      color: '#6C63FF',
+      action: () => navigation.navigate('DeveloperInfoScreen', {
+        contacts: DEVELOPER_CONTACTS,
+        services: DEVELOPER_SERVICES,
+        onContactPress: (link) => Linking.openURL(link)
+      })
+    },
     {
       title: 'Share App',
       icon: 'share',
@@ -156,10 +128,12 @@ export default function About({ navigation }) {
   return (
     <View style={styles.background}>
       <ScrollView contentContainerStyle={styles.container}>
-        <LinearGradient
-          colors={['rgba(255,255,255,0.96)', 'rgba(255,255,255,0.92)']}
-          style={styles.contentWrapper}
-        >
+      <LinearGradient
+        colors={['#512904ff', '#211c30ff', '#753704ff']}
+        style={styles.background}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+      >
           <SystemBars style="light" />
           <View style={styles.header}>
             <LottieView
@@ -168,8 +142,8 @@ export default function About({ navigation }) {
               loop
               style={{ width: 60, height: 60, marginBottom: 10 }}
             />
-            <Text style={styles.title}>About This App</Text>
-            <Text style={styles.subtitle}>Explore more about Handhuuraa Oromo Arsi</Text>
+            <Text style={styles.title}>About Risaa</Text>
+            <Text style={styles.subtitle}>Explore more about Author of Risaa Book Collections</Text>
           </View>
 
           <View style={styles.menuContainer}>
@@ -208,36 +182,7 @@ export default function About({ navigation }) {
         </LinearGradient>
       </ScrollView>
 
-      {/* Modal View */}
-      {modalVisible && (
-        <View style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.4)',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 999,
-        }}>
-          <View style={{
-            backgroundColor: '#fff',
-            borderRadius: 16,
-            padding: 40,
-            minWidth: 280,
-            maxWidth: '80%',
-            alignItems: 'center',
-            elevation: 10,
-          }}>
-            <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 5 }}>{modalContent?.title}</Text>
-            {modalContent?.content}
-            <TouchableOpacity onPress={closeModal} style={{ marginTop: 5, backgroundColor: '#1a5f9c', paddingHorizontal: 22, paddingVertical: 10, borderRadius: 8 }}>
-              <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+
     </View>
   );
 }
@@ -265,12 +210,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#2c3e50',
+    color: 'white',
     marginBottom: 5,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 13,
     color: '#7f8c8d',
     fontWeight: '500',
     textAlign: 'center',

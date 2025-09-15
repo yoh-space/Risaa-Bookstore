@@ -7,36 +7,13 @@ import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile
 
 const { width } = Dimensions.get('window');
 
-const introTitles = [
-  "Baafata", "Tartiiba Taattoo", "Galata", "Jechoota Moggaasaa",
-  "Ariirrata / Preface", "Axeerara / Abstract", "Seena",
-];
-const chapterTitles = [
-  "1: Handhuuraa Fi Ilmaan Arsee",
-  "2: Gosoota Oromoo Arsii",
-  "3: Gameeyii Oromoo Arsii",
-  "4: Handhuuraa Qabeenya Arsi",
-  "5: Aadaa Oromoo Arsii",
-  "6: Amantii Oromoo Arsii",
-  "7: Heeraa Fi Sirna Gadaa Oromoo Arsii",
-  "8: Gita Bittaa Habashaa fi Diddaa Gabrummaa Oromoo Arsii",
-  "9: Medda Beekkumsa Bulchinsa Arsii",
-  "10: Goolaba",
-];
-const introPages = {
-  1: 1, 2: 3, 3: 10, 4: 17, 5: 23, 6: 27, 7: 30,
-};
-const chapterPages = {
-  1: 48, 2: 81, 3: 188, 4: 277, 5: 286,
-  6: 368, 7: 390, 8: 439, 9: 483, 10: 533,
-};
 
 const adUnitId ='ca-app-pub-7604915619325589/3947033537';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
   requestNonPersonalizedAdsOnly: true,
 });
 
-export default function ChapterDrawer({ visible, onClose, onChapterSelect, currentPage }) {
+export default function ChapterDrawer({ visible, onClose, onChapterSelect, currentPage, chapterTitle, chapterPage }) {
   // Remove all premium/unlocked logic. Only interstitial ad logic remains.
   const [pendingPage, setPendingPage] = React.useState(null);
   const [adLoaded, setAdLoaded] = React.useState(false);
@@ -105,9 +82,10 @@ export default function ChapterDrawer({ visible, onClose, onChapterSelect, curre
 
   const renderChapterItem = (title, idx, isIntro = false) => {
     const page = isIntro ? introPages[idx + 1] : chapterPages[idx + 1];
-    const isSelected = currentPage === page;
+  // Prefer chapterPage if provided for initial highlight
+  const isSelected = (chapterPage ? chapterPage === page : currentPage === page);
     const iconName = isIntro ? "file-document-outline" : "book-open-variant";
-    const iconColor = isSelected ? '#000000ff' : (isIntro ? '#7C3AED' : '#3B82F6');
+    const iconColor = isSelected ? '#000000ff' : (isIntro ? '#b54d07ff' : '#972800ff');
     const handlePress = () => {
       setPendingPage(page);
       if (adLoaded) {
@@ -147,7 +125,7 @@ export default function ChapterDrawer({ visible, onClose, onChapterSelect, curre
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                {title}
+                {chapterTitle && chapterPage === page ? chapterTitle : title}
               </Text>
             </View>
             {isSelected && (
@@ -179,7 +157,7 @@ export default function ChapterDrawer({ visible, onClose, onChapterSelect, curre
         ]}
       >
         <LinearGradient
-          colors={['#1E3A8A', '#1E40AF']}
+          colors={['#4a2601ff', '#af5f1eff']}
           style={styles.headerGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}

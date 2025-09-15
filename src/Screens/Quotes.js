@@ -10,128 +10,208 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SystemBars } from "react-native-edge-to-edge";
 
 const quotes = [
-    {
-      text: "Oromoon waa lama jechuun Lafaa fi eenyumaa isaa yoo jalaa tuqan; Obsa hin qabu akkuma qeerransaa utaalee mataa diinaa irra bu’a.",
-      source: "Handhuuraa Oromoo Arsii, Page 32",
-    },
-    {
-      text: "Oromoon yoo tuqan malee nama hin tuqu, Oromoon saba kiyya ta’eefi miti, sheleef hin jenne.",
-      source: "Handhuuraa Oromoo Arsii, Page 32",
-    },
-    {
-      
-      text: "Nama qalqala qabutu garbuu kadhata.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Farda sangaa ta’u haada irratti beeku.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Dhugaan ilmoo Rabbiiti.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Osoo hin madaalin waldhaansoo hin bayin.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Gumaan seerri Gadaa ittiin murteessituu seera uumamaa dha.",
-      source: "Handhuuraa Oromoo Arsii, Page 366",
-    },
-    {
-      text: "Araarri danuu qulqulleessuf godhamu, tokko jaarsi araaraa murteesse nagaya buusuudha.",
-      source: "Handhuuraa Oromoo Arsii, Page 366",
-    },
-    {
-      text: "Bitata wallaalanii gabayaa abaaran.",
-      source: "Handhuuraa Oromoo Arsii, Page 289",
-    },
-    {
-      text: "Abbaan mishaan haabubbuluu barnootan nama guddisaa, Ilmi mishaan haabubbuluu abbaa gurra muldhisa.",
-      source: "Handhuuraa Oromoo Arsii, Page 441",
-    },
-    {
-      text: "Abbaan tulluudha, Ilmi muka tulluu irraati.",
-      source: "Handhuuraa Oromoo Arsii, Page 441",
-    },
-    {
-      text: "Seerri sirna Gadaa heera uumama waaqaa fi lafaa irraa ka’eeti.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Nama kufe ol qabee aannan itti qaba; yoo aannan hin jirree bishaan itti qaba.",
-      source: "Handhuuraa Oromoo Arsii, Page 32",
-    },
-    {
-      text: "Yoo waliin jiraatan amala walii baru.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Amalli hin dhiisu, gaarri hin godaanu.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Kan amala gaarii qabu hunda waliin jiraata.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Hantuunni amala qabdu abbaa warraa waliin nyaatti.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Dhugaa fi tikseen galgala galti.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Waaben eessaa dabe jennaan; Ilka-muummee.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Nama beelaye garaa itti jabaate hin beeku.",
-      source: "Handhuuraa Oromoo Arsii, Page 366",
-    },
-    {
-      text: "Oromoon yoo tuqamee malee nama hin tuqu.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Dabaan buluun bultii hin tahu.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Lafarraa buruqxu malee urjii hin tuqan.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Nama malee, safuu fi seerri lafa guddisan.",
-      source: "Handhuuraa Oromoo Arsii, Page 440",
-    },
-    {
-      text: "Intala jibbantu ilma dhalaa, ilma jibbantu ardaa dhaala.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Amalaa fi Adurreen diinqa bulti.",
-      source: "Handhuuraa Oromoo Arsii, Page 439",
-    },
-    {
-      text: "Araarri waanyoon keessa jirtu woyyaa taati malee fayyaa hin taatu.",
-      source: "Handhuuraa Oromoo Arsii, Page 473",
-    },
-    {
-      text: "Qadhaaba ceem’an keessa jirtu woyyaa taati malee fayyaa hin taatu.",
-      source: "Handhuuraa Oromoo Arsii, Page 473",
-    },
-    {
-      text: "Bishaan deemsaan malee, Fardi sangaan deemsaan male, Hayyichi/aalimni deemsaan male.",
-      source: "Handhuuraa Oromoo Arsii, Page 474",
-    },
-    {
-      text: "Dubartiin teessumaan malte, Ibiddi teessumaan male, Kinniisni teessumaan male.",
-      source: "Handhuuraa Oromoo Arsii, Page 474",
-    },
-  ];  
+  {
+    "text": "Ijoollee biyyaa kootii, hundumtuu haadhoo kooti.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Maaloo ormaayyuu guddisee, dabarseefii boonsee, maaf dabaree dhabaa? jette Oromiyaan, jette harmeen, boossee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Qotee qotee namichi, sanyii darbatee. Rafeen bulu, namni waan hormaa abdatee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Sooreettii haadha sooree, irbaanni irra buusa qaba.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Maarree yoo du’e, jabaan gaafa biyyaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Biyya ormaa dhaquun nama hindhibuu, galuutu nama dhiba.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Ani yoo du’e, lafa hinsiilessu.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Lubbuu biliqa baatuuf maafan gola naanna’aa, sabaa koof falmeen du’ee Taaddasaa Birruu ta’aa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Jirra jirra bullee barii arguuf, garaa nubal’isee yaa nuhii.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Oromoon Oromoo irratti yeroo dhukaasu arguu caala; du’a wayya, warri du’e nihobbaafate bar.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Baay’inni rakkoodhaa, furmaata mataansaa. Harreen ba’aa diddeeti, taati harree diidaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Garaaf qalbii kiyya hatanii, akkan sirraa cituuf yaadanii.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Nan mammaaka namammaaksisaa, raajii bara kanaa yaa jamaa. Boolla keessa teessee boolla qottii, dhaala abbaashee ilmoon rirmaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Manni keenya holqaaree tabba guddaadha malee, Oromoon biyya diigaaree, biyya ijaare malee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "An sossodaadhee baranaa, qalbii kootii. Gibee gamaan jaaladhee, sanyii mootii…",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Allaattiidhaaf kochoo; qocaadhaa dhagaachaa, kennaa maaltu dida? Jirra hunda baachaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Akkamiin sirraa citaa, fudhee Oromiyaa koo siin lixaa...",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Addaggeen safuun beektu; addarra buusan malee, falmadhu Qeerroo sihii abdiin sabaa yoomillee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Shaayee tiyya shaayee, haleeli shimalaan lolli gaye.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Kormi biyyaa ba’ee; biyyaa hormaa jiru, hinbokkisuu inuma barooda.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Diina hinsarmu; harka hinkennu, goonni Oromoo dura dhuma.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Gabaa galtu hingaggeessan; nidhageeffatu malee, namaa gamtu hindheessan, niwareegamu malee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Yoo Harargee luka cabsan, Wallaggaatu okkola.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Qotiyyoo abbaan didaa, yaa didaa harqoota keessaa. Qorra baraan dadhabee, morma kee jalattan dheessaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Yoo Ambootti goota ajjeessan, Shaasheetu gumaa baasa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Nuun mitii; Farda keenyaa nibeeku bareechanii, gaafa gaarren Adawaa, gaafa Maqalee sanii.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Walirraa fagaanne, kunoo dugdaaf garaa taanee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Cuwaa cufaa jettii, simbirroon halkanii. Nama garaan dhaane, dirmammuun arganii.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Of boodatti deebi’ee, bookeef tafkiin lakkaawu.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Maasaan gamaa lafan baatu; talbaa facaafata taatii, tokko du’ee tokko hinyaatu, wal-gaggalaafata taati.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Harki harka hinyaatu, diina ofii malee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Maaloo yaa ilmaan koo quxisuu; maaloo yaa ilmaan koo hangafaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Waa’een keenyaa, yoo itti dhiisan silaa nama hindhiisu.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Lafa ajaaf raqaa, allaattiif saree malee maaltu dhaqaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Garaan haadhaa burreedhaa, gootas dabbeessasi baata.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Kombortaa ormii namaa hinbaadhatu, abbatu ofii baadhata malee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Keessa namaa hinbeektu, keessa qabattee namatti kenniti.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Yaa jabbiloota koo; yaa jabbiloota odaa jalaa, kan nama nyaatu nukeessa jira.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Hiriyyaan dharaa; garaa sibaraa, mataa simaraa ofeegi hadaraa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Jiruu biyya ormaa maal jireenyaa jedhuu, obsuudha malee, danda’uudha malee kan biraa maal godhuu.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Mootummaan kun ana bituu hindanda’uu beeki, ani ummata kiyyaaf qaaliidha!.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Nafxanyaan kaleessas, hardhas borus diina Oromooti.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Seenaa Rirmi hinyaatu.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Mana gumaa nun geessinaa, mana gumaataa malee.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Biyya sirna gadaa, madda wal-qixxummaa. Gaaddisa odaan kee, mallattoo eenyummaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Lubbuun dhiiraa biliqa, guyyaa baatu hinbeekanii.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Jiituu bonaafi gannaa, kan uumamaan toltee; Jaannata ardiitii, kamtu siin qixxaatee?",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Qabda seenaa boonsaa, kumaatama kumaa! Haadha jechuun, biyya jechuun, anaa Oromiyaa dhumaa.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Hin qaanofneen nama qaanessiti.",
+    "source": "— Oromoo Proverbs"
+  },
+  {
+    "text": "Amboo gubbaan, yaa baala goodaree.",
+    "source": "— Oromoo Proverbs"
+  },
+];
+ 
 // AdMob test banner unit ID for both Android and iOS
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, { requestNonPersonalizedAdsOnly: true });

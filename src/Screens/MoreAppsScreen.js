@@ -29,14 +29,71 @@ export default function MoreAppsScreen({ navigation }) {
     }, [navigation]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-    <SystemBars style="light" />
+    <SystemBars style="dark" />
     <>
     <ScrollView contentContainerStyle={styles.container}>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20}}>
         <Icon name='arrow-back' size={24} color="#8e44ad" style={{ marginBottom: 20 }} onPress={() => navigation.goBack()} />
         <Text style={styles.header}>More Apps by Developer</Text>            
         </View>
-
+      {/* Kadiir Tech App Card */}
+      <LinearGradient colors={["#8e44ad", "#8e44adcc"]} style={styles.card}>
+           <View style={styles.cardHeader}>
+             <View style={styles.imageCircle}>
+               <Image
+                 source={require('../../assets/images/kadiirtech.webp')}
+                 style={styles.kadiirImage}
+                 resizeMode="contain"
+               />
+             </View>
+             <Text style={styles.cardTitle}>Kadiir Tech App</Text>
+           </View>
+        <Text style={styles.cardDesc}>
+          Kadiir Tech 🕊️ waltajjii dijitaalaa Oromoo ammayyaa yoo ta’u, teeknooloojii, beekumsa fi kalaqa bakka tokkotti walitti fiduu irratti kan xiyyeeffatedha. Qabiyyee qulqullina qabu barnoota, aadaa, daldalaa, fayyaa, jireenya fi odeeffannoo garaagaraa dhiyeessuun dargaggoota, ogeeyyii fi abbootii qabeenyaa humneessa. Appiin kun dandeettii dijitaalaa dagaagsa, kalaqa deeggara, eenyummaa Oromoo cimsas. 📲 </Text>
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+          <TouchableOpacity
+            style={styles.cardButton}
+            activeOpacity={0.8}
+            onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=com.kadiir.tech')}
+          >
+            <PlayIcons name="google-play" size={18} color="white" style={{ marginRight: 8 }} />
+            <Text style={styles.cardButtonText}>Play Store</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.cardButton, { backgroundColor: 'white', borderWidth: 1, borderColor: '#8e44ad' }]}
+            activeOpacity={0.8}
+            onPress={() => Linking.openURL('https://kadiir.com')}
+          >
+            <WebIcons name="web" size={18} color="#8e44ad" style={{ marginRight: 8 }} />
+            <Text style={[styles.cardButtonText, { color: '#8e44ad' }]}>Website</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+      {/* Freshman Module App Card */}
+            <LinearGradient colors={["#8e44ad", "#8e44adcc"]} style={styles.card}>
+           <View style={styles.cardHeader}>
+             <View style={styles.imageCircle}>
+               <LottieView
+                 source={require('../../assets/animations/Book.json')}
+                 autoPlay
+                 loop
+                 style={styles.lottieBook}
+               />
+             </View>
+             <Text style={styles.cardTitle}>Handhuraa Oromoo Arsii</Text>
+           </View>
+        <Text style={styles.cardDesc}>
+          Comprehensive all-in-one app for freshman university students with essential tools and resources.
+        </Text>
+        <TouchableOpacity
+          style={styles.cardButton}
+          activeOpacity={0.8}
+          onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=com.freshmanmoduleplus')}
+        >
+          <PlayIcons name="google-play" size={18} color="white" style={{ marginRight: 8 }} />
+          <Text style={styles.cardButtonText}>Play Store</Text>
+        </TouchableOpacity>
+      </LinearGradient>
       {/* Freshman Module Plus Card */}
       <LinearGradient colors={["#8e44ad", "#8e44adcc"]} style={styles.card}>
            <View style={styles.cardHeader}>
@@ -61,40 +118,6 @@ export default function MoreAppsScreen({ navigation }) {
           <PlayIcons name="google-play" size={18} color="white" style={{ marginRight: 8 }} />
           <Text style={styles.cardButtonText}>Play Store</Text>
         </TouchableOpacity>
-      </LinearGradient>
-
-      {/* Kadiir Tech App Card */}
-      <LinearGradient colors={["#8e44ad", "#8e44adcc"]} style={styles.card}>
-           <View style={styles.cardHeader}>
-             <View style={styles.imageCircle}>
-               <Image
-                 source={require('../../assets/images/kadiirtech.webp')}
-                 style={styles.kadiirImage}
-                 resizeMode="contain"
-               />
-             </View>
-             <Text style={styles.cardTitle}>Kadiir Tech App</Text>
-           </View>
-        <Text style={styles.cardDesc}>
-Kadiir Tech 🕊️ waltajjii dijitaalaa Oromoo ammayyaa yoo ta’u, teeknooloojii, beekumsa fi kalaqa bakka tokkotti walitti fiduu irratti kan xiyyeeffatedha. Qabiyyee qulqullina qabu barnoota, aadaa, daldalaa, fayyaa, jireenya fi odeeffannoo garaagaraa dhiyeessuun dargaggoota, ogeeyyii fi abbootii qabeenyaa humneessa. Appiin kun dandeettii dijitaalaa dagaagsa, kalaqa deeggara, eenyummaa Oromoo cimsas. 📲 </Text>
-        <View style={{ flexDirection: 'row', gap: 12 }}>
-          <TouchableOpacity
-            style={styles.cardButton}
-            activeOpacity={0.8}
-            onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=com.kadiir.tech')}
-          >
-            <PlayIcons name="google-play" size={18} color="white" style={{ marginRight: 8 }} />
-            <Text style={styles.cardButtonText}>Play Store</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.cardButton, { backgroundColor: 'white', borderWidth: 1, borderColor: '#8e44ad' }]}
-            activeOpacity={0.8}
-            onPress={() => Linking.openURL('https://kadiir.com')}
-          >
-            <WebIcons name="web" size={18} color="#8e44ad" style={{ marginRight: 8 }} />
-            <Text style={[styles.cardButtonText, { color: '#8e44ad' }]}>Website</Text>
-          </TouchableOpacity>
-        </View>
       </LinearGradient>
 
       <Text style={styles.footer}>All apps are regularly updated with new features and improvements.</Text>

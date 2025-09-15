@@ -32,6 +32,37 @@ export default function Home({ navigation }) {
       description: 'A collection of traditional Oromo folktales and stories.',
       image: require('../../assets/images/siitolii.jpg'),
       author: 'Kadiir Abdulaxif',
+      pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
+      chapterTitle: [
+        {
+          title: 'BOQONNAA 1:HAACAALUUHUNDEESSAA',
+          startPage: 13,
+      },
+        {
+          title: ' BOQONNAA 2:HAACAAALUUFIAARTII',
+          startPage: 42,
+        },
+        {
+          title: ' BOQONNAA 3:SIRBOOTAHAACAAALUU',
+          startPage: 47,
+        },
+        {
+          title: ' BOQONNAA 4:DHALOOTASODAACABSE',
+          startPage: 80,
+        },
+        {
+          title: ' BOQONNAA 5:SEENDUUBEESIRBAHAACAAALUU',
+          startPage: 96,
+        },
+        {
+          title: 'BOQONNAA 6:ABJUUKARAATTIHAFE',
+          startPage: 129,
+        },
+        {
+          title: '',
+          startPage: 0,
+        }  
+    ]
     },
     {
       id: 2,
@@ -39,6 +70,13 @@ export default function Home({ navigation }) {
       description: 'An in-depth look at the history and culture of the Oromo people.',
       image: require('../../assets/images/dhaloota.jpg'),
       author: 'Kadiir Abdulaxif',
+      pdfPath: {uri: 'bundle-assets://Hidhaa.pdf'},
+      chapterTitle: [
+        { title: 'Chapter 1: The Origins of the Oromo', startPage: 15 },
+        { title: 'Chapter 2: The Gadaa System', startPage: 45 },
+        { title: 'Chapter 3: Oromo Traditions and Customs', startPage: 78 },
+        { title: 'Chapter 4: The Oromo Language', startPage: 102 },
+      ],
     },
     {
       id: 3,
@@ -46,6 +84,12 @@ export default function Home({ navigation }) {
       description: 'A linguistic guide and cultural exploration of the Oromo language.',
       image: require('../../assets/images/worroma.jpg'),
       author: 'Kadiir Abdulaxif',
+      pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
+      chapterTitle: [
+        { title: 'Chapter 1: Oromo Alphabet and Pronunciation', startPage: 12 },
+        { title: 'Chapter 2: Basic Grammar and Sentence Structure', startPage: 36 },
+        { title: 'Chapter 3: Common Phrases and Expressions', startPage: 58 }, 
+      ] 
     },
     {
       id: 4,
@@ -53,6 +97,14 @@ export default function Home({ navigation }) {
       description: 'The social, political, and cultural system of the Oromo people.',
       image: require('../../assets/images/goomi.jpg'),
       author: 'Asafa Jalata',
+      pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
+      chapterTitle: [
+        { title: 'Chapter 1: Introduction to the Gadaa System', startPage: 10 },
+        { title: 'Chapter 2: Gadaa Leadership and Governance', startPage: 35 },
+        { title: 'Chapter 3: Gadaa Rituals and Ceremonies', startPage: 60 },
+        { title: 'Chapter 4: The Role of Age Sets in Oromo Society', startPage: 85 },
+        { title: 'Chapter 5: Contemporary Challenges and the Future of Gadaa', startPage: 110 },
+      ]
     },
   ];
 
@@ -96,6 +148,7 @@ export default function Home({ navigation }) {
   );
   const [interstitialLoaded, setInterstitialLoaded] = useState(false);
   const openBookClickedRef = useRef(false);
+  const pendingBookParamsRef = useRef(null);
 
   useEffect(() => {
     const unsubscribeLoaded = interstitial.current.addAdEventListener(
@@ -107,9 +160,10 @@ export default function Home({ navigation }) {
       () => {
         setInterstitialLoaded(false);
         interstitial.current.load();
-        if (openBookClickedRef.current) {
-          navigation.navigate('Read');
+        if (openBookClickedRef.current && pendingBookParamsRef.current) {
+          navigation.navigate('Read', pendingBookParamsRef.current);
           openBookClickedRef.current = false;
+          pendingBookParamsRef.current = null;
         }
       }
     );
@@ -120,18 +174,21 @@ export default function Home({ navigation }) {
     };
   }, []);
 
-  const handleOpenBook = () => {
+  const handleOpenBook = ({pdfPath, title, chapterPage, chapterTitle}) => {
     openBookClickedRef.current = true;
+    pendingBookParamsRef.current = { pdfPath, title, chapterPage, chapterTitle };
     try {
       if (interstitialLoaded && interstitial.current) {
         interstitial.current.show();
       } else {
-        navigation.navigate('Read');
+        navigation.navigate('Read', { pdfPath, title, chapterPage, chapterTitle });
         interstitial.current.load();
         openBookClickedRef.current = false;
+        pendingBookParamsRef.current = null;
       }
     } catch (error) {
       openBookClickedRef.current = false;
+      pendingBookParamsRef.current = null;
     }
   };
 
@@ -144,7 +201,12 @@ export default function Home({ navigation }) {
       <Text style={styles.collectionAuthor}>By: {item.author}</Text>
       <TouchableOpacity
         style={styles.readMoreButton}
-        onPress={handleOpenBook}
+        onPress={() => handleOpenBook({
+          pdfPath: item.pdfPath,
+          title: item.title,
+          chapterPage: item.chapterPage, // Add these if available in your data
+          chapterTitle: item.chapterTitle // Add these if available in your data
+        })}
       >
         <Text style={styles.readMoreButtonText}>📖 Read Now</Text>
       </TouchableOpacity>
@@ -154,7 +216,7 @@ export default function Home({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
-        colors={['#512904ff', '#211c30ff', '#b5babeff']}
+        colors={['#512904ff', '#211c30ff', '#8c4103c6']}
         style={styles.background}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
@@ -293,7 +355,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     height: width * 0.8,
     borderRadius: width * 0.4,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(173, 92, 92, 0.23)',
   },
   bottomShape: {
     position: 'absolute',
@@ -302,7 +364,7 @@ const styles = StyleSheet.create({
     width: width * 0.7,
     height: width * 0.7,
     borderRadius: width * 0.35,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(145, 131, 188, 0.2)',
   },
   container: { flexGrow: 1, paddingBottom: 20 },
   contentWrapper: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
