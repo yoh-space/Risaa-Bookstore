@@ -290,7 +290,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: 'black', // or your preferred background
+    backgroundColor: '#5e2a00ff', // or your preferred background
   },
   iconContainer: {
     alignItems: 'center',

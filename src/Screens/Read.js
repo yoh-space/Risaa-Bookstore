@@ -12,12 +12,11 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import LottieView from 'lottie-react-native';
 import Orientation from 'react-native-orientation-locker';
-import { InterstitialAd, AdEventType,TestIds } from 'react-native-google-mobile-ads';
+import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ChapterDrawer from '../Components/Chapters/ChapterDrawer';
 import { SystemBars } from 'react-native-edge-to-edge';
-
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {keywords: ['book', 'oromo history','afaan oromo books']});
 
