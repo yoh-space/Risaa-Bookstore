@@ -43,9 +43,7 @@ export default function About({ navigation }) {
       title: 'Share App',
       icon: 'share',
       color: '#e67e22',
-      action: () => navigation.navigate('ShareAppScreen', {
-        onShare: handleShare
-      })
+      action: () => navigation.navigate('ShareAppScreen')
     },
     {
       title: 'Rate App',

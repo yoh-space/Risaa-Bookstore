@@ -15,9 +15,7 @@ import Orientation from 'react-native-orientation-locker';
 import { InterstitialAd, AdEventType,TestIds } from 'react-native-google-mobile-ads';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import ChapterDrawer from '../Components/ChapterDrawer';
-import Notes from './Notes';
-import Quotes from './Quotes';
+import ChapterDrawer from '../../Chapters/ChapterDrawer';
 import { SystemBars } from 'react-native-edge-to-edge';
 
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';

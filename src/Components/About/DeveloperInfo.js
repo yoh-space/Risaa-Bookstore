@@ -72,8 +72,8 @@ export default function DeveloperInfo() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
-      <SystemBars style='dark' />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#7e2803ff' }}>
+      <SystemBars style='light' />
       
       {/* Animated Header Background */}
       <Animated.View 
@@ -128,14 +128,14 @@ export default function DeveloperInfo() {
             fontSize: 28, 
             fontWeight: '800', 
             marginBottom: 6, 
-            color: '#2D3748', 
+            color: 'white', 
             letterSpacing: 0.5 
           }}>
             Yo-Tech
           </Text>
           <Text style={{ 
             fontSize: 16, 
-            color: '#6C63FF', 
+            color: 'white', 
             fontWeight: '600', 
             marginBottom: 16,
             backgroundColor: 'rgba(108, 99, 255, 0.1)',
@@ -147,7 +147,7 @@ export default function DeveloperInfo() {
           </Text>
           <Text style={{ 
             fontSize: 16, 
-            color: '#4A5568', 
+            color: 'white', 
             textAlign: 'center', 
             lineHeight: 24, 
             paddingHorizontal: 10 
@@ -161,7 +161,7 @@ export default function DeveloperInfo() {
         <View style={{ 
           width: '100%', 
           marginBottom: 24, 
-          backgroundColor: 'white', 
+          backgroundColor: 'whitesmoke', 
           borderRadius: 16, 
           padding: 20, 
           shadowColor: '#000',
