@@ -16,6 +16,8 @@ import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ChapterDrawer from '../Components/Chapters/ChapterDrawer';
+import ReadOptionsModal from '../Components/Modals/ReadOptionsModal';
+import PremiumChapterModal from '../Components/Modals/PremiumChapterModal';
 import { SystemBars } from 'react-native-edge-to-edge';
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';
 const interstitial = InterstitialAd.createForAdRequest(adUnitId, {keywords: ['book', 'oromo history','afaan oromo books']});
@@ -30,8 +32,6 @@ export default function Read({ navigation, route }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [isNoteVisible, setIsNoteVisible] = useState(false);
-  const [isQuoteVisible, setIsQuoteVisible] = useState(false);
   const [isStatusBarHidden, setIsStatusBarHidden] = useState(false);
   const [isHeaderFooterVisible, setIsHeaderFooterVisible] = useState(true);
   const [isHLScroll, setIsHLScroll] = useState(false);
@@ -43,8 +43,9 @@ export default function Read({ navigation, route }) {
   const [selectedPremiumKey, setSelectedPremiumKey] = useState(null);
   const [interstitialLoaded, setInterstitialLoaded] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [totalPage, setTotalPage] = useState(1); // Default for main book
+  const [totalPage, setTotalPage] = useState(1);
   const [unlockedPremiumChapters, setUnlockedPremiumChapters] = useState({});
+  
   // Load unlocked state for all premium chapters
   useEffect(() => {
     const fetchUnlocked = async () => {
@@ -139,54 +140,54 @@ export default function Read({ navigation, route }) {
   };
 
   // Handle chapter selection
-const premiumChapters = React.useMemo(() => ({
-  48: { title: 'Chapter 1: Risaa BookStore', uri: 'bundle-assets://ormoo-48-80.pdf' },
-  81: { title: 'Chapter 2: Risaa BookStore', uri: 'bundle-assets://ormoo-81-187.pdf' },
-  188: { title: 'Chapter 3: Risaa BookStore', uri: 'bundle-assets://ormoo-188-276.pdf' },
-  277: { title: 'Chapter 4: Risaa BookStore', uri: 'bundle-assets://ormoo-277-285.pdf' },
-  286: { title: 'Chapter 5: Risaa BookStore', uri: 'bundle-assets://ormoo-286-367.pdf' },
-  368: { title: 'Chapter 6: Risaa BookStore', uri: 'bundle-assets://ormoo-368-389.pdf' },
-  390: { title: 'Chapter 7: Risaa BookStore', uri: 'bundle-assets://ormoo-390-438.pdf' },
-  439: { title: 'Chapter 8: Risaa BookStore', uri: 'bundle-assets://ormoo-439-482.pdf' },
-  483: { title: 'Chapter 9: Risaa BookStore', uri: 'bundle-assets://ormoo-483-532.pdf' },
-  533: { title: 'Chapter 10: Risaa BookStore', uri: 'bundle-assets://ormoo-533-544.pdf' },
-}), []);
+  const premiumChapters = React.useMemo(() => ({
+    48: { title: 'Chapter 1: Risaa BookStore', uri: 'bundle-assets://ormoo-48-80.pdf' },
+    81: { title: 'Chapter 2: Risaa BookStore', uri: 'bundle-assets://ormoo-81-187.pdf' },
+    188: { title: 'Chapter 3: Risaa BookStore', uri: 'bundle-assets://ormoo-188-276.pdf' },
+    277: { title: 'Chapter 4: Risaa BookStore', uri: 'bundle-assets://ormoo-277-285.pdf' },
+    286: { title: 'Chapter 5: Risaa BookStore', uri: 'bundle-assets://ormoo-286-367.pdf' },
+    368: { title: 'Chapter 6: Risaa BookStore', uri: 'bundle-assets://ormoo-368-389.pdf' },
+    390: { title: 'Chapter 7: Risaa BookStore', uri: 'bundle-assets://ormoo-390-438.pdf' },
+    439: { title: 'Chapter 8: Risaa BookStore', uri: 'bundle-assets://ormoo-439-482.pdf' },
+    483: { title: 'Chapter 9: Risaa BookStore', uri: 'bundle-assets://ormoo-483-532.pdf' },
+    533: { title: 'Chapter 10: Risaa BookStore', uri: 'bundle-assets://ormoo-533-544.pdf' },
+  }), []);
 
-const handleChapterSelect = async (pageNumber) => {
-  if (premiumChapters[pageNumber]) {
-    // Check unlock state
-    const unlocked = await AsyncStorage.getItem(`chapter_unlocked_${pageNumber}`);
-    if (unlocked === 'true') {
-      setPremiumSource({ uri: premiumChapters[pageNumber].uri });
-      setPremiumTitle(premiumChapters[pageNumber].title);
-      setIsPremiumVisible(true);
-      setIsDrawerVisible(false);
-    } else {
-      setSelectedPremiumKey(pageNumber);
-      setIsPremiumVisible(true);
-      setPremiumSource(null);
-      setPremiumTitle('');
-      setIsDrawerVisible(false);
-      // Show interstitial ad to unlock
-      if (interstitialLoaded) {
-        interstitial.show();
+  const handleChapterSelect = async (pageNumber) => {
+    if (premiumChapters[pageNumber]) {
+      // Check unlock state
+      const unlocked = await AsyncStorage.getItem(`chapter_unlocked_${pageNumber}`);
+      if (unlocked === 'true') {
+        setPremiumSource({ uri: premiumChapters[pageNumber].uri });
+        setPremiumTitle(premiumChapters[pageNumber].title);
+        setIsPremiumVisible(true);
+        setIsDrawerVisible(false);
       } else {
-        Alert.alert('Ad not ready', 'The ad is still loading. Please try again in a moment.');
+        setSelectedPremiumKey(pageNumber);
+        setIsPremiumVisible(true);
+        setPremiumSource(null);
+        setPremiumTitle('');
+        setIsDrawerVisible(false);
+        // Show interstitial ad to unlock
+        if (interstitialLoaded) {
+          interstitial.show();
+        } else {
+          Alert.alert('Ad not ready', 'The ad is still loading. Please try again in a moment.');
+        }
       }
+    } else {
+      pdfRef.current?.setPage(pageNumber);
+      setCurrentPage(pageNumber);
+      setIsDrawerVisible(false);
     }
-  } else {
-    pdfRef.current?.setPage(pageNumber);
-    setCurrentPage(pageNumber);
-    setIsDrawerVisible(false);
-  }
-};
+  };
 
-const onSlidingComplete = (value) => {
-  const page = Math.round(value);
-  setCurrentPage(page);
-  pdfRef.current?.setPage(page); // This line ensures the PDF page changes
-  setIsHLScroll(value === 1);
-};
+  const onSlidingComplete = (value) => {
+    const page = Math.round(value);
+    setCurrentPage(page);
+    pdfRef.current?.setPage(page);
+    setIsHLScroll(value === 1);
+  };
 
   // Toggle orientation
   const handleOrientation = () => {
@@ -211,6 +212,7 @@ const onSlidingComplete = (value) => {
     setIsDrawerVisible(true);
     setIsModalVisible(false);
   };
+  
   const handleSingleTap = () => {
     setIsHeaderFooterVisible((prev) => !prev);
     setIsStatusBarHidden((prev) => !prev);
@@ -230,287 +232,39 @@ const onSlidingComplete = (value) => {
     );
   }
 
-if (isPremiumVisible) {
-  if (selectedPremiumKey && premiumChapters[selectedPremiumKey]) {
-    const chapter = premiumChapters[selectedPremiumKey];
-    if (premiumSource) {
-      return (
-        <SafeAreaView style={styles.safeArea} edges={["top"]}>
-          <Animated.View style={[styles.mainContainer, { opacity: fadeAnim }]}> 
-          <SystemBars style='light' />
-            <StatusBar
-              translucent
-              backgroundColor="#1E3A8A"
-              barStyle="light-content"
-              hidden={isStatusBarHidden}
-            />
-            {/* Header */}
-            {isHeaderFooterVisible && (
-            <LinearGradient 
-              colors={["#1E3A8A", "#3B82F6"]} 
-              style={styles.header}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-            >
-              <View style={styles.headerContent}>
-                <TouchableOpacity 
-                  style={styles.backButton} 
-                  onPress={() => setIsDrawerVisible(true)}
-                  activeOpacity={0.7}
-                >
-                  <Icons name="view-list" size={24} color="white" />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>{premiumTitle || chapter.title}</Text>
-                <View style={styles.searchContainer}>
-                  <TextInput
-                    placeholder="Go to page..."
-                    placeholderTextColor="rgba(255,255,255,0.7)"
-                    keyboardType="numeric"
-                    value={inputPage}
-                    onChangeText={setInputPage}
-                    onSubmitEditing={handlePageSearch}
-                    style={[styles.searchInput, { fontSize: 10, paddingHorizontal: 3 }]}
-                  />
-                  <TouchableOpacity 
-                    onPress={handlePageSearch} 
-                    style={styles.searchButton}
-                    activeOpacity={0.7}
-                  >
-                    <Icons name="arrow-right" size={20} color="white" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </LinearGradient>              
-            )}
-
-            {/* Chapter Drawer */}
-            <ChapterDrawer
-              visible={isDrawerVisible}
-              currentPage={selectedPremiumKey}
-              onClose={() => setIsDrawerVisible(false)}
-              onChapterSelect={handleChapterSelect}
-              unlockedPremiumChapters={unlockedPremiumChapters}
-            />
-
-            {/* PDF Viewer */}
-            <View style={styles.pdfContainer}>
-              <Pdf
-                ref={pdfRef}
-                source={{ uri: chapter.uri }}
-                style={styles.pdf}
-                onLoadComplete={handlePdfLoadComplete}
-                onPageChanged={(page) => setCurrentPage(page)}
-                onError={(error) => {}}
-                horizontal={isHLScroll}
-                onPageSingleTap={handleSingleTap}
-              />
-              {isHeaderFooterVisible && (
-              <View style={styles.verticalSliderContainer}>
-                <Slider
-                  value={currentPage}
-                  minimumValue={1}
-                  maximumValue={totalPage}
-                  step={1}
-                  minimumTrackTintColor="#3B82F6"
-                  maximumTrackTintColor="#E5E7EB"
-                  thumbTintColor="#FF7E5F"
-                  vertical={true}
-                  onSlidingComplete={onSlidingComplete}
-                  trackStyle={styles.sliderTrack}
-                />
-              </View>                
-              )}
-            </View>
-
-            {/* Footer */}
-            { isHeaderFooterVisible && (
-            <LinearGradient 
-              colors={["#3B82F6", "#1E3A8A"]} 
-              style={styles.footer}
-              start={{x: 0, y: 1}}
-              end={{x: 0, y: 1}}
-            >
-              <View style={styles.footerContent}>
-                <View style={styles.pageInfo}>
-                  <Icons name="book-open-page-variant" size={20} color="white" />
-                  <Text style={styles.footerText}>{`  ${currentPage}/${totalPage}`}</Text>
-                </View>
-                <View style={styles.footerIcons}>
-                  <TouchableOpacity 
-                    onPress={() =>{
-                      setIsModalVisible(true)
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <Icons name="menu" size={24} color="white" style={styles.footerIcon} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </LinearGradient>              
-            )}
-          {/* Options Modal (for premium chapter view) */}
-          <Modal
-            visible={isModalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={() => setIsModalVisible(false)}
-          >
-            <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)}>
-              <View style={styles.modalOverlay}>
-                <View style={styles.bottomSheet}>
-                  <View style={styles.dragHandle} />
-                  <View style={styles.bottomSheetContent}>
-                    <Text style={styles.bottomSheetTitle}>Reading Options</Text>
-                    <ScrollView contentContainerStyle={styles.optionsContainer}>
-                      <View style={styles.optionsGrid}>
-                        {/* Chapters */}
-                        <TouchableOpacity
-                          style={styles.optionCard}
-                          onPress={showPremiumChapters}
-                        >
-                          <View style={styles.optionIconContainer}>
-                            <LottieView
-                              source={require('../../assets/animations/premium.json')}
-                              autoPlay
-                              loop
-                              style={{ width: 50, height: 50 }}
-                            />
-                          </View>
-                          <Text style={styles.optionText}>Premium Chapters</Text>
-                        </TouchableOpacity>
-                        {/* Orientation */}
-                        <TouchableOpacity
-                          style={styles.optionCard}
-                          onPress={handleOrientation}
-                        >
-                          <View style={styles.optionIconContainer}>
-                            <LottieView
-                              source={require('../../assets/animations/Orientation.json')}
-                              autoPlay
-                              loop
-                              style={{ width: 50, height: 50, backgroundColor: 'rgba(50, 43, 43, 1)', borderRadius: 25 }}
-                            />
-                          </View>
-                          <Text style={styles.optionText}>Orientation</Text>
-                        </TouchableOpacity>
-                        {/* Scroll Direction */}
-                        <TouchableOpacity
-                          style={styles.optionCard}
-                          onPress={() => setIsHLScroll(!isHLScroll)}
-                        >
-                          <View style={styles.optionIconContainer}>
-                            <LottieView
-                              source={isHLScroll
-                                ? require('../../assets/animations/Vertical_scroll.json')
-                                : require('../../assets/animations/horizontal_scroll.json')}
-                              autoPlay
-                              loop
-                              style={{ width: 50, height: 50 }}
-                            />
-                          </View>
-                          <Text style={styles.optionText}>
-                            {isHLScroll ? "Vertical Scroll" : "Horizontal Scroll"}
-                          </Text>
-                        </TouchableOpacity>
-                        {/* Add Note */}
-                        <TouchableOpacity
-                          style={styles.optionCard}
-                          onPress={() => {
-                            navigation.navigate('Notes', { page: currentPage, chapter: premiumTitle || chapter.title });
-                          }}
-                        >
-                          <View style={styles.optionIconContainer}>
-                            <LottieView
-                              source={require('../../assets/animations/addNote.json')}
-                              autoPlay
-                              loop
-                              style={{ width: 50, height: 50 }}
-                            />
-                          </View>
-                          <Text style={styles.optionText}>Add Note</Text>
-                        </TouchableOpacity>
-                        {/* Add Quotes */}
-                        <TouchableOpacity
-                          style={styles.optionCard}
-                          onPress={() => {
-                            navigation.navigate('Quotes', { page: currentPage, chapter: premiumTitle || chapter.title }); 
-                          }}
-                        >
-                          <View style={styles.optionIconContainer}>
-                            <LottieView
-                              source={require('../../assets/animations/addQuote.json')}
-                              autoPlay
-                              loop
-                              style={{ width: 50, height: 50 }}
-                            />
-                          </View>
-                          <Text style={styles.optionText}>Add Quotes</Text>
-                        </TouchableOpacity>
-                        {/* Share */}
-                        <TouchableOpacity
-                          style={styles.optionCard}
-                          onPress={() => {
-                            setIsModalVisible(false);
-                            Share.share({
-                              message: 'Check out this amazing book: Handhuuraa Oromoo Arsii',
-                            });
-                          }}
-                        >
-                          <View style={styles.optionIconContainer}>
-                            <LottieView
-                              source={require('../../assets/animations/share.json')}
-                              autoPlay
-                              loop
-                              style={{ width: 50, height: 50 }}
-                            />
-                          </View>
-                          <Text style={styles.optionText}>Share</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </ScrollView>
-                  </View>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-          </Animated.View>
-        </SafeAreaView>
-      );
-    } else {
-      // Show a loading indicator or fallback UI while waiting for ad unlock
-      return (
-        <SafeAreaView style={styles.safeArea} edges={["top"]}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-            <ActivityIndicator size="large" color="#3B82F6" />
-            <Text style={{ marginTop: 20, color: '#1E3A8A', fontWeight: 'bold' }}>Preparing your chapter...</Text>
-            <TouchableOpacity onPress={() => setIsPremiumVisible(false)} style={{ marginTop: 30 }}>
-              <Text style={{ color: '#3B82F6', fontWeight: 'bold', fontSize: 16 }}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
-      );
-    }
-  } else {
-    // Fallback if something went wrong
+  if (isPremiumVisible) {
     return (
-      <SafeAreaView style={styles.safeArea} edges={["top"]}>
-        <SystemBars style='light' />
-        <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: 'black' }]}>Chapter Not Found</Text>
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>Unable to load chapter. Please try again.</Text>
-          <TouchableOpacity 
-            style={styles.backButton} 
-            onPress={() => setIsPremiumVisible(false)}
-          >
-            <Text style={{ color: '#3B82F6', fontWeight: 'bold', fontSize: 16 }}>Back</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+      <PremiumChapterModal
+        isPremiumVisible={isPremiumVisible}
+        selectedPremiumKey={selectedPremiumKey}
+        premiumChapters={premiumChapters}
+        premiumSource={premiumSource}
+        premiumTitle={premiumTitle}
+        setIsPremiumVisible={setIsPremiumVisible}
+        setIsDrawerVisible={setIsDrawerVisible}
+        isHeaderFooterVisible={isHeaderFooterVisible}
+        isStatusBarHidden={isStatusBarHidden}
+        inputPage={inputPage}
+        setInputPage={setInputPage}
+        handlePageSearch={handlePageSearch}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPage={totalPage}
+        onSlidingComplete={onSlidingComplete}
+        isHLScroll={isHLScroll}
+        handleSingleTap={handleSingleTap}
+        handlePdfLoadComplete={handlePdfLoadComplete}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        handleOrientation={handleOrientation}
+        setIsHLScroll={setIsHLScroll}
+        navigation={navigation}
+        unlockedPremiumChapters={unlockedPremiumChapters}
+        handleChapterSelect={handleChapterSelect}
+        styles={styles}
+      />
     );
   }
-}
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
@@ -562,7 +316,6 @@ if (isPremiumVisible) {
         </LinearGradient>          
         )}
 
-
         {/* Chapter Drawer */}
         <ChapterDrawer
           visible={isDrawerVisible}
@@ -602,7 +355,6 @@ if (isPremiumVisible) {
             />
           </View>            
           )}
-
         </View>
  
         {/* Footer */}
@@ -628,9 +380,7 @@ if (isPremiumVisible) {
             </View>
           </View>
         </LinearGradient>
-          )
-        }
-
+        )}
 
         {/* Options Modal */}
         <Modal
@@ -640,128 +390,19 @@ if (isPremiumVisible) {
           onRequestClose={() => setIsModalVisible(false)}
         >
           <TouchableWithoutFeedback onPress={() => setIsModalVisible(false)}>
-            <View style={styles.modalOverlay}>
-              <View style={styles.bottomSheet}>
-                <View style={styles.dragHandle} />
-                <View style={styles.bottomSheetContent}>
-                  <Text style={styles.bottomSheetTitle}>Reading Options</Text>
-                  <ScrollView contentContainerStyle={styles.optionsContainer}>
-                    <View style={styles.optionsGrid}>
-                      {/* Chapters */}
-                      <TouchableOpacity
-                        style={styles.optionCard}
-                        onPress={showPremiumChapters}
-                      >
-                        <View style={styles.optionIconContainer}>
-                          <LottieView
-                            source={require('../../assets/animations/premium.json')}
-                            autoPlay
-                            loop
-                            style={{ width: 50, height: 50 }}
-                          />
-                        </View>
-                        <Text style={styles.optionText}>Premium Chapters</Text>
-                      </TouchableOpacity>
-
-                      {/* Orientation */}
-                      <TouchableOpacity
-                        style={styles.optionCard}
-                        onPress={handleOrientation}
-                      >
-                        <View style={styles.optionIconContainer}>
-                          <LottieView
-                            source={require('../../assets/animations/Orientation.json')}
-                            autoPlay
-                            loop
-                            style={{ width: 50, height: 50, backgroundColor: 'rgba(50, 43, 43, 1)', borderRadius: 25 }}
-                          />
-                        </View>
-                        <Text style={styles.optionText}>Orientation</Text>
-                      </TouchableOpacity>
-
-                      {/* Scroll Direction */}
-                      <TouchableOpacity
-                        style={styles.optionCard}
-                        onPress={() => setIsHLScroll(!isHLScroll)}
-                      >
-                        <View style={styles.optionIconContainer}>
-                          <LottieView
-                            source={isHLScroll
-                              ? require('../../assets/animations/Vertical_scroll.json')
-                              : require('../../assets/animations/horizontal_scroll.json')}
-                            autoPlay
-                            loop
-                            style={{ width: 50, height: 50 }}
-                          />
-                        </View>
-                        <Text style={styles.optionText}>
-                          {isHLScroll ? "Vertical Scroll" : "Horizontal Scroll"}
-                        </Text>
-                      </TouchableOpacity>
-
-                      {/* Add Note */}
-                      <TouchableOpacity
-                        style={styles.optionCard}
-                        onPress={() => {
-                          setIsNoteVisible(true);
-                          setIsModalVisible(false);
-                        }}
-                      >
-                        <View style={styles.optionIconContainer}>
-                          <LottieView
-                            source={require('../../assets/animations/addNote.json')}
-                            autoPlay
-                            loop
-                            style={{ width: 50, height: 50 }}
-                          />
-                        </View>
-                        <Text style={styles.optionText}>Add Note</Text>
-                      </TouchableOpacity>
-
-                      {/* Add Quotes */}
-                      <TouchableOpacity
-                        style={styles.optionCard}
-                        onPress={() => {
-                          setIsQuoteVisible(true);
-                          setIsModalVisible(false);
-                        }}
-                      >
-                        <View style={styles.optionIconContainer}>
-                          <LottieView
-                            source={require('../../assets/animations/addQuote.json')}
-                            autoPlay
-                            loop
-                            style={{ width: 50, height: 50 }}
-                          />
-                        </View>
-                        <Text style={styles.optionText}>Add Quotes</Text>
-                      </TouchableOpacity>
-
-                      {/* Share */}
-                      <TouchableOpacity
-                        style={styles.optionCard}
-                        onPress={() => {
-                          setIsModalVisible(false);
-                            Share.share({
-                              message: 'Check out this amazing book: Risaa BookStore',
-                            });
-                        }}
-                      >
-                        <View style={styles.optionIconContainer}>
-                          <LottieView
-                            source={require('../../assets/animations/share.json')}
-                            autoPlay
-                            loop
-                            style={{ width: 50, height: 50 }}
-                          />
-                        </View>
-                        <Text style={styles.optionText}>Share</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </ScrollView>
-                </View>
-              </View>
-            </View>
+            <ReadOptionsModal 
+              visible={isModalVisible}
+              onClose={() => setIsModalVisible(false)}
+              showPremiumChapters={showPremiumChapters}
+              handleOrientation={handleOrientation}
+              isHLScroll={isHLScroll}
+              setIsHLScroll={setIsHLScroll}
+              setIsModalVisible={setIsModalVisible}
+              navigation={navigation}
+              currentPage={currentPage}
+              chapterTitle={chapterTitle}
+              styles={styles}
+            />
           </TouchableWithoutFeedback>
         </Modal>
       </Animated.View>
