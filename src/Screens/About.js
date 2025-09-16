@@ -11,7 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from 'react-native-edge-to-edge';
-import FooterInfo from '../Components/FooterInfo';
+import FooterInfo from '../Components/About/FooterInfo';
 import LottieView from 'lottie-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

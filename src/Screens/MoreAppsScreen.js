@@ -83,7 +83,7 @@ export default function MoreAppsScreen({ navigation }) {
              <Text style={styles.cardTitle}>Handhuraa Oromoo Arsii</Text>
            </View>
         <Text style={styles.cardDesc}>
-          Comprehensive all-in-one app for freshman university students with essential tools and resources.
+          Handhuraa Oromoo Arsii is a comprehensive collection of proverbs, idioms, and wise sayings from the Arsi Oromo community, reflecting their rich cultural heritage and traditional wisdom.
         </Text>
         <TouchableOpacity
           style={styles.cardButton}

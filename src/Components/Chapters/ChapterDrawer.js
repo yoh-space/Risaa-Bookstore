@@ -19,6 +19,9 @@ export default function ChapterDrawer({ visible, onClose, onChapterSelect, curre
   const [adLoaded, setAdLoaded] = React.useState(false);
   const translateX = React.useRef(new Animated.Value(-width)).current;
   const opacity = React.useRef(new Animated.Value(0)).current;
+  const introTitles = [];
+  const introPages = [];
+  const chapterTitles = [];
 
   React.useEffect(() => {
     if (visible) {

@@ -240,12 +240,10 @@ export default function Home({ navigation }) {
                 loop
                 style={styles.headerAnimation}
               />
-              <Text style={styles.title}>📚 Risaa Book Store</Text>
+              <Text style={styles.title}>Risaa Book Store</Text>
             </View>
-
-            {/* <Text style={[styles.title, { fontSize: 20, marginBottom: 10 }]}>
-              Risaa Collections
-            </Text> */}
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#fff'}}>Explore Oromo Literature</Text>
+            <Text style={{ fontSize: 14, color: '#fff', textAlign: 'flex-start', marginTop: 10, marginBottom: 20 }}>Select available book to read</Text>
 
             <FlatList
               data={RisaaCollections}
@@ -368,8 +366,8 @@ const styles = StyleSheet.create({
   },
   container: { flexGrow: 1, paddingBottom: 20 },
   contentWrapper: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
-  header: { alignItems: 'center', marginBottom: 20, marginTop: 10 },
-  headerAnimation: { width: 70, height: 70, marginBottom: 10 },
+  header: { alignItems: 'center', marginBottom: 10, flexDirection: 'row', justifyContent: 'flex-start' },
+  headerAnimation: { width: 50, height: 50, marginRight: 12 },
   title: {
     fontSize: 24,
     fontWeight: '800',
