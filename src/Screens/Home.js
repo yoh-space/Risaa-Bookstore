@@ -22,14 +22,43 @@ import { SystemBars } from "react-native-edge-to-edge";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import CartsModal from '../Components/Modals/CartsModal';
+
 const { width, height } = Dimensions.get('window');
 
 export default function Home({ navigation }) {
+  // Remove book from cart
+  const removeBookFromCart = (bookId) => {
+    const updatedCart = cartItems.filter(item => item.id !== bookId);
+    setCartItems(updatedCart);
+    ToastAndroid.show('Removed from cart', ToastAndroid.SHORT);
+  };
   const [backPressCount, setBackPressCount] = useState(0);
   const [exitModalVisible, setExitModalVisible] = useState(false);
   const [isStatusBarHidden, setIsStatusBarHidden] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [unlockedBooks, setUnlockedBooks] = useState([1]); // Example: Book with id 1 is unlocked
+  const [cartsModalVisible, setCartsModalVisible] = useState(false);
+
+  // Load cart items from AsyncStorage on mount
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const stored = await AsyncStorage.getItem('cartItems');
+        if (stored) setCartItems(JSON.parse(stored));
+      } catch {}
+    };
+    loadCart();
+  }, []);
+
+  // Save cart items to AsyncStorage whenever cartItems changes
+  useEffect(() => {
+    AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+  // Removed duplicate declaration of cartsModalVisible
+  // Make 'Siitolii' (id: 1) and 'Dhaloota Sodaa Cabse' (id: 2) free for all users
+  const [unlockedBooks, setUnlockedBooks] = useState([1, 2]);
 
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -59,7 +88,7 @@ export default function Home({ navigation }) {
       description: 'A collection of traditional Oromo folktales and stories.',
       image: require('../../assets/images/siitolii.jpg'),
       author: 'Kadiir Abdulaxif',
-      price: 4.99,
+      price: 0,
       rating: 4.8,
       pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
       chapterTitle: [
@@ -99,7 +128,7 @@ export default function Home({ navigation }) {
       description: 'An in-depth look at the history and culture of the Oromo people.',
       image: require('../../assets/images/dhaloota.jpg'),
       author: 'Kadiir Abdulaxif',
-      price: 5.99,
+      price: 0,
       rating: 4.5,
       pdfPath: {uri: 'bundle-assets://Hidhaa.pdf'},
       chapterTitle: [
@@ -228,6 +257,10 @@ export default function Home({ navigation }) {
   };
 
   const addToCart = (book) => {
+    if (cartItems.some(item => item.id === book.id)) {
+      ToastAndroid.show('Already added to cart', ToastAndroid.SHORT);
+      return;
+    }
     setCartItems([...cartItems, book]);
     ToastAndroid.show(`${book.title} added to cart`, ToastAndroid.SHORT);
   };
@@ -291,6 +324,14 @@ export default function Home({ navigation }) {
               <Ionicons name="book" size={16} color="#FFF" />
               <Text style={styles.actionButtonText}>Read Now</Text>
             </TouchableOpacity>
+          ) : cartItems.some(cart => cart.id === item.id) ? (
+            <TouchableOpacity
+              style={[styles.actionButton, styles.addedButton]}
+              disabled
+            >
+              <Ionicons name="checkmark" size={16} color="#FFF" />
+              <Text style={styles.actionButtonText}>Added to Cart</Text>
+            </TouchableOpacity>
           ) : (
             <TouchableOpacity
               style={[styles.actionButton, styles.buyButton]}
@@ -332,12 +373,10 @@ export default function Home({ navigation }) {
                 loop
                 style={styles.headerAnimation}
               />
-              <View>
                 <Text style={styles.title}>Risaa Book Store</Text>
                 <Text style={styles.subtitle}>Explore Oromo Literature</Text>
-              </View>
             </View>
-            <TouchableOpacity style={styles.cartIcon}>
+            <TouchableOpacity style={styles.cartIcon} onPress={() => setCartsModalVisible(true)}>
               <Ionicons name="cart" size={24} color="#FFF" />
               {cartItems.length > 0 && (
                 <View style={styles.cartBadge}>
@@ -393,6 +432,13 @@ export default function Home({ navigation }) {
             </View>
           </View>
         </Modal>
+        {/* Carts Modal */}
+        <CartsModal
+          visible={cartsModalVisible}
+          onClose={() => setCartsModalVisible(false)}
+          cartItems={cartItems}
+          onRemoveBook={removeBookFromCart}
+        />
       </LinearGradient>
     </View>
   );
@@ -420,7 +466,7 @@ const styles = StyleSheet.create({
   },
   container: { 
     flex: 1, 
-    paddingTop: StatusBar.currentHeight || 20 
+    // paddingTop: StatusBar.currentHeight || 20 
   },
   header: {
     flexDirection: 'row',
@@ -586,6 +632,10 @@ const styles = StyleSheet.create({
   },
   buyButton: {
     backgroundColor: '#27ae60',
+  },
+  addedButton: {
+    backgroundColor: '#888',
+    opacity: 0.8,
   },
   actionButtonText: {
     color: '#fff',
