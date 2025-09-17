@@ -11,7 +11,7 @@ export const themeColors = {
   backgroundAlt: '#233D91',   // Mid-tone blue
 
   // 📦 Cards & Surfaces
-  cardBackground: '#3a6293ff',  // Card blue
+  cardBackground: '#3a9383ff',  // Card blue
   cardBorder: '#4d5471ff',      // Card border/outline
   cardShadow: 'rgba(0,0,0,0.2)',
 
