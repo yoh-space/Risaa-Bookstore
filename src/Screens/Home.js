@@ -290,25 +290,22 @@ export default function Home({ navigation }) {
       <View style={styles.imageContainer}>
         <Image source={item.image} style={styles.collectionImage} />
         <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={12} color="#FFD700" />
+          <Ionicons name="star" size={12} color={themeColors.primary} />
           <Text style={styles.ratingText}>{item.rating}</Text>
         </View>
         {!isBookUnlocked(item.id) && (
           <View style={styles.lockedOverlay}>
-            <Ionicons name="lock-closed" size={24} color="#FFF" />
+            <Ionicons name="lock-closed" size={24} color={themeColors.textPrimary} />
             <Text style={styles.lockedText}>Purchase to unlock</Text>
           </View>
         )}
       </View>
-      
       <View style={styles.cardContent}>
         <Text style={styles.collectionTitle} numberOfLines={1}>{item.title}</Text>
         <Text style={styles.collectionAuthor}>By {item.author}</Text>
-        
         <View style={styles.priceContainer}>
           <Text style={styles.priceText}>${item.price}</Text>
         </View>
-        
         <View style={styles.buttonContainer}>
           {isBookUnlocked(item.id) ? (
             <TouchableOpacity
@@ -320,7 +317,7 @@ export default function Home({ navigation }) {
                 chapterTitle: item.chapterTitle
               })}
             >
-              <Ionicons name="book" size={16} color="#FFF" />
+              <Ionicons name="book" size={16} color={themeColors.textPrimary} />
               <Text style={styles.actionButtonText}>Read Now</Text>
             </TouchableOpacity>
           ) : cartItems.some(cart => cart.id === item.id) ? (
@@ -328,7 +325,7 @@ export default function Home({ navigation }) {
               style={[styles.actionButton, styles.addedButton]}
               disabled
             >
-              <Ionicons name="checkmark" size={16} color="#FFF" />
+              <Ionicons name="checkmark" size={16} color={themeColors.textPrimary} />
               <Text style={styles.actionButtonText}>Added to Cart</Text>
             </TouchableOpacity>
           ) : (
@@ -336,7 +333,7 @@ export default function Home({ navigation }) {
               style={[styles.actionButton, styles.buyButton]}
               onPress={() => addToCart(item)}
             >
-              <Ionicons name="cart" size={16} color="#FFF" />
+              <Ionicons name="cart" size={16} color={themeColors.textPrimary} />
               <Text style={styles.actionButtonText}>Add to Cart</Text>
             </TouchableOpacity>
           )}
@@ -348,7 +345,7 @@ export default function Home({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
-        colors={['#211c30ff', themeColors.secondary]}
+        colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
         style={styles.background}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
@@ -378,7 +375,7 @@ export default function Home({ navigation }) {
               </View>
             </View>
             <TouchableOpacity style={styles.cartIcon} onPress={() => setCartsModalVisible(true)}>
-              <Ionicons name="cart" size={24} color="#FFF" />
+              <Ionicons name="cart" size={24} color={themeColors.textPrimary} />
               {cartItems.length > 0 && (
                 <View style={styles.cartBadge}>
                   <Text style={styles.cartBadgeText}>{cartItems.length}</Text>
@@ -412,7 +409,7 @@ export default function Home({ navigation }) {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalBox}>
-              <Ionicons name="exit" size={40} color="#1a5f9c" style={styles.modalIcon} />
+              <Ionicons name="exit" size={40} color={themeColors.primary} style={styles.modalIcon} />
               <Text style={styles.modalText}>
                 Are you sure you want to exit?
               </Text>
@@ -454,7 +451,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     height: width * 0.8,
     borderRadius: width * 0.4,
-    backgroundColor: 'rgba(173, 92, 92, 0.23)',
+    backgroundColor: themeColors.cardShadow,
   },
   bottomShape: {
     position: 'absolute',
@@ -463,7 +460,7 @@ const styles = StyleSheet.create({
     width: width * 0.7,
     height: width * 0.7,
     borderRadius: width * 0.35,
-    backgroundColor: 'rgba(145, 131, 188, 0.2)',
+    backgroundColor: themeColors.cardShadow,
   },
   container: { 
     flex: 1,
@@ -488,11 +485,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#fff',
+    color: themeColors.textPrimary,
   },
   subtitle: {
     fontSize: 14,
-    color: 'rgba(255,255,255,0.8)',
+    color: themeColors.textSecondary,
     marginTop: 2,
   },
   cartIcon: {
@@ -503,7 +500,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    backgroundColor: '#E74C3C',
+    backgroundColor: themeColors.danger,
     width: 18,
     height: 18,
     borderRadius: 9,
@@ -511,7 +508,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cartBadgeText: {
-    color: '#FFF',
+    color: themeColors.textPrimary,
     fontSize: 10,
     fontWeight: 'bold',
   },
@@ -523,12 +520,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
+    color: themeColors.textPrimary,
     marginBottom: 4,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
+    color: themeColors.textSecondary,
     marginBottom: 20,
   },
   columnWrapper: {
@@ -540,15 +537,17 @@ const styles = StyleSheet.create({
   },
   collectionCard: {
     width: (width - 40) / 2,
-    backgroundColor: themeColors.secondary,
+    backgroundColor: themeColors.cardBackground,
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: themeColors.cardShadow,
     shadowOpacity: 0.2,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
     elevation: 5,
+    borderWidth: 1,
+    borderColor: themeColors.cardBorder,
   },
   imageContainer: {
     position: 'relative',
@@ -566,13 +565,13 @@ const styles = StyleSheet.create({
     right: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: themeColors.cardShadow,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
   },
   ratingText: {
-    color: '#FFF',
+    color: themeColors.textPrimary,
     fontSize: 12,
     marginLeft: 2,
     fontWeight: 'bold',
@@ -583,12 +582,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: themeColors.modalOverlay,
     justifyContent: 'center',
     alignItems: 'center',
   },
   lockedText: {
-    color: '#FFF',
+    color: themeColors.textPrimary,
     fontSize: 12,
     marginTop: 8,
     fontWeight: '500',
@@ -599,12 +598,12 @@ const styles = StyleSheet.create({
   collectionTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff',
+    color: themeColors.textPrimary,
     marginBottom: 4,
   },
   collectionAuthor: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.7)',
+    color: themeColors.textSecondary,
     marginBottom: 8,
     fontStyle: 'italic',
   },
@@ -614,7 +613,7 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: themeColors.primary,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -629,29 +628,29 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   readButton: {
-    backgroundColor: '#1a5f9c',
+    backgroundColor: themeColors.primary,
   },
   buyButton: {
-    backgroundColor: '#27ae60',
+    backgroundColor: themeColors.success,
   },
   addedButton: {
-    backgroundColor: '#888',
+    backgroundColor: themeColors.cardBorder,
     opacity: 0.8,
   },
   actionButtonText: {
-    color: '#fff',
+    color: themeColors.textPrimary,
     fontWeight: '600',
     fontSize: 12,
     marginLeft: 4,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: themeColors.modalOverlay,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalBox: {
-    backgroundColor: '#fff',
+    backgroundColor: themeColors.modalBackground,
     borderRadius: 20,
     padding: 25,
     width: '80%',
@@ -665,7 +664,7 @@ const styles = StyleSheet.create({
     fontWeight: '700', 
     marginBottom: 20, 
     textAlign: 'center',
-    color: '#333',
+    color: themeColors.textOnLight,
   },
   modalActions: { 
     flexDirection: 'row', 
@@ -680,18 +679,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   modalButtonPrimary: {
-    backgroundColor: '#1a5f9c',
+    backgroundColor: themeColors.primary,
   },
   modalButtonSecondary: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: themeColors.backgroundLight,
   },
   modalButtonTextPrimary: { 
-    color: '#fff', 
+    color: themeColors.textPrimary, 
     fontWeight: '600', 
     fontSize: 16 
   },
   modalButtonTextSecondary: { 
-    color: '#333', 
+    color: themeColors.textOnLight, 
     fontWeight: '600', 
     fontSize: 16 
   },

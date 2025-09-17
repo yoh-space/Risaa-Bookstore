@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  View, Text, Animated, StyleSheet, Dimensions, 
+  View, Text, Animated, StyleSheet, 
   TextInput, TouchableOpacity, StatusBar, Modal, 
-  TouchableWithoutFeedback, ScrollView, BackHandler,
-  ActivityIndicator, Alert, Share
+  TouchableWithoutFeedback, BackHandler, Alert
 } from 'react-native';
 import Pdf from 'react-native-pdf';
 import { Slider } from '@react-native-assets/slider';

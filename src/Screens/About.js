@@ -5,26 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Linking,
-  Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from 'react-native-edge-to-edge';
 import FooterInfo from '../Components/About/FooterInfo';
 import LottieView from 'lottie-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function About({ navigation }) {
-    const handleShare = async () => {
-    try {
-      await Share.share({
-        message: 'Check out Risaa Bookstore App! Download now from the Play Store.',
-      });
-    } catch (error) {
-      alert('Error sharing app');
-    }
-  };
 
   const menuItems = [
     {
