@@ -65,10 +65,10 @@ export default function MainTabs() {
           iconName = 'chatbox-ellipses-outline';
           animationSource = require('../../assets/animations/quotes.json');
           break;
-        case 'About':
-          iconName = 'information-outline';
-          animationSource = require('../../assets/animations/about.json');
-          break;
+        // case 'About':
+        //   iconName = 'information-outline';
+        //   animationSource = require('../../assets/animations/about.json');
+        //   break;
         case 'Profile':
           iconName = 'person-outline';
           animationSource = require('../../assets/animations/profile.json'); // Add this animation if available
@@ -135,7 +135,7 @@ export default function MainTabs() {
         <Tab.Screen name="Category" component={Category} options={{ unmountOnBlur: true }} />
         <Tab.Screen name="Quotes" component={Quotes} options={{ unmountOnBlur: true }} />
         <Tab.Screen name="Profile" component={Profile} options={{ unmountOnBlur: true }} />
-        <Tab.Screen name="About" component={About} options={{ unmountOnBlur: true }} />
+        {/* <Tab.Screen name="About" component={About} options={{ unmountOnBlur: true }} /> */}
       </Tab.Navigator>
     </SafeAreaView>
   );
