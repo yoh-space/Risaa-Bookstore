@@ -21,7 +21,7 @@ import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from "react-native-edge-to-edge";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { RisaaCollections, bookSections } from '../Components/RisaaColletions';
+import { RisaaCollections, bookSections } from '../Components/Utils/RisaaColletions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CartsModal from '../Components/Modals/CartsModal';

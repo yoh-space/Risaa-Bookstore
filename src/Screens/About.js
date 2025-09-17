@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from 'react-native-edge-to-edge';
 import FooterInfo from '../Components/About/FooterInfo';
 import LottieView from 'lottie-react-native';
+import { themeColors } from '../Components/Utils/color';
 
 export default function About({ navigation }) {
 
@@ -18,40 +19,40 @@ export default function About({ navigation }) {
     {
       title: 'Author',
       icon: 'person',
-      color: '#166d67',
+      color: themeColors.primary,
       action: () => navigation.navigate('AuthorInfoScreen')
     },
     {
       title: 'Developer',
       icon: 'code',
-      color: '#6C63FF',
+      color: themeColors.secondary,
       action: () => navigation.navigate('DeveloperInfoScreen')
     },
     {
       title: 'Share App',
       icon: 'share',
-      color: '#e67e22',
+      color: themeColors.warning,
       action: () => navigation.navigate('ShareAppScreen')
     },
     {
       title: 'Rate App',
       icon: 'star',
-      color: '#f1c40f',
+      color: themeColors.accent,
       action: () => navigation.navigate('RateAppScreen')
     },
-{
-  title: 'More Apps',
-  icon: 'apps',
-  color: '#8e44ad',
-  action: () => navigation.navigate('MoreAppsScreen'),
-},
+    {
+      title: 'More Apps',
+      icon: 'apps',
+      color: themeColors.backgroundLight,
+      action: () => navigation.navigate('MoreAppsScreen'),
+    },
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#7d2e00ff' }}>
+  <View style={{ flex: 1, backgroundColor: themeColors.background }}>
       <ScrollView contentContainerStyle={styles.container}>
       <LinearGradient
-        colors={['#512904ff', '#211c30ff', '#753704ff']}
+        colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
         style={styles.background}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
@@ -76,7 +77,7 @@ export default function About({ navigation }) {
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={[item.color, `${item.color}cc`]}
+                  colors={[item.color, themeColors.cardBackground]}
                   style={styles.menuItem}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
@@ -90,11 +91,11 @@ export default function About({ navigation }) {
                         style={{ width: 32, height: 32 }}
                       />
                     ) : (
-                      <Icon name={item.icon} size={24} color="#fff" />
+                      <Icon name={item.icon} size={24} color={themeColors.textPrimary} />
                     )}
                   </View>
                   <Text style={styles.menuItemText}>{item.title}</Text>
-                  <Icon name="chevron-right" size={24} color="#fff" />
+                  <Icon name="chevron-right" size={24} color={themeColors.textPrimary} />
                 </LinearGradient>
               </TouchableOpacity>
             ))}
@@ -132,13 +133,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '800',
-    color: 'white',
+    color: themeColors.textPrimary,
     marginBottom: 5,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 13,
-    color: '#7f8c8d',
+    color: themeColors.textSecondary,
     fontWeight: '500',
     textAlign: 'center',
   },
@@ -163,14 +164,14 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     flex: 1,
-    color: '#fff',
+    color: themeColors.textPrimary,
     fontSize: 16,
     fontWeight: '600',
   },
   footerText: {
     textAlign: 'center',
     marginTop: 30,
-    color: '#95a5a6',
+    color: themeColors.textMuted,
     fontSize: 14,
   },
 });

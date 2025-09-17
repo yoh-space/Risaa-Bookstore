@@ -8,209 +8,9 @@ import { BannerAd, BannerAdSize, InterstitialAd, AdEventType } from 'react-nativ
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SystemBars } from "react-native-edge-to-edge";
-
-const quotes = [
-  {
-    "text": "Ijoollee biyyaa kootii, hundumtuu haadhoo kooti.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Maaloo ormaayyuu guddisee, dabarseefii boonsee, maaf dabaree dhabaa? jette Oromiyaan, jette harmeen, boossee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Qotee qotee namichi, sanyii darbatee. Rafeen bulu, namni waan hormaa abdatee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Sooreettii haadha sooree, irbaanni irra buusa qaba.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Maarree yoo du’e, jabaan gaafa biyyaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Biyya ormaa dhaquun nama hindhibuu, galuutu nama dhiba.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Ani yoo du’e, lafa hinsiilessu.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Lubbuu biliqa baatuuf maafan gola naanna’aa, sabaa koof falmeen du’ee Taaddasaa Birruu ta’aa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Jirra jirra bullee barii arguuf, garaa nubal’isee yaa nuhii.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Oromoon Oromoo irratti yeroo dhukaasu arguu caala; du’a wayya, warri du’e nihobbaafate bar.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Baay’inni rakkoodhaa, furmaata mataansaa. Harreen ba’aa diddeeti, taati harree diidaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Garaaf qalbii kiyya hatanii, akkan sirraa cituuf yaadanii.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Nan mammaaka namammaaksisaa, raajii bara kanaa yaa jamaa. Boolla keessa teessee boolla qottii, dhaala abbaashee ilmoon rirmaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Manni keenya holqaaree tabba guddaadha malee, Oromoon biyya diigaaree, biyya ijaare malee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "An sossodaadhee baranaa, qalbii kootii. Gibee gamaan jaaladhee, sanyii mootii…",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Allaattiidhaaf kochoo; qocaadhaa dhagaachaa, kennaa maaltu dida? Jirra hunda baachaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Akkamiin sirraa citaa, fudhee Oromiyaa koo siin lixaa...",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Addaggeen safuun beektu; addarra buusan malee, falmadhu Qeerroo sihii abdiin sabaa yoomillee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Shaayee tiyya shaayee, haleeli shimalaan lolli gaye.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Kormi biyyaa ba’ee; biyyaa hormaa jiru, hinbokkisuu inuma barooda.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Diina hinsarmu; harka hinkennu, goonni Oromoo dura dhuma.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Gabaa galtu hingaggeessan; nidhageeffatu malee, namaa gamtu hindheessan, niwareegamu malee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Yoo Harargee luka cabsan, Wallaggaatu okkola.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Qotiyyoo abbaan didaa, yaa didaa harqoota keessaa. Qorra baraan dadhabee, morma kee jalattan dheessaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Yoo Ambootti goota ajjeessan, Shaasheetu gumaa baasa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Nuun mitii; Farda keenyaa nibeeku bareechanii, gaafa gaarren Adawaa, gaafa Maqalee sanii.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Walirraa fagaanne, kunoo dugdaaf garaa taanee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Cuwaa cufaa jettii, simbirroon halkanii. Nama garaan dhaane, dirmammuun arganii.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Of boodatti deebi’ee, bookeef tafkiin lakkaawu.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Maasaan gamaa lafan baatu; talbaa facaafata taatii, tokko du’ee tokko hinyaatu, wal-gaggalaafata taati.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Harki harka hinyaatu, diina ofii malee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Maaloo yaa ilmaan koo quxisuu; maaloo yaa ilmaan koo hangafaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Waa’een keenyaa, yoo itti dhiisan silaa nama hindhiisu.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Lafa ajaaf raqaa, allaattiif saree malee maaltu dhaqaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Garaan haadhaa burreedhaa, gootas dabbeessasi baata.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Kombortaa ormii namaa hinbaadhatu, abbatu ofii baadhata malee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Keessa namaa hinbeektu, keessa qabattee namatti kenniti.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Yaa jabbiloota koo; yaa jabbiloota odaa jalaa, kan nama nyaatu nukeessa jira.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Hiriyyaan dharaa; garaa sibaraa, mataa simaraa ofeegi hadaraa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Jiruu biyya ormaa maal jireenyaa jedhuu, obsuudha malee, danda’uudha malee kan biraa maal godhuu.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Mootummaan kun ana bituu hindanda’uu beeki, ani ummata kiyyaaf qaaliidha!.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Nafxanyaan kaleessas, hardhas borus diina Oromooti.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Seenaa Rirmi hinyaatu.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Mana gumaa nun geessinaa, mana gumaataa malee.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Biyya sirna gadaa, madda wal-qixxummaa. Gaaddisa odaan kee, mallattoo eenyummaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Lubbuun dhiiraa biliqa, guyyaa baatu hinbeekanii.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Jiituu bonaafi gannaa, kan uumamaan toltee; Jaannata ardiitii, kamtu siin qixxaatee?",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Qabda seenaa boonsaa, kumaatama kumaa! Haadha jechuun, biyya jechuun, anaa Oromiyaa dhumaa.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Hin qaanofneen nama qaanessiti.",
-    "source": "— Oromoo Proverbs"
-  },
-  {
-    "text": "Amboo gubbaan, yaa baala goodaree.",
-    "source": "— Oromoo Proverbs"
-  },
-];
+import { themeColors } from '../Components/Utils/color';
+import LinearGradient from 'react-native-linear-gradient';
+import { quotes } from '../Components/Utils/quotes';
  
 // AdMob test banner unit ID for both Android and iOS
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';
@@ -310,14 +110,20 @@ const Quotes = ({ onBack }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <LinearGradient
+      colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
+      style={{ flex: 1 }}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
+    >
+      <SafeAreaView style={[styles.container, { backgroundColor: 'transparent', flex: 1 }] }>
       {/* Header with Back Button */}
       <SystemBars style='light'/>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <Icons name="arrow-left" size={30} color="white" />
+          <Icons name="arrow-left" size={30} color={themeColors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.header}> Quotes from Book</Text>
+        <Text style={[styles.header, { color: themeColors.textPrimary }]}> Quotes from Book</Text>
       </View>
 
       {/* Add Quote Floating Button */}
@@ -337,11 +143,11 @@ const Quotes = ({ onBack }) => {
           loop
           style={{ width: 70, height: 70 }}
         />
-        <Text style={styles.floatingButtonText}>Add Quote</Text>
+  <Text style={[styles.floatingButtonText, { color: themeColors.textPrimary }]}>Add Quote</Text>
       </TouchableOpacity>
 
       {/* Scrollable Quotes List */}
-      <ScrollView style={styles.quoteList}>
+  <ScrollView style={[styles.quoteList, { backgroundColor: themeColors.cardBackground }] }>
         {allQuotes.map((quote, index) => (
           <TouchableOpacity
             key={index}
@@ -349,9 +155,9 @@ const Quotes = ({ onBack }) => {
             onLongPress={() => handleDeleteQuote(index)}
             delayLongPress={400}
           >
-            <View style={styles.quoteContainer}>
-              <Icons name="format-quote-close" size={20} color="white" />
-              <Text style={styles.quoteText}>{quote.text}</Text>
+            <View style={[styles.quoteContainer, { backgroundColor: themeColors.cardBackground, borderColor: themeColors.cardBorder }] }>
+              <Icons name="format-quote-close" size={20} color={themeColors.primary} />
+              <Text style={[styles.quoteText, { color: themeColors.textPrimary }]}>{quote.text}</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -368,7 +174,7 @@ const Quotes = ({ onBack }) => {
           <View style={styles.modalBackground}>
             <TouchableWithoutFeedback>
               <View style={[styles.modalContainer, { alignItems: 'stretch' }]}> 
-                <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: '#1a73e8', textAlign: 'center' }}>Add a Quote</Text>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: themeColors.primary, textAlign: 'center' }}>Add a Quote</Text>
                 <Text style={{ fontSize: 15, marginBottom: 6 }}>Quote Text</Text>
                 <TextInput
                   style={styles.input}
@@ -387,12 +193,12 @@ const Quotes = ({ onBack }) => {
                 />
                 <View style={{ alignItems: 'center', marginTop: 10 }}>
                   <TouchableOpacity
-                    style={{ backgroundColor: '#1a73e8', borderRadius: 30, width: 80, height: 30, justifyContent: 'center', alignItems: 'center',flexDirection: 'row' }}
+                    style={{ backgroundColor: themeColors.primary, borderRadius: 30, width: 80, height: 30, justifyContent: 'center', alignItems: 'center',flexDirection: 'row' }}
                     onPress={handleAddQuote}
                     activeOpacity={0.8}
                   >
-                    <Icon name='check' size={25} color="#fff" />
-                    <Text style={{ color: '#fff', fontSize: 12, marginLeft: 5 }}>Add</Text>
+                    <Icon name='check' size={25} color={themeColors.textPrimary} />
+                    <Text style={{ color: themeColors.textPrimary, fontSize: 12, marginLeft: 5 }}>Add</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -406,28 +212,27 @@ const Quotes = ({ onBack }) => {
         <Modal transparent visible={true} animationType="slide">
         <TouchableWithoutFeedback onPress={() => setSelectedQuote(null)}>
           <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalQuote}>{selectedQuote.text}</Text>
-              <Text style={styles.modalSource}>{selectedQuote.source}</Text>
+            <View style={[styles.modalContainer, { backgroundColor: themeColors.cardBackground }] }>
+              <Text style={[styles.modalQuote, { color: themeColors.textPrimary }]}>{selectedQuote.text}</Text>
+              <Text style={[styles.modalSource, { color: themeColors.textSecondary }]}>{selectedQuote.source}</Text>
             </View>
           </View>
           </TouchableWithoutFeedback>
         </Modal>
       )}
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#512904ff",
     paddingHorizontal: 15,
   },
   floatingButtonText:{
     fontSize: 12,
-    fontWeight: 300,
-    color: 'white',
+    fontWeight: '300',
   },
   headerContainer: {
     flexDirection: "row",
@@ -441,29 +246,26 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "white",
   },
   quoteList: {
     flex: 1,
     paddingBottom: 20,
-    backgroundColor: "#40250fff",
   },
   quoteContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
     padding: 15,
-    backgroundColor: "#605e5dff",
     borderRadius: 10,
-    shadowColor: "#000",
+    shadowColor: themeColors.cardShadow,
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 3,
+    borderWidth: 1,
   },
   quoteText: {
     fontSize: 16,
-    color: "white",
     marginLeft: 10,
     flex: 1,
   },
@@ -475,7 +277,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#512904ff",
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
@@ -485,11 +286,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
-    color: "white",
   },
   modalSource: {
     fontSize: 14,
-    color: "gray",
     textAlign: "center",
     marginBottom: 20,
   },
