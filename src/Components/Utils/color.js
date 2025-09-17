@@ -11,8 +11,8 @@ export const themeColors = {
   backgroundAlt: '#233D91',   // Mid-tone blue
 
   // 📦 Cards & Surfaces
-  cardBackground: '#2D4CC8',  // Card blue
-  cardBorder: '#4F6DE5',      // Card border/outline
+  cardBackground: '#3a6293ff',  // Card blue
+  cardBorder: '#4d5471ff',      // Card border/outline
   cardShadow: 'rgba(0,0,0,0.2)',
 
   // 🪟 Modals & Overlays
@@ -27,9 +27,9 @@ export const themeColors = {
   textOnLight: '#0A2342',     // For light backgrounds
 
   // 🌈 Gradients
-  gradientStart: '#4facfe',   // Light sky blue
-  gradientMiddle: '#1c44be',  // Royal blue (ties in main bg)
-  gradientEnd: '#081A3E',     // Dark navy depth
+  gradientEnd: '#21323bff',   // Light sky blue
+  gradientMiddle: 'darkblue',  // Royal blue (ties in main bg)
+  gradientStart: '#0a204bff',     // Dark navy depth
 
   // 🚦 States
   success: '#4CAF50',

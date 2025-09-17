@@ -13,13 +13,15 @@ import {
   FlatList,
   Animated,
   Easing,
+  ScrollView,
+  TextInput
 } from 'react-native';
 import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from "react-native-edge-to-edge";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { RisaaCollections, bookSections } from '../Components/RisaaColletions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CartsModal from '../Components/Modals/CartsModal';
@@ -28,12 +30,40 @@ const { width, height } = Dimensions.get('window');
 import { themeColors } from '../Components/Utils/color';
 
 export default function Home({ navigation }) {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Filter out the 'selling' category from bookSections
+  const filteredBookSections = bookSections.filter(section => section.id !== 'selling');
+
+  // Category options for filtering (excluding 'selling')
+  const categoryOptions = [
+    { id: 'all', label: 'All' },
+    ...filteredBookSections.map(section => ({ id: section.id, label: section.title }))
+  ];
+
+  // Category tab icons mapping
+  const categoryTabIcons = {
+    all: 'apps',
+    featured: 'star',
+    new: 'sparkles',
+    free: 'gift',
+    popular: 'flame',
+  };
+
+  // Filtered sections based on selected category
+  const filteredSections = selectedCategory === 'all'
+    ? filteredBookSections
+    : filteredBookSections.filter(section => section.id === selectedCategory);
+    
   // Remove book from cart
   const removeBookFromCart = (bookId) => {
     const updatedCart = cartItems.filter(item => item.id !== bookId);
     setCartItems(updatedCart);
     ToastAndroid.show('Removed from cart', ToastAndroid.SHORT);
   };
+  
   const [backPressCount, setBackPressCount] = useState(0);
   const [exitModalVisible, setExitModalVisible] = useState(false);
   const [isStatusBarHidden, setIsStatusBarHidden] = useState(false);
@@ -55,7 +85,7 @@ export default function Home({ navigation }) {
   useEffect(() => {
     AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
-  // Removed duplicate declaration of cartsModalVisible
+  
   // Make 'Siitolii' (id: 1) and 'Dhaloota Sodaa Cabse' (id: 2) free for all users
   const [unlockedBooks, setUnlockedBooks] = useState([1, 2]);
 
@@ -80,96 +110,14 @@ export default function Home({ navigation }) {
     ]).start();
   }, [fadeAnim, slideAnim]);
 
-  const RisaaCollections = [
-    {
-      id: 1,
-      title: 'Siitolii',
-      description: 'A collection of traditional Oromo folktales and stories.',
-      image: require('../../assets/images/siitolii.jpg'),
-      author: 'Kadiir Abdulaxif',
-      price: 0,
-      rating: 4.8,
-      pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
-      chapterTitle: [
-        {
-          title: 'BOQONNAA 1:HAACAALUUHUNDEESSAA',
-          startPage: 13,
-      },
-        {
-          title: ' BOQONNAA 2:HAACAAALUUFIAARTII',
-          startPage: 42,
-        },
-        {
-          title: ' BOQONNAA 3:SIRBOOTAHAACAAALUU',
-          startPage: 47,
-        },
-        {
-          title: ' BOQONNAA 4:DHALOOTASODAACABSE',
-          startPage: 80,
-        },
-        {
-          title: ' BOQONNAA 5:SEENDUUBEESIRBAHAACAAALUU',
-          startPage: 96,
-        },
-        {
-          title: 'BOQONNAA 6:ABJUUKARAATTIHAFE',
-          startPage: 129,
-        },
-        {
-          title: '',
-          startPage: 0,
-        }  
-    ]
-    },
-    {
-      id: 2,
-      title: 'Dhaloota Sodaa Cabse',
-      description: 'An in-depth look at the history and culture of the Oromo people.',
-      image: require('../../assets/images/dhaloota.jpg'),
-      author: 'Kadiir Abdulaxif',
-      price: 0,
-      rating: 4.5,
-      pdfPath: {uri: 'bundle-assets://Hidhaa.pdf'},
-      chapterTitle: [
-        { title: 'Chapter 1: The Origins of the Oromo', startPage: 15 },
-        { title: 'Chapter 2: The Gadaa System', startPage: 45 },
-        { title: 'Chapter 3: Oromo Traditions and Customs', startPage: 78 },
-        { title: 'Chapter 4: The Oromo Language', startPage: 102 },
-      ],
-    },
-    {
-      id: 3,
-      title: 'Wayyoma',
-      description: 'A linguistic guide and cultural exploration of the Oromo language.',
-      image: require('../../assets/images/worroma.jpg'),
-      author: 'Kadiir Abdulaxif',
-      price: 3.99,
-      rating: 4.2,
-      pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
-      chapterTitle: [
-        { title: 'Chapter 1: Oromo Alphabet and Pronunciation', startPage: 12 },
-        { title: 'Chapter 2: Basic Grammar and Sentence Structure', startPage: 36 },
-        { title: 'Chapter 3: Common Phrases and Expressions', startPage: 58 }, 
-      ] 
-    },
-    {
-      id: 4,
-      title: 'Goonni Gosa Dhaala',
-      description: 'The social, political, and cultural system of the Oromo people.',
-      image: require('../../assets/images/goomi.jpg'),
-      author: 'Asafa Jalata',
-      price: 6.99,
-      rating: 4.7,
-      pdfPath: {uri: 'bundle-assets://Dhaloota.pdf'},
-      chapterTitle: [
-        { title: 'Chapter 1: Introduction to the Gadaa System', startPage: 10 },
-        { title: 'Chapter 2: Gadaa Leadership and Governance', startPage: 35 },
-        { title: 'Chapter 3: Gadaa Rituals and Ceremonies', startPage: 60 },
-        { title: 'Chapter 4: The Role of Age Sets in Oromo Society', startPage: 85 },
-        { title: 'Chapter 5: Contemporary Challenges and the Future of Gadaa', startPage: 110 },
-      ]
-    },
-  ];
+  // Filter books based on search query
+  const filteredBooks = searchQuery 
+    ? RisaaCollections.filter(book => 
+        book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.description.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : RisaaCollections;
 
   // Back press handler
   useEffect(() => {
@@ -268,79 +216,154 @@ export default function Home({ navigation }) {
     return unlockedBooks.includes(bookId);
   };
 
-  // Render book card
-  const renderCollectionItem = ({ item, index }) => (
-    <Animated.View 
-      style={[
-        styles.collectionCard,
-        {
-          opacity: fadeAnim,
-          transform: [
-            { 
-              translateY: slideAnim.interpolate({
-                inputRange: [0, 50],
-                outputRange: [0, 20 - (index * 5)],
-                extrapolate: 'clamp'
-              })
-            }
-          ]
-        }
-      ]}
-    >
-      <View style={styles.imageContainer}>
-        <Image source={item.image} style={styles.collectionImage} />
-        <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={12} color={themeColors.primary} />
-          <Text style={styles.ratingText}>{item.rating}</Text>
-        </View>
-        {!isBookUnlocked(item.id) && (
-          <View style={styles.lockedOverlay}>
-            <Ionicons name="lock-closed" size={24} color={themeColors.textPrimary} />
-            <Text style={styles.lockedText}>Purchase to unlock</Text>
+  // Render book card based on card style and section
+  const renderBookCard = ({ item, index, cardStyle = 'default' }) => {
+    // Section-specific layouts
+    if (cardStyle === 'popular' || cardStyle === 'new') {
+      // Horizontal card: image left, details right
+      return (
+        <Animated.View style={[styles.collectionCard, styles.horizontalCard, { opacity: fadeAnim }]}>
+          <View style={styles.horizontalImageWrap}>
+            <Image source={item.image} style={styles.horizontalImage} />
           </View>
-        )}
-      </View>
-      <View style={styles.cardContent}>
-        <Text style={styles.collectionTitle} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.collectionAuthor}>By {item.author}</Text>
-        <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>${item.price}</Text>
+          <View style={styles.horizontalContent}>
+            <Text style={styles.collectionTitle} numberOfLines={1}>{item.title}</Text>
+            <Text style={styles.collectionAuthor} numberOfLines={1}>By {item.author}</Text>
+            <View style={styles.ratingContainer}>
+              <Ionicons name="star" size={12} color={themeColors.primary} />
+              <Text style={styles.ratingText}>{item.rating}</Text>
+            </View>
+            <Text style={item.price === 0 ? styles.freePriceText : styles.priceText}>
+              {item.price === 0 ? 'FREE' : `$${item.price}`}
+            </Text>
+            <View style={styles.buttonContainer}>
+              {isBookUnlocked(item.id) ? (
+                <TouchableOpacity style={[styles.actionButton, styles.readButton]} onPress={() => handleOpenBook({ pdfPath: item.pdfPath, title: item.title, chapterPage: item.chapterPage, chapterTitle: item.chapterTitle })}>
+                  <Ionicons name="book" size={16} color={themeColors.textPrimary} />
+                  <Text style={styles.actionButtonText}>Read Now</Text>
+                </TouchableOpacity>
+              ) : cartItems.some(cart => cart.id === item.id) ? (
+                <TouchableOpacity style={[styles.actionButton, styles.addedButton]} disabled>
+                  <Ionicons name="checkmark" size={16} color={themeColors.textPrimary} />
+                  <Text style={styles.actionButtonText}>Added to Cart</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={[styles.actionButton, styles.buyButton]} onPress={() => addToCart(item)}>
+                  <Ionicons name="cart" size={16} color={themeColors.textPrimary} />
+                  <Text style={styles.actionButtonText}>Add to Cart</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </Animated.View>
+      );
+    }
+
+    // Featured & Free: prominent tag/button
+    let tag = null;
+    if (cardStyle === 'featured') {
+      tag = (
+        <View style={styles.featuredTag}>
+          <Ionicons name="star" size={14} color={themeColors.textPrimary} />
+          <Text style={styles.featuredTagText}>Featured</Text>
         </View>
-        <View style={styles.buttonContainer}>
-          {isBookUnlocked(item.id) ? (
-            <TouchableOpacity
-              style={[styles.actionButton, styles.readButton]}
-              onPress={() => handleOpenBook({
-                pdfPath: item.pdfPath,
-                title: item.title,
-                chapterPage: item.chapterPage,
-                chapterTitle: item.chapterTitle
-              })}
-            >
-              <Ionicons name="book" size={16} color={themeColors.textPrimary} />
-              <Text style={styles.actionButtonText}>Read Now</Text>
-            </TouchableOpacity>
-          ) : cartItems.some(cart => cart.id === item.id) ? (
-            <TouchableOpacity
-              style={[styles.actionButton, styles.addedButton]}
-              disabled
-            >
-              <Ionicons name="checkmark" size={16} color={themeColors.textPrimary} />
-              <Text style={styles.actionButtonText}>Added to Cart</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[styles.actionButton, styles.buyButton]}
-              onPress={() => addToCart(item)}
-            >
-              <Ionicons name="cart" size={16} color={themeColors.textPrimary} />
-              <Text style={styles.actionButtonText}>Add to Cart</Text>
-            </TouchableOpacity>
+      );
+    } else if (cardStyle === 'free') {
+      tag = (
+        <View style={styles.freeTag}>
+          <Ionicons name="gift" size={14} color={themeColors.textPrimary} />
+          <Text style={styles.freeTagText}>FREE</Text>
+        </View>
+      );
+    }
+
+    return (
+      <Animated.View 
+        style={[styles.collectionCard, cardStyle === 'featured' && styles.featuredCard, cardStyle === 'free' && styles.freeCard, { opacity: fadeAnim }]}
+      >
+        <View style={[styles.imageContainer, { height: 120 }]}>
+          <Image source={item.image} style={styles.collectionImage} />
+          <View style={styles.ratingContainer}>
+            <Ionicons name="star" size={12} color={themeColors.primary} />
+            <Text style={styles.ratingText}>{item.rating}</Text>
+          </View>
+          {tag}
+          {!isBookUnlocked(item.id) && (
+            <View style={styles.lockedOverlay}>
+              <Ionicons name="lock-closed" size={24} color={themeColors.textPrimary} />
+              <Text style={styles.lockedText}>Purchase to unlock</Text>
+            </View>
           )}
         </View>
+        <View style={[styles.cardContent, { padding: 8 }]}>
+          <Text style={styles.collectionTitle} numberOfLines={1}>{item.title}</Text>
+          <Text style={styles.collectionAuthor} numberOfLines={1}>By {item.author}</Text>
+          <View style={styles.priceContainer}>
+            <Text style={item.price === 0 ? styles.freePriceText : styles.priceText}>
+              {item.price === 0 ? 'FREE' : `$${item.price}`}
+            </Text>
+          </View>
+          <View style={styles.buttonContainer}>
+            {isBookUnlocked(item.id) ? (
+              <TouchableOpacity style={[styles.actionButton, styles.readButton]} onPress={() => handleOpenBook({ pdfPath: item.pdfPath, title: item.title, chapterPage: item.chapterPage, chapterTitle: item.chapterTitle })}>
+                <Ionicons name="book" size={16} color={themeColors.textPrimary} />
+                <Text style={styles.actionButtonText}>Read Now</Text>
+              </TouchableOpacity>
+            ) : cartItems.some(cart => cart.id === item.id) ? (
+              <TouchableOpacity style={[styles.actionButton, styles.addedButton]} disabled>
+                <Ionicons name="checkmark" size={16} color={themeColors.textPrimary} />
+                <Text style={styles.actionButtonText}>Added to Cart</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={[styles.actionButton, styles.buyButton]} onPress={() => addToCart(item)}>
+                <Ionicons name="cart" size={16} color={themeColors.textPrimary} />
+                <Text style={styles.actionButtonText}>Add to Cart</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </Animated.View>
+    );
+  };
+
+  // Render section based on layout type
+  const renderSection = (section) => {
+    const sectionBooks = section.filter(filteredBooks);
+    
+    if (sectionBooks.length === 0) return null;
+
+    return (
+      <View style={{ marginBottom: section.layout === 'horizontal' ? 20 : 24 }} key={section.id}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <Text style={styles.sectionTitle}>{section.title}</Text>
+        </View>
+        
+        {section.layout === 'horizontal' ? (
+          <FlatList
+            key={`section-${section.id}-horizontal`}
+            data={sectionBooks}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item, index }) => renderBookCard({ item, index, cardStyle: section.cardStyle })}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalListContent}
+            ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+          />
+        ) : (
+          <FlatList
+            key={`section-${section.id}-2col`}
+            data={sectionBooks}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item, index }) => renderBookCard({ item, index, cardStyle: section.cardStyle })}
+            scrollEnabled={false}
+            numColumns={2}
+            columnWrapperStyle={styles.columnWrapper}
+            contentContainerStyle={styles.verticalListContent}
+          />
+        )}
       </View>
-    </Animated.View>
-  );
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -384,20 +407,89 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.contentWrapper}>
-            <Text style={styles.sectionTitle}>Featured Books</Text>
-            <Text style={styles.sectionSubtitle}>Select a book to read or purchase</Text>
-
-            <FlatList
-              data={RisaaCollections}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderCollectionItem}
-              numColumns={2}
-              showsVerticalScrollIndicator={false}
-              columnWrapperStyle={styles.columnWrapper}
-              contentContainerStyle={styles.listContent}
+          {/* Search Bar */}
+          <View style={styles.searchContainer}>
+            <Ionicons 
+              name="search" 
+              size={20} 
+              color={isSearchFocused ? themeColors.primary : themeColors.textSecondary} 
+              style={styles.searchIcon}
             />
+            <TextInput
+              style={[
+                styles.searchInput,
+                isSearchFocused && styles.searchInputFocused
+              ]}
+              placeholder="Search books, authors..."
+              placeholderTextColor={themeColors.textSecondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <Ionicons name="close-circle" size={20} color={themeColors.textSecondary} />
+              </TouchableOpacity>
+            )}
           </View>
+
+          <ScrollView style={styles.contentWrapper} showsVerticalScrollIndicator={false}>
+            {/* Category Filter Bar */}
+            <View style={{ marginBottom: 16 }}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.categoryContainer}
+              >
+                {categoryOptions.map(option => (
+                  <TouchableOpacity
+                    key={option.id}
+                    onPress={() => setSelectedCategory(option.id)}
+                    activeOpacity={0.85}
+                    style={[styles.categoryButton, selectedCategory === option.id && styles.categoryButtonActive]}
+                  >
+                    <Ionicons
+                      name={categoryTabIcons[option.id] || 'ellipse'}
+                      size={18}
+                      color={selectedCategory === option.id ? themeColors.textPrimary : themeColors.textSecondary}
+                      style={{ marginRight: 7 }}
+                    />
+                    <Text style={[styles.categoryButtonText, selectedCategory === option.id && styles.categoryButtonTextActive]}>
+                      {option.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+
+            {/* Show search results or regular sections */}
+            {searchQuery ? (
+              <View style={{ marginBottom: 24 }}>
+                <Text style={styles.sectionTitle}>Search Results</Text>
+                {filteredBooks.length > 0 ? (
+                  <FlatList
+                    key={`search-2col`}
+                    data={filteredBooks}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item, index }) => renderBookCard({ item, index })}
+                    scrollEnabled={false}
+                    numColumns={2}
+                    columnWrapperStyle={styles.columnWrapper}
+                    contentContainerStyle={styles.listContent}
+                  />
+                ) : (
+                  <View style={styles.noResultsContainer}>
+                    <Ionicons name="search" size={48} color={themeColors.textSecondary} />
+                    <Text style={styles.noResultsText}>No books found</Text>
+                    <Text style={styles.noResultsSubtext}>Try different keywords</Text>
+                  </View>
+                )}
+              </View>
+            ) : (
+              filteredSections.map(section => renderSection(section))
+            )}
+          </ScrollView>
         </View>
 
         {/* Exit Modal */}
@@ -430,6 +522,7 @@ export default function Home({ navigation }) {
             </View>
           </View>
         </Modal>
+        
         {/* Carts Modal */}
         <CartsModal
           visible={cartsModalVisible}
@@ -464,14 +557,14 @@ const styles = StyleSheet.create({
   },
   container: { 
     flex: 1,
-    // marginTop: Platform.OS === 'android'? StatusBar.currentHeight: 0
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     paddingVertical: 10,
+    marginTop: 10,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -512,47 +605,169 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: themeColors.cardBackground,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderRadius: 24,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: themeColors.cardBorder,
+  },
+  searchIcon: {
+    marginRight: 12,
+  },
+  searchInput: {
+    flex: 1,
+    color: themeColors.textPrimary,
+    fontSize: 12,
+  },
+  searchInputFocused: {
+    borderColor: themeColors.primary,
+  },
   contentWrapper: { 
     flex: 1, 
-    paddingHorizontal: 16, 
-    paddingTop: 10 
+    paddingHorizontal: 16,
+  },
+  categoryContainer: {
+    paddingHorizontal: 2,
+  },
+  categoryButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 24,
+    marginHorizontal: 6,
+    marginVertical: 2,
+    backgroundColor: themeColors.cardBackground,
+    borderWidth: 1,
+    borderColor: themeColors.cardBorder,
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: 70,
+  },
+  categoryButtonActive: {
+    backgroundColor: themeColors.primary,
+    borderColor: themeColors.primary,
+    shadowColor: themeColors.primary,
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  categoryButtonText: {
+    color: themeColors.textSecondary,
+    fontWeight: '600',
+    fontSize: 14,
+    letterSpacing: 0.2,
+  },
+  categoryButtonTextActive: {
+    color: themeColors.textPrimary,
+    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: themeColors.textPrimary,
-    marginBottom: 4,
   },
-  sectionSubtitle: {
-    fontSize: 14,
-    color: themeColors.textSecondary,
-    marginBottom: 20,
+  horizontalListContent: {
+    paddingVertical: 6,
+  },
+  verticalListContent: {
+    paddingVertical: 6,
   },
   columnWrapper: {
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   listContent: { 
-    paddingBottom: 20 
+    paddingBottom: 16 
   },
   collectionCard: {
-    width: (width - 40) / 2,
     backgroundColor: themeColors.cardBackground,
-    borderRadius: 16,
+    borderRadius: 14,
     overflow: 'hidden',
-    marginBottom: 16,
+    marginBottom: 12,
     shadowColor: themeColors.cardShadow,
     shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 5,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
     borderWidth: 1,
     borderColor: themeColors.cardBorder,
+    width: (width - 44) / 2, // Fixed width for all cards
+  },
+  featuredCard: {
+    shadowColor: themeColors.primary,
+    shadowOpacity: 0.3,
+    elevation: 5,
+  },
+  freeCard: {
+    borderColor: themeColors.success,
+  },
+  horizontalCard: {
+    flexDirection: 'row',
+    width: width - 32,
+    minHeight: 140,
+    alignItems: 'center',
+    padding: 8,
+  },
+  horizontalImageWrap: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginRight: 12,
+  },
+  horizontalImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  horizontalContent: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  featuredTag: {
+    position: 'absolute',
+    top: 6,
+    left: 6,
+    backgroundColor: themeColors.primary,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    zIndex: 2,
+  },
+  featuredTagText: {
+    color: themeColors.textPrimary,
+    fontWeight: 'bold',
+    fontSize: 11,
+    marginLeft: 3,
+  },
+  freeTag: {
+    position: 'absolute',
+    top: 6,
+    left: 6,
+    backgroundColor: themeColors.success,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    zIndex: 2,
+  },
+  freeTagText: {
+    color: themeColors.textPrimary,
+    fontWeight: 'bold',
+    fontSize: 11,
+    marginLeft: 3,
   },
   imageContainer: {
     position: 'relative',
     width: '100%',
-    height: 160,
   },
   collectionImage: {
     width: '100%',
@@ -561,18 +776,18 @@ const styles = StyleSheet.create({
   },
   ratingContainer: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: 6,
+    right: 6,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: themeColors.cardShadow,
-    paddingHorizontal: 6,
+    paddingHorizontal: 5,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 8,
   },
   ratingText: {
     color: themeColors.textPrimary,
-    fontSize: 12,
+    fontSize: 11,
     marginLeft: 2,
     fontWeight: 'bold',
   },
@@ -588,32 +803,38 @@ const styles = StyleSheet.create({
   },
   lockedText: {
     color: themeColors.textPrimary,
-    fontSize: 12,
-    marginTop: 8,
+    fontSize: 11,
+    marginTop: 6,
     fontWeight: '500',
   },
   cardContent: {
-    padding: 12,
+    flex: 1,
+    justifyContent: 'space-between',
   },
   collectionTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     color: themeColors.textPrimary,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   collectionAuthor: {
-    fontSize: 12,
+    fontSize: 11,
     color: themeColors.textSecondary,
-    marginBottom: 8,
+    marginBottom: 6,
     fontStyle: 'italic',
   },
   priceContainer: {
-    marginBottom: 12,
+    marginBottom: 8,
   },
   priceText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: themeColors.primary,
+  },
+  freePriceText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: themeColors.success,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -623,8 +844,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
-    borderRadius: 8,
+    paddingVertical: 6,
+    borderRadius: 6,
     marginHorizontal: 2,
   },
   readButton: {
@@ -640,8 +861,24 @@ const styles = StyleSheet.create({
   actionButtonText: {
     color: themeColors.textPrimary,
     fontWeight: '600',
-    fontSize: 12,
-    marginLeft: 4,
+    fontSize: 11,
+    marginLeft: 3,
+  },
+  noResultsContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  noResultsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: themeColors.textPrimary,
+    marginTop: 16,
+  },
+  noResultsSubtext: {
+    fontSize: 14,
+    color: themeColors.textSecondary,
+    marginTop: 8,
   },
   modalOverlay: {
     flex: 1,
