@@ -6,6 +6,7 @@ export default function CartsModal({ visible, onClose, cartItems, onRemoveBook }
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const [error, setError] = useState('');
   
   const subtotal = cartItems.reduce((sum, book) => sum + (book.price || 0), 0);
   const totalPrice = subtotal - discount;
@@ -16,15 +17,15 @@ export default function CartsModal({ visible, onClose, cartItems, onRemoveBook }
       setDiscount(subtotal * 0.1); // 10% discount
       setIsCouponApplied(true);
     } else {
-      setDiscount(0);
-      setIsCouponApplied(false);
-      alert('Invalid coupon code');
+    setDiscount(0);
+    setIsCouponApplied(false);
+    setError('Invalid coupon code');
     }
   };
 
   const handleProceedToPayment = () => {
     // Payment logic would go here
-    alert('Proceeding to payment...');
+    setError('Proceeding to payment...');
     // You might navigate to a payment screen or process payment here
   };
 
@@ -48,13 +49,16 @@ export default function CartsModal({ visible, onClose, cartItems, onRemoveBook }
             </TouchableOpacity>
           </View>
           
+          {error ? (
+            <Text style={{ color: '#E74C3C', textAlign: 'center', marginBottom: 8 }}>{error}</Text>
+          ) : null}
           <FlatList
             data={cartItems}
             keyExtractor={(item, idx) => item.id ? item.id.toString() : idx.toString()}
             renderItem={({ item }) => (
               <View style={styles.itemRow}>
                 <Text style={styles.bookTitle}>{item.title}</Text>
-                <Text style={styles.bookPrice}>${item.price.toFixed(2)}</Text>
+                <Text style={styles.bookPrice}>{`$${item.price.toFixed(2)}`}</Text>
                 <TouchableOpacity onPress={() => onRemoveBook(item.id)} style={styles.removeBtn}>
                   <Ionicons name="trash" size={20} color="#E74C3C" />
                 </TouchableOpacity>
@@ -62,7 +66,6 @@ export default function CartsModal({ visible, onClose, cartItems, onRemoveBook }
             )}
             ListEmptyComponent={<Text style={styles.emptyText}>No books in cart.</Text>}
           />
-// ...existing code...
           
           {/* Coupon Code Section */}
           <View style={styles.couponSection}>

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Dimensions,
   BackHandler,
@@ -19,7 +18,6 @@ import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from "react-native-edge-to-edge";
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +25,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartsModal from '../Components/Modals/CartsModal';
 
 const { width, height } = Dimensions.get('window');
+import { themeColors } from '../Components/Utils/color';
 
 export default function Home({ navigation }) {
   // Remove book from cart
@@ -349,7 +348,7 @@ export default function Home({ navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
-        colors={['#512904ff', '#211c30ff', '#8c4103c6']}
+        colors={['#211c30ff', themeColors.secondary]}
         style={styles.background}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
@@ -373,8 +372,10 @@ export default function Home({ navigation }) {
                 loop
                 style={styles.headerAnimation}
               />
+              <View>
                 <Text style={styles.title}>Risaa Book Store</Text>
                 <Text style={styles.subtitle}>Explore Oromo Literature</Text>
+              </View>
             </View>
             <TouchableOpacity style={styles.cartIcon} onPress={() => setCartsModalVisible(true)}>
               <Ionicons name="cart" size={24} color="#FFF" />
@@ -465,14 +466,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(145, 131, 188, 0.2)',
   },
   container: { 
-    flex: 1, 
-    // paddingTop: StatusBar.currentHeight || 20 
+    flex: 1,
+    // marginTop: Platform.OS === 'android'? StatusBar.currentHeight: 0
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
   },
   headerLeft: {
@@ -539,7 +540,7 @@ const styles = StyleSheet.create({
   },
   collectionCard: {
     width: (width - 40) / 2,
-    backgroundColor: 'rgba(81, 41, 4, 0.9)',
+    backgroundColor: themeColors.secondary,
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,

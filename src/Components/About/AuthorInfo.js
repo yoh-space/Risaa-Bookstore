@@ -42,7 +42,6 @@ export default function AuthorInfo() {
       padding: 20, 
       borderRadius: 16,
       marginVertical: 10,
-
     }}>
       <SystemBars style='dark' />
       {/* Author Header */}
@@ -198,7 +197,7 @@ export default function AuthorInfo() {
                 color: '#4A5568', 
                 fontSize: 14 
               }}>
-                +251 912 345 678
+                +251 92 875 3295
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#166d67" />
