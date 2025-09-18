@@ -17,10 +17,11 @@ import {
 import { LinearGradient } from 'react-native-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { SystemBars } from 'react-native-edge-to-edge';
+import { themeColors } from '../Utils/color';
 
 const { width, height } = Dimensions.get('window');
 
-export default function AuthScreen() {
+export default function Login({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
@@ -33,8 +34,6 @@ export default function AuthScreen() {
   
   const slideAnim = useState(new Animated.Value(0))[0];
   const fadeAnim = useState(new Animated.Value(0))[0];
-
-  const toggleForm = () => {
   const handleAuth = async () => {
     setLoading(true);
     setError('');
@@ -55,24 +54,6 @@ export default function AuthScreen() {
     }
     setLoading(false);
   };
-    Animated.parallel([
-      Animated.timing(slideAnim, {
-        toValue: isSignIn ? 1 : 0,
-        duration: 500,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: isSignIn ? 1 : 0,
-        duration: 300,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true
-      })
-    ]).start();
-    
-    setIsSignIn(!isSignIn);
-  };
-
   const translateX = slideAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0, -width]
@@ -84,14 +65,17 @@ export default function AuthScreen() {
   });
 
   return (
+    <View style={{flex:1, backgroundColor: themeColors.backgroundDark }}>
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <LinearGradient
-        colors={['#6a11cb', '#2575fc']}
-        style={styles.gradient}
-      >
+        <LinearGradient
+          colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
+          style={styles.background}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+         >
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <SystemBars style="light" />
           <View style={styles.logoContainer}>
@@ -99,7 +83,7 @@ export default function AuthScreen() {
               source={{ uri: 'https://placehold.co/100x100/6a11cb/FFFFFF/png?text=Logo' }} 
               style={styles.logo}
             />
-            <Text style={styles.appName}>AppName</Text>
+            <Text style={styles.appName}>Risaa BookStore</Text>
             <Text style={styles.tagline}>
               {isSignIn ? 'Welcome back!' : 'Create your account'}
             </Text>
@@ -221,7 +205,9 @@ export default function AuthScreen() {
                 <Text style={styles.signUpText}>
                   {isSignIn ? "Don't have an account?" : "Already have an account?"}
                 </Text>
-                <TouchableOpacity onPress={toggleForm}>
+                <TouchableOpacity onPress={() => {
+                  navigation.navigate('RootStack', { screen: 'SignUp' })
+                  }}>
                   <Text style={styles.signUpLink}>
                     {isSignIn ? ' Sign Up' : ' Sign In'}
                   </Text>
@@ -231,11 +217,16 @@ export default function AuthScreen() {
           </Animated.View>
         </ScrollView>
       </LinearGradient>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView>              
+</View>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: themeColors.backgroundDark,
+  },
   container: {
     flex: 1,
   },

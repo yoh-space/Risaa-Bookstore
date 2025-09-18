@@ -12,6 +12,7 @@ import AuthorInfo from './src/Components/About/AuthorInfo';
 import DeveloperInfo from './src/Components/About/DeveloperInfo';
 import ShareApp from './src/Components/About/ShareApp';
 import RateApp from './src/Components/About/RateApp';
+import RootStack from './src/Components/RootStack';
 import mobileAds, { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 // Interstitial ad setup
 const INTERSTITIAL_AD_UNIT_ID = 'ca-app-pub-7604915619325589/3947033537';
@@ -153,6 +154,7 @@ export default function App() {
             {({ route }) => <ShareApp {...route.params} />}
           </Stack.Screen>
           <Stack.Screen name="RateAppScreen" component={RateApp} />
+          <Stack.Screen name="RootStack" component={RootStack} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

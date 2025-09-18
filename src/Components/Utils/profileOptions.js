@@ -11,6 +11,7 @@ export const options = [
     title: 'Settings',
     data: [
       { id: 3, name: 'Languages', icon: 'language' },
+      { id: 14, name: 'Logout', icon: 'logout' },
     ],
   },
   {

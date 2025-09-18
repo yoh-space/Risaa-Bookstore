@@ -18,7 +18,7 @@ import { options } from '../Components/Utils/profileOptions';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Profile() {
+export default function Profile({navigation}) {
 
   // Example user data
   const user = {
@@ -28,14 +28,6 @@ export default function Profile() {
     avatar: 'https://i.pravatar.cc/150?img=12',
   };
 
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      // TODO: Navigate to login screen
-    } catch (e) {
-      // Handle error
-    }
-  };
   return (
     <View style={{flex:1}}>
       <LinearGradient
@@ -47,7 +39,9 @@ export default function Profile() {
        <View style={styles.headerRow}>
         <Icon name="person" size={24} color="white" style={styles.backIcon} />
         <Text style={styles.profileTitle}>Profile</Text>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+        <TouchableOpacity onPress={() => {    
+          navigation.navigate('RootStack', { screen: 'Login' });
+        }} style={styles.logoutBtn}>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
