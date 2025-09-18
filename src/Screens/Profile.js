@@ -13,6 +13,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from 'react-native-edge-to-edge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { themeColors } from '../Components/Utils/color';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,7 +22,7 @@ const options = [
   {
     title: 'Account',
     data: [
-      { id: 1, name: 'Payment History', icon: 'receipt' },
+      { id: 1, name: 'Payment History', icon: 'cart' },
       { id: 2, name: 'Quick Access', icon: 'book' },
       { id: 5, name: 'Notification', icon: 'notifications' },
     ],
@@ -109,7 +110,11 @@ const options = [
             <View style={styles.optionsContainer}>
               {section.data.map((item) => (
                 <TouchableOpacity key={item.id} style={styles.optionCard}>
-                  <Icon name={item.icon} size={22} color={themeColors.primary} />
+                  {item.name === 'Payment History' ? (
+                    <Ionicons name="cart" size={22} color={themeColors.primary} />
+                  ) : (
+                    <Icon name={item.icon} size={22} color={themeColors.primary} />
+                  )}
                   <Text style={styles.optionText}>{item.name}</Text>
                   {item.value && (
                     <Text style={styles.optionValue}>{item.value}</Text>
