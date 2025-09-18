@@ -393,7 +393,7 @@ export default function Home({ navigation }) {
                 style={styles.headerAnimation}
               />
               <View>
-                <Text style={styles.title}>Risaa Book Store</Text>
+                <Text style={styles.title}>Risaa BookStore</Text>
                 <Text style={styles.subtitle}>Explore Oromo Literature</Text>
               </View>
             </View>
