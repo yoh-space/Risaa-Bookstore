@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import { logOut } from '../Auth/authService';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from 'react-native-edge-to-edge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -16,146 +17,273 @@ import { themeColors } from '../Components/Utils/color';
 const { width, height } = Dimensions.get('window');
 
 export default function Profile() {
-  const options = [
-    { id: 1, name: 'Edit Profile', icon: 'person' },
-    { id: 2, name: 'Bio', icon: 'info' },
-    { id: 3, name: 'Quick Access', icon: 'flash-on' },
-    { id: 4, name: 'Purchase History', icon: 'shopping-cart' },
-    { id: 5, name: 'Options', icon: 'settings' },
-    { id: 6, name: 'Help & Support', icon: 'help' },
-    { id: 7, name: 'Logout', icon: 'logout' },
-    { id: 8, name: 'About Us', icon: 'info' },
-  ];
+const options = [
+  {
+    title: 'Account',
+    data: [
+      { id: 1, name: 'Payment History', icon: 'receipt' },
+      { id: 2, name: 'Quick Access', icon: 'book' },
+      { id: 5, name: 'Notification', icon: 'notifications' },
+    ],
+  },
+  {
+    title: 'Settings',
+    data: [
+      { id: 3, name: 'Languages', icon: 'language' },
+    ],
+  },
+  {
+    title: 'App Info & Support',
+    data: [
+      { id: 6, name: 'About Us', icon: 'info', value: 'Risaa Bookstore' },
+      { id: 7, name: 'Privacy Policy', icon: 'privacy-tip' },
+      { id: 8, name: 'Terms & Conditions', icon: 'gavel' },
+      { id: 9, name: 'Help & Support', icon: 'help' },
+      { id: 13, name: 'FAQ', icon: 'feedback' },
+    ],
+  },
+  {
+    title: 'Engage',
+    data: [
+      { id: 10, name: 'Rate Us', icon: 'star' },
+      { id: 12, name: 'Share App', icon: 'share' },
+    ],
+  },
+  {
+    title: 'Developer',
+    data: [
+      { id: 11, name: 'About Developer', icon: 'face' },
+    ],
+  },
+];
 
+
+  // Example user data
+  const user = {
+    name: 'Ryan Sterling',
+    id: '1105486242',
+    membership: 'Standard Member',
+    avatar: 'https://i.pravatar.cc/150?img=12',
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      // TODO: Navigate to login screen
+    } catch (e) {
+      // Handle error
+    }
+  };
   return (
-    <LinearGradient
-      colors={[
-        themeColors.gradientStart,
-        themeColors.gradientMiddle,
-        themeColors.gradientEnd,
-      ]}
-      style={styles.background}
-      start={{ x: 0.5, y: 0 }}
-      end={{ x: 0.5, y: 1 }}
-    >
-      <SystemBars style="light" />
-      <View style={styles.topShape} />
+    <View style={{flex:1}}>
+      <LinearGradient
+        colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
+        style={styles.background}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+      >
+       <View style={styles.headerRow}>
+        <Icon name="person" size={24} color="white" style={styles.backIcon} />
+        <Text style={styles.profileTitle}>Profile</Text>
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={{ height: 24 }} />
-        <View style={styles.header}>
-          <View style={styles.avatarContainer}>
-            <Image
-              source={{
-                uri: 'https://i.pravatar.cc/150?img=12', // placeholder avatar
-              }}
-              style={styles.avatar}
-            />
+        <View style={styles.profileCard}>
+          <View style={styles.avatarWrapper}>
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
             <TouchableOpacity style={styles.editAvatarBtn}>
-              <Icon name="edit" size={18} color={themeColors.textOnPrimary} />
+              <Text style={styles.editText}>Edit</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.username}>John Doe</Text>
-          <Text style={styles.userEmail}>johndoe@email.com</Text>
+          <Text style={styles.userName}>{user.name}</Text>
+          <Text style={styles.userId}>ID No : {user.id}</Text>
+          <View style={styles.memberBadge}>
+            <Text style={styles.memberBadgeText}>{user.membership}</Text>
+          </View>
         </View>
-        <View style={styles.optionsContainer}>
-          {options.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.optionCard}>
-              <Icon name={item.icon} size={24} color={themeColors.primary} />
-              <Text style={styles.optionText}>{item.name}</Text>
-              <Icon
-                name="keyboard-arrow-right"
-                size={24}
-                color={themeColors.textSecondary}
-                style={{ marginLeft: 'auto' }}
-              />
-            </TouchableOpacity>
-          ))}
-        </View>
+        {options.map((section) => (
+          <View key={section.title} style={{ marginBottom: 18 }}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+            <View style={styles.optionsContainer}>
+              {section.data.map((item) => (
+                <TouchableOpacity key={item.id} style={styles.optionCard}>
+                  <Icon name={item.icon} size={22} color={themeColors.primary} />
+                  <Text style={styles.optionText}>{item.name}</Text>
+                  {item.value && (
+                    <Text style={styles.optionValue}>{item.value}</Text>
+                  )}
+                  <Icon name="keyboard-arrow-right" size={22} color={themeColors.textSecondary} style={{ marginLeft: 'auto' }} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        ))}
         <View style={{ height: 32 }} />
-      </ScrollView>
+      </ScrollView>             
     </LinearGradient>
+
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+    sectionTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: themeColors.textPrimary,
+    marginLeft: 22,
+    marginTop: 24,
+    marginBottom: 6,
+  },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 0,
     paddingBottom: 24,
   },
-  background: { flex: 1 },
-  scrollWrapper: {
+  bg: {
     flex: 1,
-    paddingHorizontal: 0,
+    backgroundColor: themeColors.background,
   },
-  topShape: {
-    position: 'absolute',
-    top: -height * 0.15,
-    right: -width * 0.2,
-    width: width * 0.8,
-    height: width * 0.8,
-    borderRadius: width * 0.4,
-    backgroundColor: themeColors.cardShadow,
-  },
-  header: {
+  headerRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: height * 0.10,
-    marginBottom: 18,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 18,
+    paddingBottom: 8,
+    backgroundColor: 'transparent',
   },
-  avatarContainer: {
-    position: 'relative',
-  },
-  avatar: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    borderWidth: 3,
-    borderColor: themeColors.primary,
-    backgroundColor: themeColors.card,
-  },
-  editAvatarBtn: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: themeColors.primary,
-    borderRadius: 12,
-    padding: 6,
-    borderWidth: 2,
-    borderColor: themeColors.card,
-  },
-  username: {
+  profileTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: themeColors.textPrimary,
-    marginTop: 10,
   },
-  userEmail: {
+  logoutBtn: {
+    padding: 4,
+  },
+  logoutText: {
+    color: themeColors.danger,
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 0,
+    paddingBottom: 24,
+  },
+  profileCard: {
+    backgroundColor: themeColors.cardBackground,
+    borderRadius: 18,
+    marginHorizontal: 18,
+    marginTop: 10,
+    alignItems: 'center',
+    paddingVertical: 24,
+    shadowColor: themeColors.cardShadow,
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  avatarWrapper: {
+    position: 'relative',
+    marginBottom: 10,
+  },
+  avatar: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: themeColors.backgroundLight,
+  },
+  editAvatarBtn: {
+    position: 'absolute',
+    bottom: -8,
+    left: '50%',
+    transform: [{ translateX: -22 }],
+    backgroundColor: themeColors.cardBackground,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: themeColors.cardBorder,
+    shadowColor: themeColors.cardShadow,
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  editText: {
+    color: themeColors.primary,
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  userName: {
+    fontSize: 19,
+    fontWeight: 'bold',
+    color: themeColors.textPrimary,
+    marginTop: 8,
+  },
+  userId: {
     fontSize: 14,
     color: themeColors.textSecondary,
+    marginTop: 2,
+  },
+  memberBadge: {
+    backgroundColor: themeColors.warning,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 4,
+    marginTop: 8,
+  },
+  memberBadgeText: {
+    color: themeColors.textOnLight,
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  settingsTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: themeColors.textPrimary,
+    marginLeft: 22,
+    marginTop: 28,
+    marginBottom: 10,
   },
   optionsContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
+    backgroundColor: themeColors.cardBackground,
+    borderRadius: 16,
+    marginHorizontal: 14,
+    paddingVertical: 8,
+    paddingHorizontal: 2,
+    shadowColor: themeColors.cardShadow,
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
   },
   optionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: themeColors.card,
-    borderRadius: 12,
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 18,
-    marginBottom: 14,
-    shadowColor: '#000',
-    shadowOpacity: 0.10,
-    shadowRadius: 8,
-    elevation: 4,
+    borderRadius: 12,
+    marginBottom: 2,
   },
   optionText: {
-    fontSize: 17,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '500',
     marginLeft: 14,
     color: themeColors.textPrimary,
+    flex: 1,
+  },
+  optionValue: {
+    fontSize: 13,
+    color: themeColors.textSecondary,
+    marginRight: 8,
+  },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: themeColors.textPrimary,
+    marginLeft: 22,
+    marginTop: 24,
+    marginBottom: 6,
   },
 });

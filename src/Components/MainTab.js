@@ -7,11 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SystemBars } from 'react-native-edge-to-edge';
 import LottieView from 'lottie-react-native';
 import Home from '../Screens/Home';
-// import Notes from '../Screens/Notes';
 import Quotes from '../Screens/Quotes';
-import About from '../Screens/About';
-import Category from '../Components/Categories/Category'
-import Profile from '../Screens/Profile'; // Add this import, create Profile.js if not present
+import Category from '../Components/Categories/Category';
+import Favorite from '../Screens/Favorite';
+import Profile from '../Screens/Profile';
 
 export default function MainTabs() {
     const Tab = createBottomTabNavigator();
@@ -61,14 +60,10 @@ export default function MainTabs() {
           iconName = 'grid-outline';
           animationSource = require('../../assets/animations/favorite.json');
           break;
-        case 'Quotes':
-          iconName = 'chatbox-ellipses-outline';
+        case 'Favorite':
+          iconName = 'heart-outline';
           animationSource = require('../../assets/animations/quotes.json');
           break;
-        // case 'About':
-        //   iconName = 'information-outline';
-        //   animationSource = require('../../assets/animations/about.json');
-        //   break;
         case 'Profile':
           iconName = 'person-outline';
           animationSource = require('../../assets/animations/profile.json'); // Add this animation if available
@@ -131,11 +126,10 @@ export default function MainTabs() {
           tabBarInactiveTintColor: themeColors.textSecondary,
         })}
       >
-        <Tab.Screen name="Home" component={Home} options={{ unmountOnBlur: true }} />
-        <Tab.Screen name="Category" component={Category} options={{ unmountOnBlur: true }} />
-        <Tab.Screen name="Quotes" component={Quotes} options={{ unmountOnBlur: true }} />
-        <Tab.Screen name="Profile" component={Profile} options={{ unmountOnBlur: true }} />
-        {/* <Tab.Screen name="About" component={About} options={{ unmountOnBlur: true }} /> */}
+  <Tab.Screen name="Home" component={Home} options={{ unmountOnBlur: true }} />
+  <Tab.Screen name="Category" component={Category} options={{ unmountOnBlur: true }} />
+  <Tab.Screen name="Favorite" component={Favorite} options={{ unmountOnBlur: true }} />
+  <Tab.Screen name="Profile" component={Profile} options={{ unmountOnBlur: true }} />
       </Tab.Navigator>
     </SafeAreaView>
   );

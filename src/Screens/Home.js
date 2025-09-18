@@ -404,6 +404,14 @@ export default function Home({ navigation }) {
                   <Text style={styles.cartBadgeText}>{cartItems.length}</Text>
                 </View>
               )}
+            </TouchableOpacity>            
+            <TouchableOpacity style={styles.cartIcon} onPress={() => {navigation.navigate('Profile');}}>
+              <Ionicons name="person" size={24} color={themeColors.textPrimary} />
+              {/* {Notification.length > 0 && (
+                <View style={styles.cartBadge}>
+                  <Text style={styles.cartBadgeText}>{Notification.length}</Text>
+                </View>
+              )} */}
             </TouchableOpacity>
           </View>
 
