@@ -14,6 +14,9 @@ import ShareApp from './src/Components/About/ShareApp';
 import RateApp from './src/Components/About/RateApp';
 import { AuthProvider } from './src/Provider/AuthProvider';
 import RootStack from './src/Components/RootStack';
+import { themeColors } from './src/Components/Utils/color';
+import { SystemBars } from 'react-native-edge-to-edge';
+// Google Mobile Ads
 import mobileAds, { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 // Interstitial ad setup
 const INTERSTITIAL_AD_UNIT_ID = 'ca-app-pub-7604915619325589/3947033537';
@@ -79,6 +82,7 @@ export default function App() {
   return (
     <AuthProvider>
     <SafeAreaProvider>
+      <SystemBars style="light"/>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
           screenOptions={{
@@ -167,7 +171,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#5e2a00ff', // or your preferred background
+    backgroundColor: themeColors.backgroundDark, // or your preferred background
   },
   iconContainer: {
     alignItems: 'center',

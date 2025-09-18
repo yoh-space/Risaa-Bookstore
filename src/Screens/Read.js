@@ -13,6 +13,7 @@ import LottieView from 'lottie-react-native';
 import Orientation from 'react-native-orientation-locker';
 import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { themeColors } from '../Components/Utils/color';
 
 import ChapterDrawer from '../Components/Chapters/ChapterDrawer';
 import ReadOptionsModal from '../Components/Modals/ReadOptionsModal';
@@ -270,7 +271,7 @@ export default function Read({ navigation, route }) {
       <Animated.View style={[styles.mainContainer, { opacity: fadeAnim }]}>
         <StatusBar 
           translucent 
-          backgroundColor="#412c06ff" 
+          backgroundColor="#0d0641ff" 
           barStyle="light-content" 
           hidden={isStatusBarHidden} 
         />
@@ -279,7 +280,7 @@ export default function Read({ navigation, route }) {
         {/* Header */}
         {isHeaderFooterVisible && (
         <LinearGradient 
-          colors={["#2d0b00ff", "#b95503ff"]} 
+        colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
           style={styles.header}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
@@ -359,7 +360,7 @@ export default function Read({ navigation, route }) {
         {/* Footer */}
         { isHeaderFooterVisible && (
         <LinearGradient 
-          colors={["#2d0b00ff", "#b95503ff"]} 
+          colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
           style={styles.footer}
           start={{x: 1, y: 0}}
           end={{x: 0, y: 1}}
@@ -411,9 +412,8 @@ export default function Read({ navigation, route }) {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-  },
+    flex: 1
+    },
   mainContainer: {
     flex: 1,
   },
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#4d1200ff',
+    backgroundColor: themeColors.backgroundDark,
   },
   loadingAnimation: {
     width: 200,
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
   },
   bottomSheet: {
     width: '100%',
-    backgroundColor: 'rgba(103, 43, 4, 0.9)',
+    backgroundColor: themeColors.backgroundDark,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     maxHeight: '60%',

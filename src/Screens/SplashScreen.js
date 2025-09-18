@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
+import { themeColors } from '../Components/Utils/color';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function SplashScreen({ onFinish }) {
   useEffect(() => {
@@ -13,15 +15,22 @@ export default function SplashScreen({ onFinish }) {
 
   return (
     <View style={styles.container}>
-      <SystemBars style='light'/>
-      <LottieView
-        source={require('../../assets/animations/Books.json')}
-        autoPlay
-        loop={false}
-        style={styles.lottie}
-      />
-      <Text style={styles.title}>Risaa BookStore</Text>
-      <Text style={styles.caption}>Risaa Colletions</Text>
+      <LinearGradient
+        colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
+        style={styles.background}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+      > 
+        <SystemBars style='light'/>
+        <LottieView
+          source={require('../../assets/animations/Books.json')}
+          autoPlay
+          loop={false}
+          style={styles.lottie}
+        />
+        <Text style={styles.title}>Risaa BookStore</Text>
+        <Text style={styles.caption}>Risaa Collections</Text>
+      </LinearGradient>
     </View>
   );
 }
@@ -31,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#512904ff',
+    backgroundColor: themeColors.backgroundDark,
   },
   lottie: {
     width: 220,
