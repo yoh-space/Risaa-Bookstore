@@ -23,7 +23,7 @@ export default function Profile({navigation}) {
   // Example user data
   const user = {
     name: 'Ryan Sterling',
-    id: '1105486242',
+    bio: 'hello',
     membership: 'Standard Member',
     avatar: 'https://i.pravatar.cc/150?img=12',
   };
@@ -54,7 +54,7 @@ export default function Profile({navigation}) {
             </TouchableOpacity>
           </View>
           <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userId}>ID No : {user.id}</Text>
+          <Text style={styles.userId}>Bio: {user.bio}</Text>
           <View style={styles.memberBadge}>
             <Text style={styles.memberBadgeText}>{user.membership}</Text>
           </View>

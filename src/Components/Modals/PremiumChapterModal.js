@@ -15,6 +15,7 @@ import { Slider } from '@react-native-assets/slider';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { SystemBars } from 'react-native-edge-to-edge';
+import { themeColors } from '../Utils/color';
 
 import ChapterDrawer from '../Chapters/ChapterDrawer';
 import ReadOptionsModal from './ReadOptionsModal';
@@ -67,11 +68,11 @@ const PremiumChapterModal = ({
             {/* Header */}
             {isHeaderFooterVisible && (
               <LinearGradient 
-                colors={["#1E3A8A", "#3B82F6"]} 
+                colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
                 style={styles.header}
                 start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
-              >
+                end={{x: 1, y: 0}}             
+          >
                 <View style={styles.headerContent}>
                   <TouchableOpacity 
                     style={styles.backButton} 
@@ -144,10 +145,10 @@ const PremiumChapterModal = ({
             {/* Footer */}
             { isHeaderFooterVisible && (
               <LinearGradient 
-                colors={["#3B82F6", "#1E3A8A"]} 
-                style={styles.footer}
-                start={{x: 0, y: 1}}
-                end={{x: 0, y: 1}}
+                colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
+                style={styles.header}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}          
               >
                 <View style={styles.footerContent}>
                   <View style={styles.pageInfo}>
