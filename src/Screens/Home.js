@@ -30,6 +30,14 @@ const { width, height } = Dimensions.get('window');
 import { themeColors } from '../Components/Utils/color';
 
 export default function Home({ navigation }) {
+  // Example: get user info (replace with actual auth state)
+  const [user, setUser] = useState(null);
+
+  // Simulate user state (replace with real auth logic)
+  useEffect(() => {
+    // TODO: Replace with actual auth state listener
+    setUser({ avatar: 'https://i.pravatar.cc/150?img=12' }); // or null if not logged in
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -406,12 +414,14 @@ export default function Home({ navigation }) {
               )}
             </TouchableOpacity>            
             <TouchableOpacity style={styles.cartIcon} onPress={() => {navigation.navigate('Profile');}}>
-              <Ionicons name="person" size={24} color={themeColors.textPrimary} />
-              {/* {Notification.length > 0 && (
-                <View style={styles.cartBadge}>
-                  <Text style={styles.cartBadgeText}>{Notification.length}</Text>
-                </View>
-              )} */}
+              {user && user.avatar ? (
+                <Image
+                  source={{ uri: user.avatar }}
+                  style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: themeColors.backgroundLight }}
+                />
+              ) : (
+                <Ionicons name="person" size={24} color={themeColors.textPrimary} />
+              )}
             </TouchableOpacity>
           </View>
 
@@ -459,9 +469,9 @@ export default function Home({ navigation }) {
                   >
                     <Ionicons
                       name={categoryTabIcons[option.id] || 'ellipse'}
-                      size={18}
-                      color={selectedCategory === option.id ? themeColors.textPrimary : themeColors.textSecondary}
-                      style={{ marginRight: 7 }}
+                      size={12}
+                      color={selectedCategory === option.id ? themeColors.textPrimary : themeColors.primary}
+                      style={{ marginRight: 5 }}
                     />
                     <Text style={[styles.categoryButtonText, selectedCategory === option.id && styles.categoryButtonTextActive]}>
                       {option.label}

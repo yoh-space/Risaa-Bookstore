@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { signIn, signUp } from '../../Auth/authService';
 import {
   View,
   Text,
@@ -15,10 +16,13 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'react-native-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { SystemBars } from 'react-native-edge-to-edge';
 
 const { width, height } = Dimensions.get('window');
 
 export default function AuthScreen() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,6 +35,26 @@ export default function AuthScreen() {
   const fadeAnim = useState(new Animated.Value(0))[0];
 
   const toggleForm = () => {
+  const handleAuth = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      if (isSignIn) {
+        await signIn(email, password);
+      } else {
+        if (password !== confirmPassword) {
+          setError('Passwords do not match');
+          setLoading(false);
+          return;
+        }
+        await signUp(email, password);
+      }
+      // TODO: Navigate to main app screen after successful login
+    } catch (err) {
+      setError(err.message || 'Authentication failed');
+    }
+    setLoading(false);
+  };
     Animated.parallel([
       Animated.timing(slideAnim, {
         toValue: isSignIn ? 1 : 0,
@@ -69,6 +93,7 @@ export default function AuthScreen() {
         style={styles.gradient}
       >
         <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <SystemBars style="light" />
           <View style={styles.logoContainer}>
             <Image 
               source={{ uri: 'https://placehold.co/100x100/6a11cb/FFFFFF/png?text=Logo' }} 
@@ -161,13 +186,16 @@ export default function AuthScreen() {
                 <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.signInButton}>
+              {error ? (
+                <Text style={{ color: 'red', textAlign: 'center', marginBottom: 8 }}>{error}</Text>
+              ) : null}
+              <TouchableOpacity style={styles.signInButton} onPress={handleAuth} disabled={loading}>
                 <LinearGradient
                   colors={['#6a11cb', '#2575fc']}
                   style={styles.gradientButton}
                 >
                   <Text style={styles.buttonText}>
-                    {isSignIn ? 'Sign In' : 'Sign Up'}
+                    {loading ? 'Please wait...' : isSignIn ? 'Sign In' : 'Sign Up'}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
