@@ -12,6 +12,7 @@ import AuthorInfo from './src/Components/About/AuthorInfo';
 import DeveloperInfo from './src/Components/About/DeveloperInfo';
 import ShareApp from './src/Components/About/ShareApp';
 import RateApp from './src/Components/About/RateApp';
+import { AuthProvider } from './src/Provider/AuthProvider';
 import RootStack from './src/Components/RootStack';
 import mobileAds, { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 // Interstitial ad setup
@@ -76,6 +77,7 @@ export default function App() {
     return <SplashScreen onFinish={handleSplashFinish} />;
   }
   return (
+    <AuthProvider>
     <SafeAreaProvider>
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
@@ -158,6 +160,7 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+    </AuthProvider>
   );
 }
 
