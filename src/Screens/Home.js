@@ -451,8 +451,6 @@ export default function Home({ navigation }) {
               </TouchableOpacity>
             )}
           </View>
-
-          <ScrollView style={styles.contentWrapper} showsVerticalScrollIndicator={false}>
             {/* Category Filter Bar */}
             <View style={{ marginBottom: 16 }}>
               <ScrollView
@@ -480,7 +478,7 @@ export default function Home({ navigation }) {
                 ))}
               </ScrollView>
             </View>
-
+          <ScrollView style={styles.contentWrapper} showsVerticalScrollIndicator={false}>
             {/* Show search results or regular sections */}
             {searchQuery ? (
               <View style={{ marginBottom: 24 }}>

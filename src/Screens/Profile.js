@@ -1,32 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Image,
   ScrollView,
+  Modal,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 import { logOut } from '../Auth/authService';
+import { useAuth } from '../Provider/AuthProvider';
 import LinearGradient from 'react-native-linear-gradient';
-import { SystemBars } from 'react-native-edge-to-edge';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { themeColors } from '../Components/Utils/color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { options } from '../Components/Utils/profileOptions';
+import EditProfileModal from '../Components/Modals/EditProfileModal';
 
 const { width, height } = Dimensions.get('window');
+export default function Profile({ navigation }) {
+  const { user: authUser } = useAuth();
+  const [profile, setProfile] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-export default function Profile({navigation}) {
+  useEffect(() => {
+    if (authUser) {
+      setProfile({
+        displayName: authUser.displayName,
+        email: authUser.email,
+        photoURL: authUser.photoURL,
+        bio: authUser.bio || '',
+        preferences: authUser.preferences || {},
+      });
+    } else {
+      setProfile(null);
+    }
+    setLoading(false);
+  }, [authUser]);
 
-  // Example user data
-  const user = {
-    name: 'Ryan Sterling',
-    bio: 'hello',
-    membership: 'Standard Member',
-    avatar: 'https://i.pravatar.cc/150?img=12',
+  const handleEditComplete = () => {
+    setEditModalVisible(false);
+    fetchProfile(); // Refresh profile data
   };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      navigation.navigate('RootStack', { screen: 'Login' });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={themeColors.primary} />
+        <Text style={styles.loadingText}>Loading profile...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{flex:1}}>
@@ -36,66 +72,124 @@ export default function Profile({navigation}) {
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       >
-       <View style={styles.headerRow}>
-        <Icon name="person" size={24} color="white" style={styles.backIcon} />
-        <Text style={styles.profileTitle}>Profile</Text>
-        <TouchableOpacity onPress={() => {    
-          navigation.navigate('RootStack', { screen: 'Login' });
-        }} style={styles.logoutBtn}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.profileCard}>
-          <View style={styles.avatarWrapper}>
-            <Image source={{ uri: user.avatar }} style={styles.avatar} />
-            <TouchableOpacity style={styles.editAvatarBtn}>
-              <Text style={styles.editText}>Edit</Text>
+        <View style={styles.headerRow}>
+          <Icon name="person" size={24} color="white" style={styles.backIcon} />
+          <Text style={styles.profileTitle}>Profile</Text>
+          {authUser ? (
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+              <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
-          </View>
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userId}>Bio: {user.bio}</Text>
-          <View style={styles.memberBadge}>
-            <Text style={styles.memberBadgeText}>{user.membership}</Text>
-          </View>
+          ) : (
+            <TouchableOpacity onPress={() => navigation.navigate('RootStack', { screen: 'Login' })} style={styles.logoutBtn}>
+              <Text style={styles.logoutText}>Login</Text>
+            </TouchableOpacity>
+          )}
         </View>
-        {options.map((section) => (
-          <View key={section.title} style={{ marginBottom: 18 }}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            <View style={styles.optionsContainer}>
-              {section.data.map((item) => (
-                <TouchableOpacity key={item.id} style={styles.optionCard}>
-                  {item.name === 'Payment History' ? (
-                    <Ionicons name="cart" size={22} color={themeColors.primary} />
-                  ) : (
-                    <Icon name={item.icon} size={22} color={themeColors.primary} />
-                  )}
-                  <Text style={styles.optionText}>{item.name}</Text>
-                  {item.value && (
-                    <Text style={styles.optionValue}>{item.value}</Text>
-                  )}
-                  <Icon name="keyboard-arrow-right" size={22} color={themeColors.textSecondary} style={{ marginLeft: 'auto' }} />
-                </TouchableOpacity>
-              ))}
+        
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          <View style={styles.profileCard}>
+            <View style={styles.avatarWrapper}>
+              <Image
+                source={{ uri: profile?.photoURL || authUser?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
+                style={styles.avatar}
+              />
+              <TouchableOpacity
+                style={styles.editAvatarBtn}
+                onPress={() => setEditModalVisible(true)}
+              >
+                <Text style={styles.editText}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.userName}>{profile?.displayName || authUser?.displayName || 'No Name'}</Text>
+            <Text style={styles.userEmail}>{authUser?.email || ''}</Text>
+            {profile?.bio && (
+              <Text style={styles.userBio}>Bio: {profile.bio}</Text>
+            )}
+            <View style={styles.memberBadge}>
+              <Text style={styles.memberBadgeText}>Standard Member</Text>
             </View>
           </View>
-        ))}
-        <View style={{ height: 32 }} />
-      </ScrollView>             
-    </LinearGradient>
 
+          {options.map((section) => (
+            <View key={section.title} style={{ marginBottom: 18 }}>
+              <Text style={styles.sectionTitle}>{section.title}</Text>
+              <View style={styles.optionsContainer}>
+                {section.data.map((item) => (
+                  <TouchableOpacity key={item.id} style={styles.optionCard}>
+                    {item.name === 'Payment History' ? (
+                      <Ionicons name="cart" size={22} color={themeColors.primary} />
+                    ) : (
+                      <Icon name={item.icon} size={22} color={themeColors.primary} />
+                    )}
+                    <Text style={styles.optionText}>{item.name}</Text>
+                    {item.value && (
+                      <Text style={styles.optionValue}>{item.value}</Text>
+                    )}
+                    <Icon name="keyboard-arrow-right" size={22} color={themeColors.textSecondary} style={{ marginLeft: 'auto' }} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          ))}
+          <View style={{ height: 32 }} />
+        </ScrollView>
+
+        {/* Edit Profile Modal */}
+        <EditProfileModal
+          visible={editModalVisible}
+          onClose={() => setEditModalVisible(false)}
+          initialData={{
+            displayName: profile?.displayName || authUser?.displayName || '',
+            email: authUser?.email || '',
+            bio: profile?.bio || '',
+            photoURL: profile?.photoURL || authUser?.photoURL || '',
+            preferences: profile?.preferences || {},
+          }}
+          onSaveComplete={handleEditComplete}
+        />
+      </LinearGradient>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    sectionTitle: {
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: themeColors.background,
+  },
+  loadingText: {
+    marginTop: 12,
+    color: themeColors.textSecondary,
+  },
+  sectionTitle: {
     fontSize: 15,
     fontWeight: 'bold',
     color: themeColors.textPrimary,
     marginLeft: 22,
     marginTop: 24,
     marginBottom: 6,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: themeColors.background,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: themeColors.border,
+  },
+  modalCloseButton: {
+    padding: 4,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: themeColors.textPrimary,
   },
   scrollContent: {
     flexGrow: 1,
@@ -238,12 +332,17 @@ const styles = StyleSheet.create({
     color: themeColors.textSecondary,
     marginRight: 8,
   },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: themeColors.textPrimary,
-    marginLeft: 22,
-    marginTop: 24,
-    marginBottom: 6,
+  userEmail: {
+    fontSize: 14,
+    color: themeColors.textSecondary,
+    marginTop: 2,
+  },
+  userBio: {
+    fontSize: 14,
+    color: themeColors.textSecondary,
+    marginTop: 4,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });
+

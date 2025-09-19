@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../Provider/AuthProvider';
 import { Modal, View, Text, TouchableOpacity, FlatList, StyleSheet, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function CartsModal({ visible, onClose, cartItems, onRemoveBook }) {
+export default function CartsModal({ visible, onClose, cartItems, onRemoveBook, navigation }) {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [error, setError] = useState('');
+  const { user } = useAuth();
   
   const subtotal = cartItems.reduce((sum, book) => sum + (book.price || 0), 0);
   const totalPrice = subtotal - discount;
@@ -24,7 +26,11 @@ export default function CartsModal({ visible, onClose, cartItems, onRemoveBook }
   };
 
   const handleProceedToPayment = () => {
-    // Payment logic would go here
+    if (!user) {
+      setError('You must be logged in to proceed to payment.');
+      navigation.navigate('Login');
+      return;
+    }
     setError('Proceeding to payment...');
     // You might navigate to a payment screen or process payment here
   };

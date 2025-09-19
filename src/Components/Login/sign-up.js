@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signUp } from '../../Auth/authService';
+import { useAuth } from '../../Provider/AuthProvider';
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { signup } = useAuth();
   const [isSignIn, setIsSignIn] = useState(false); // To toggle between sign in and sign up views
 
   const handleSignUp = async () => {
@@ -38,7 +39,8 @@ export default function SignUp() {
       return;
     }
     try {
-      await signUp(email, password);
+  // Pass name to AuthProvider's signup
+  await signup(email, password, name);
       // TODO: Navigate to main app screen after successful sign up
     } catch (err) {
       setError(err.message || 'Sign up failed');

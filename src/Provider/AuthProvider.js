@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onUserStateChange, signIn, signUp, logOut } from '../Auth/authService';
+import { updateProfile } from 'firebase/auth';
 
 const AuthContext = createContext();
 
@@ -17,14 +18,22 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     setLoading(true);
-    await signIn(email, password);
+    const user = await signIn(email, password);
     setLoading(false);
   };
 
-  const signup = async (email, password) => {
+  const signup = async (email, password, name) => {
     setLoading(true);
-    await signUp(email, password);
-    setLoading(false);
+    try {
+      const user = await signUp(email, password);
+      // Update Firebase Auth profile with display name
+      await updateProfile(user, { displayName: name });
+      setLoading(false);
+      return user;
+    } catch (error) {
+      setLoading(false);
+      throw error;
+    }
   };
 
   const logout = async () => {
