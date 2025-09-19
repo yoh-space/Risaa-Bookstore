@@ -25,7 +25,7 @@ import { RisaaCollections, bookSections } from '../Components/Utils/RisaaColleti
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CartsModal from '../Components/Modals/CartsModal';
-
+import FavoriteContext, { useFavorites } from '../Provider/favoriteProvider';
 const { width, height } = Dimensions.get('window');
 import { themeColors } from '../Components/Utils/color';
 
@@ -41,6 +41,7 @@ export default function Home({ navigation }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const { favorites, addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   // Filter out the 'selling' category from bookSections
   const filteredBookSections = bookSections.filter(section => section.id !== 'selling');
@@ -223,6 +224,13 @@ export default function Home({ navigation }) {
   const isBookUnlocked = (bookId) => {
     return unlockedBooks.includes(bookId);
   };
+  const handleFavoriteToggle = (bookId) => {
+    if (isFavorite(bookId)) {
+      removeFavorite(bookId);
+    } else {
+      addFavorite(bookId);
+    }
+  }
 
   // Render book card based on card style and section
   const renderBookCard = ({ item, index, cardStyle = 'default' }) => {
@@ -261,6 +269,10 @@ export default function Home({ navigation }) {
                   <Text style={styles.actionButtonText}>Add to Cart</Text>
                 </TouchableOpacity>
               )}
+                <TouchableOpacity style={[styles.actionButton1, styles.addedButton]} onPress={handleFavoriteToggle}>
+                  <Ionicons name="heart" size={16} color={themeColors.textPrimary} />
+                  <Text style={styles.actionButtonText}>Favorite</Text>
+                </TouchableOpacity>
             </View>
           </View>
         </Animated.View>
@@ -373,6 +385,36 @@ export default function Home({ navigation }) {
     );
   };
 
+  const handleToggleFavorite = (bookId) => {
+    if (isFavorite(bookId)) {
+      removeFavorite(bookId);
+    } else {
+      addFavorite(bookId);
+    }
+  };
+
+  const renderBookItem = ({ item }) => (
+    <View style={{ margin: 8, padding: 8, backgroundColor: '#fff', borderRadius: 8, flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+      {/* Favorite icon in top right corner */}
+      <TouchableOpacity
+        onPress={() => handleToggleFavorite(item.id)}
+        style={styles.favoriteButton}
+        accessibilityLabel={isFavorite(item.id) ? 'Remove from favorites' : 'Add to favorites'}
+      >
+        <Ionicons
+          name={isFavorite(item.id) ? 'heart' : 'heart-outline'}
+          size={24}
+          style={styles.favoriteIcon}
+          color={isFavorite(item.id) ? themeColors.primary : 'gray'}
+        />
+      </TouchableOpacity>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.title}</Text>
+        {/* ...other book details... */}
+      </View>
+    </View>
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
@@ -407,6 +449,14 @@ export default function Home({ navigation }) {
             </View>
             <TouchableOpacity style={styles.cartIcon} onPress={() => setCartsModalVisible(true)}>
               <Ionicons name="cart" size={24} color={themeColors.textPrimary} />
+              {cartItems.length > 0 && (
+                <View style={styles.cartBadge}>
+                  <Text style={styles.cartBadgeText}>{cartItems.length}</Text>
+                </View>
+              )}
+            </TouchableOpacity>              
+            <TouchableOpacity style={styles.cartIcon} onPress={() => setCartsModalVisible(true)}>
+              <Ionicons name="notifications" size={24} color={themeColors.textPrimary} />
               {cartItems.length > 0 && (
                 <View style={styles.cartBadge}>
                   <Text style={styles.cartBadgeText}>{cartItems.length}</Text>
@@ -587,17 +637,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerAnimation: { 
-    width: 50, 
-    height: 50, 
+    width: 25, 
+    height: 25, 
     marginRight: 12 
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '800',
     color: themeColors.textPrimary,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: themeColors.textSecondary,
     marginTop: 2,
   },
@@ -864,6 +914,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginHorizontal: 2,
   },
+  actionButton1: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    borderRadius: 6,
+    marginHorizontal: 2,
+  },
   readButton: {
     backgroundColor: themeColors.primary,
   },
@@ -946,5 +1005,17 @@ const styles = StyleSheet.create({
     color: themeColors.textOnLight, 
     fontWeight: '600', 
     fontSize: 16 
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: themeColors.cardBackground,
+    borderRadius: 20,
+    padding: 6,
+    elevation: 4,
+  },
+  favoriteIcon: {
+    color: themeColors.primary,
   },
 });

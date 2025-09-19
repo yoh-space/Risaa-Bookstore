@@ -13,6 +13,7 @@ import DeveloperInfo from './src/Components/About/DeveloperInfo';
 import ShareApp from './src/Components/About/ShareApp';
 import RateApp from './src/Components/About/RateApp';
 import { AuthProvider } from './src/Provider/AuthProvider';
+import { FavoriteProvider } from './src/Provider/favoriteProvider';
 import RootStack from './src/Components/RootStack';
 import { themeColors } from './src/Components/Utils/color';
 import { SystemBars } from 'react-native-edge-to-edge';
@@ -80,91 +81,93 @@ export default function App() {
     return <SplashScreen onFinish={handleSplashFinish} />;
   }
   return (
-    <AuthProvider>
     <SafeAreaProvider>
-      <SystemBars style="light"/>
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            cardStyleInterpolator: ({ current, next, layouts }) => {
-              return {
-                cardStyle: {
-                  transform: [
-                    {
-                      translateX: current.progress.interpolate({
+      <AuthProvider>
+        <FavoriteProvider>
+          <SystemBars style="light"/>
+          <NavigationContainer ref={navigationRef}>
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+                cardStyleInterpolator: ({ current, next, layouts }) => {
+                  return {
+                    cardStyle: {
+                      transform: [
+                        {
+                          translateX: current.progress.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [layouts.screen.width, 0],
+                          }),
+                        },
+                        {
+                          scale: next
+                            ? next.progress.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [1, 0.9],
+                              })
+                            : 1,
+                        },
+                      ],
+                    },
+                    overlayStyle: {
+                      opacity: current.progress.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [layouts.screen.width, 0],
+                        outputRange: [0, 0.5],
                       }),
                     },
-                    {
-                      scale: next
-                        ? next.progress.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [1, 0.9],
-                          })
-                        : 1,
+                  };
+                },
+                transitionSpec: {
+                  open: {
+                    animation: 'spring',
+                    config: {
+                      stiffness: 1000,
+                      damping: 500,
+                      mass: 3,
+                      overshootClamping: true,
+                      restDisplacementThreshold: 0.01,
+                      restSpeedThreshold: 0.01,
                     },
-                  ],
+                  },
+                  close: {
+                    animation: 'spring',
+                    config: {
+                      stiffness: 1000,
+                      damping: 500,
+                      mass: 3,
+                      overshootClamping: true,
+                      restDisplacementThreshold: 0.01,
+                      restSpeedThreshold: 0.01,
+                    },
+                  },
                 },
-                overlayStyle: {
-                  opacity: current.progress.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, 0.5],
-                  }),
-                },
-              };
-            },
-            transitionSpec: {
-              open: {
-                animation: 'spring',
-                config: {
-                  stiffness: 1000,
-                  damping: 500,
-                  mass: 3,
-                  overshootClamping: true,
-                  restDisplacementThreshold: 0.01,
-                  restSpeedThreshold: 0.01,
-                },
-              },
-              close: {
-                animation: 'spring',
-                config: {
-                  stiffness: 1000,
-                  damping: 500,
-                  mass: 3,
-                  overshootClamping: true,
-                  restDisplacementThreshold: 0.01,
-                  restSpeedThreshold: 0.01,
-                },
-              },
-            },
-          }}
-        >
-          <Stack.Screen name="MainTabs" component={MainTabs} />
-          <Stack.Screen name="Read">
-            {(props) => (
-              <SafeAreaView style={styles.safeArea} edges={['bottom']}>
-                <Read {...props} />
-              </SafeAreaView>
-            )}
-          </Stack.Screen>
-          <Stack.Screen name="MoreAppsScreen" component={MoreAppsScreen} />
-          <Stack.Screen name="AuthorInfoScreen">
-            {({ route }) => <AuthorInfo {...route.params} />}
-          </Stack.Screen>
-          <Stack.Screen name="DeveloperInfoScreen">
-            {({ route }) => <DeveloperInfo {...route.params} />}
-          </Stack.Screen>
-          <Stack.Screen name="ShareAppScreen">
-            {({ route }) => <ShareApp {...route.params} />}
-          </Stack.Screen>
-          <Stack.Screen name="RateAppScreen" component={RateApp} />
-          <Stack.Screen name="RootStack" component={RootStack} />
-        </Stack.Navigator>
-      </NavigationContainer>
+              }}
+            >
+              <Stack.Screen name="MainTabs" component={MainTabs} />
+              <Stack.Screen name="Read">
+                {(props) => (
+                  <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+                    <Read {...props} />
+                  </SafeAreaView>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="MoreAppsScreen" component={MoreAppsScreen} />
+              <Stack.Screen name="AuthorInfoScreen">
+                {({ route }) => <AuthorInfo {...route.params} />}
+              </Stack.Screen>
+              <Stack.Screen name="DeveloperInfoScreen">
+                {({ route }) => <DeveloperInfo {...route.params} />}
+              </Stack.Screen>
+              <Stack.Screen name="ShareAppScreen">
+                {({ route }) => <ShareApp {...route.params} />}
+              </Stack.Screen>
+              <Stack.Screen name="RateAppScreen" component={RateApp} />
+              <Stack.Screen name="RootStack" component={RootStack} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </FavoriteProvider>
+      </AuthProvider>
     </SafeAreaProvider>
-    </AuthProvider>
   );
 }
 
