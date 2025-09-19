@@ -2,39 +2,39 @@ export const options = [
   {
     title: 'Account',
     data: [
-      { id: 1, name: 'Payment History', icon: 'cart' },
-      { id: 2, name: 'Quick Access', icon: 'book' },
-      { id: 5, name: 'Notification', icon: 'notifications' },
+      { id: 1, name: 'Payment History', icon: 'cart', route: 'PaymentHistory' },
+      { id: 2, name: 'Quick Access', icon: 'book', modal: 'QuickAccessModal' },
+      { id: 5, name: 'Notification', icon: 'notifications', route: 'Notification' },
     ],
   },
   {
     title: 'Settings',
     data: [
-      { id: 3, name: 'Languages', icon: 'language' },
-      { id: 14, name: 'Logout', icon: 'logout' },
+      { id: 3, name: 'Languages', icon: 'language', action: 'Languages' },
+      { id: 14, name: 'Logout', icon: 'logout', action: 'logout' },
     ],
   },
   {
     title: 'App Info & Support',
     data: [
-      { id: 6, name: 'About Us', icon: 'info', value: 'Risaa Bookstore' },
-      { id: 7, name: 'Privacy Policy', icon: 'privacy-tip' },
-      { id: 8, name: 'Terms & Conditions', icon: 'gavel' },
-      { id: 9, name: 'Help & Support', icon: 'help' },
-      { id: 13, name: 'FAQ', icon: 'feedback' },
+      { id: 6, name: 'About Us', icon: 'info', value: 'Risaa Bookstore', route: 'AuthorInfo' },
+      { id: 7, name: 'Privacy Policy', icon: 'privacy-tip', route: 'PrivacyPolicy' },
+      { id: 8, name: 'Terms & Conditions', icon: 'gavel', route: 'TermsConditions' },
+      { id: 9, name: 'Help & Support', icon: 'help', route: 'HelpSupport' },
+      { id: 13, name: 'FAQ', icon: 'feedback', route: 'FAQ' },
     ],
   },
   {
     title: 'Engage',
     data: [
-      { id: 10, name: 'Rate Us', icon: 'star' },
-      { id: 12, name: 'Share App', icon: 'share' },
+      { id: 10, name: 'Rate Us', icon: 'star', route: 'RateApp' },
+      { id: 12, name: 'Share App', icon: 'share', route: 'ShareApp' },
     ],
   },
   {
     title: 'Developer',
     data: [
-      { id: 11, name: 'About Developer', icon: 'face' },
+      { id: 11, name: 'About Developer', icon: 'face', route: 'DeveloperInfo' },
     ],
   },
 ];

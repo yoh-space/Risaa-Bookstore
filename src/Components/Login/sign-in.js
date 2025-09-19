@@ -18,7 +18,6 @@ import { LinearGradient } from 'react-native-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { themeColors } from '../Utils/color';
-import RootStack from '../RootStack';
 
 const { width, height } = Dimensions.get('window');
 
@@ -48,7 +47,7 @@ export default function Login({ navigation }) {
           setLoading(false);
           return;
         }
-  await signUp(email, password);
+        await signUp(email, password);
       }
       // TODO: Navigate to main app screen after successful login
     } catch (err) {

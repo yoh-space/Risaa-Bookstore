@@ -43,7 +43,18 @@ export default function Profile({ navigation }) {
 
   const handleEditComplete = () => {
     setEditModalVisible(false);
-    fetchProfile(); // Refresh profile data
+    // Refresh profile data from authUser
+    if (authUser) {
+      setProfile({
+        displayName: authUser.displayName,
+        email: authUser.email,
+        photoURL: authUser.photoURL,
+        bio: authUser.bio || '',
+        preferences: authUser.preferences || {},
+      });
+    } else {
+      setProfile(null);
+    }
   };
 
   const handleLogout = async () => {
@@ -52,6 +63,29 @@ export default function Profile({ navigation }) {
       navigation.navigate('RootStack', { screen: 'Login' });
     } catch (error) {
       console.error('Logout failed:', error);
+    }
+  };
+
+  // Handler for option press
+  const handleOptionPress = (item) => {
+    if (item.route) {
+      navigation.navigate(item.route);
+    } else if (item.modal) {
+      // Example: set modal state, e.g. setQuickAccessModalVisible(true)
+    } else if (item.action) {
+      switch (item.action) {
+        case 'logout':
+          handleLogout();
+          break;
+        case 'rate':
+          // Implement app rating logic
+          break;
+        case 'share':
+          // Implement share logic
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -90,7 +124,7 @@ export default function Profile({ navigation }) {
           <View style={styles.profileCard}>
             <View style={styles.avatarWrapper}>
               <Image
-                source={{ uri: profile?.photoURL || authUser?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
+                source={{ uri: authUser?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
                 style={styles.avatar}
               />
               <TouchableOpacity
@@ -115,7 +149,7 @@ export default function Profile({ navigation }) {
               <Text style={styles.sectionTitle}>{section.title}</Text>
               <View style={styles.optionsContainer}>
                 {section.data.map((item) => (
-                  <TouchableOpacity key={item.id} style={styles.optionCard}>
+                  <TouchableOpacity key={item.id} style={styles.optionCard} onPress={() => handleOptionPress(item)}>
                     {item.name === 'Payment History' ? (
                       <Ionicons name="cart" size={22} color={themeColors.primary} />
                     ) : (
