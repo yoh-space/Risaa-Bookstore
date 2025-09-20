@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { themeColors } from '../Components/Utils/color';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import ChapterDrawer from '../Components/ChapterDrawer';
 import ChapterPDF from '../Components/ChapterPDF';
@@ -57,7 +58,7 @@ export default function PremiumChapters({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: themeColors.background,
   },
   emptyState: {
     flex: 1,
@@ -68,23 +69,23 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#4a6fa5',
+    color: themeColors.primary,
     marginBottom: 16,
   },
   emptyText: {
     fontSize: 16,
-    color: '#666',
+    color: themeColors.textMuted,
     textAlign: 'center',
     marginBottom: 24,
   },
   drawerButton: {
-    backgroundColor: '#4a6fa5',
+    backgroundColor: themeColors.primary,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
   },
   drawerButtonText: {
-    color: '#fff',
+    color: themeColors.textPrimary,
     fontWeight: 'bold',
     fontSize: 16,
   },

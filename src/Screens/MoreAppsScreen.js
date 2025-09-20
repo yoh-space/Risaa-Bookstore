@@ -17,6 +17,7 @@ import PlayIcons from 'react-native-vector-icons/Fontisto';
 import WebIcons from 'react-native-vector-icons/Foundation';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { themeColors } from '../Components/Utils/color';
 
 export default function MoreAppsScreen({ navigation }) {
     useEffect(() => {

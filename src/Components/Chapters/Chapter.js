@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChapterUnlocker from './ChapterUnlocker';
-
+import { themeColors } from '../Utils/color';
 const Chapter = ({ onChapterPress }) => {
   const freeChapters = [1]; // Chapter 1 is always free
   const [unlockModalVisible, setUnlockModalVisible] = useState(false);

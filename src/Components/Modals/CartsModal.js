@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../Provider/AuthProvider';
 import { Modal, View, Text, TouchableOpacity, FlatList, StyleSheet, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { themeColors } from '../Utils/color';
 
 export default function CartsModal({ visible, onClose, cartItems, onRemoveBook, navigation }) {
   const [couponCode, setCouponCode] = useState('');

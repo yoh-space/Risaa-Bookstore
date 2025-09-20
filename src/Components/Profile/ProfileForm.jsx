@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet,
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, app } from '../../../firebase';
 import ImagePickerComponent from './ImagePicker';
+import { themeColors } from '../Utils/color';
 
 const firestore = getFirestore(app);
 
@@ -100,21 +101,23 @@ export default function ProfileForm({ onSaveComplete }) {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: themeColors.cardBackground,
     borderRadius: 12,
   },
   label: {
     fontWeight: 'bold',
     marginTop: 12,
     marginBottom: 4,
+    color: themeColors.textPrimary,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: themeColors.cardBorder,
     borderRadius: 6,
     padding: 10,
     marginBottom: 8,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: themeColors.backgroundLight,
+    color: themeColors.textPrimary,
   },
   profileImage: {
     width: 80,
@@ -122,26 +125,28 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     alignSelf: 'center',
     marginVertical: 12,
+    borderWidth: 2,
+    borderColor: themeColors.primary,
   },
   saveButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: themeColors.primary,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 16,
   },
   saveButtonText: {
-    color: '#fff',
+    color: themeColors.textPrimary,
     fontWeight: 'bold',
     fontSize: 16,
   },
   error: {
-    color: 'red',
+    color: themeColors.danger,
     marginTop: 8,
     textAlign: 'center',
   },
   pickerButton: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: themeColors.backgroundAlt,
     paddingVertical: 8,
     borderRadius: 6,
     alignItems: 'center',

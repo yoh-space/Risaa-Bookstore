@@ -19,6 +19,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Orientation from "react-native-orientation-locker";
+import { themeColors } from '../Components/Utils/color';
 import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import { SystemBars } from "react-native-edge-to-edge";
 const adUnitId = 'ca-app-pub-7604915619325589/3947033537';

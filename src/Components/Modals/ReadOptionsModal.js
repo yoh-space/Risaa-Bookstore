@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Share, Modal } from 'react-native';
 import LottieView from 'lottie-react-native';
+import { themeColors } from '../Utils/color';
 
 const ReadOptionsModal = ({
   visible,
