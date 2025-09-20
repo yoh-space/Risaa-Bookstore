@@ -1,3 +1,4 @@
+import { themeColors } from "./color";
 export const adminFeatures = [
   {
     id: "1",
