@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { auth, app } from '../../firebase';
 import {
@@ -16,7 +16,8 @@ import {
   Animated,
   Easing,
   ScrollView,
-  TextInput
+  TextInput,
+  RefreshControl
 } from 'react-native';
 import { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
 import LottieView from 'lottie-react-native';
@@ -35,33 +36,45 @@ export default function Home({ navigation }) {
   // User state and profile image
   const [user, setUser] = useState(null);
   const [profileImageURL, setProfileImageURL] = useState('');
+  // Pull-to-refresh state
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        setUser(currentUser);
-        try {
-          const firestore = getFirestore(app);
-          const userDocRef = doc(firestore, 'users', currentUser.uid);
-          const userDoc = await getDoc(userDocRef);
-          if (userDoc.exists()) {
-            const data = userDoc.data();
-            setProfileImageURL(data.profileImageURL || '');
-          } else {
-            setProfileImageURL('');
-          }
-        } catch {
+  // Fetch user profile and any other data you want to refresh
+  const fetchUserProfile = useCallback(async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUser(currentUser);
+      try {
+        const firestore = getFirestore(app);
+        const userDocRef = doc(firestore, 'users', currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setProfileImageURL(data.profileImageURL || '');
+        } else {
           setProfileImageURL('');
         }
-      } else {
-        setUser(null);
+      } catch {
         setProfileImageURL('');
       }
-    };
+    } else {
+      setUser(null);
+      setProfileImageURL('');
+    }
+  }, []);
+
+  useEffect(() => {
     fetchUserProfile();
     // Optionally, add a listener for auth state changes if needed
-  }, []);
+  }, [fetchUserProfile]);
+
+  // Pull-to-refresh handler
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchUserProfile();
+    // Add any other data reload logic here (e.g., reload books from API)
+    setRefreshing(false);
+  }, [fetchUserProfile]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -533,7 +546,17 @@ export default function Home({ navigation }) {
                 ))}
               </ScrollView>
             </View>
-          <ScrollView style={styles.contentWrapper} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            style={styles.contentWrapper}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[themeColors.primary]}
+              />
+            }
+          >
             {/* Show search results or regular sections */}
             {searchQuery ? (
               <View style={{ marginBottom: 24 }}>
@@ -548,6 +571,8 @@ export default function Home({ navigation }) {
                     numColumns={2}
                     columnWrapperStyle={styles.columnWrapper}
                     contentContainerStyle={styles.listContent}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
                   />
                 ) : (
                   <View style={styles.noResultsContainer}>
