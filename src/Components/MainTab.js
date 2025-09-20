@@ -16,7 +16,7 @@ import { useAuth } from '../Provider/AuthProvider';
 
 export default function MainTabs() {
   const { user } = useAuth();
-  const ADMIN_UID = "QpOJnUEvyAZV5TWoQ1pcClWq9462" || "EI0iQUdqAaYFP5quGdntJ3IHUID3"; // Replace with actual admin UID
+  const ADMIN_UID ="EI0iQUdqAaYFP5quGdntJ3IHUID3"; // Replace with actual admin UID
   const Tab = createBottomTabNavigator();
   const TabBarIcon = ({ route, focused, color, size }) => {
     const scaleValue = React.useRef(new Animated.Value(1)).current;
@@ -71,6 +71,10 @@ export default function MainTabs() {
         case 'Profile':
           iconName = 'person-outline';
           animationSource = require('../../assets/animations/profile.json'); // Add this animation if available
+          break;
+        case 'AdminDashboard':
+          iconName = 'shield-checkmark';
+          animationSource = require('../../assets/animations/profile.json'); // Add this animation if available 
           break;
       }
     
