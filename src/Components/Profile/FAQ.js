@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { themeColors } from '../Utils/color';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const faqs = [
   {
@@ -17,23 +19,45 @@ const faqs = [
   },
 ];
 
-const FAQ = () => (
-  <ScrollView contentContainerStyle={styles.container}>
+const FAQ = ({ navigation }) => (
+  <SafeAreaView style={styles.container}>
+    <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10, padding: 20, backgroundColor: themeColors.backgroundDark}}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.backArrow}
+      onPress={() => navigation.goBack()}
+    >
+      <Ionicons name="arrow-back" size={28} color={themeColors.primary} />
+    </TouchableOpacity>
     <Text style={styles.header}>Frequently Asked Questions</Text>
-    {faqs.map((faq, idx) => (
-      <View key={idx} style={styles.faqItem}>
-        <Text style={styles.question}>{faq.question}</Text>
-        <Text style={styles.answer}>{faq.answer}</Text>
-      </View>
-    ))}
-  </ScrollView>
+  </View>
+    <ScrollView contentContainerStyle={{ flex: 1, padding: 20, backgroundColor: themeColors.backgroundDark }}>
+      {faqs.map((faq, idx) => (
+        <View key={idx} style={styles.faqItem}>
+          <Text style={styles.question}>{faq.question}</Text>
+          <Text style={styles.answer}>{faq.answer}</Text>
+        </View>
+      ))}
+    </ScrollView>
+  </SafeAreaView>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
     backgroundColor: themeColors.backgroundDark,
+  },
+  backArrow: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    backgroundColor: themeColors.backgroundDark,
+    borderRadius: 16,
+    padding: 4,
+    shadowColor: themeColors.cardShadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   header: {
     fontSize: 22,

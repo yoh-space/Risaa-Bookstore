@@ -4,18 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Linking } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
+import { themeColors } from '../Utils/color';
 
 const { width } = Dimensions.get('window');
 
-export default function AuthorInfo() {
+export default function AuthorInfo({navigation}) {
   const [scaleValue] = useState(new Animated.Value(1));
-  
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.97,
-      useNativeDriver: true,
-    }).start();
-  };
   
   const handlePressOut = () => {
     Animated.spring(scaleValue, {
@@ -41,47 +35,59 @@ export default function AuthorInfo() {
       flex: 1,
       padding: 20, 
       borderRadius: 16,
-      marginVertical: 10,
+      backgroundColor: themeColors.backgroundDark,
     }}>
-      <SystemBars style='dark' />
+      <SystemBars style='light' />
       {/* Author Header */}
       <View style={{ 
         flexDirection: 'row', 
         alignItems: 'center', 
         marginBottom: 16, 
-        width: '100%' 
+        width: '100%',
       }}>
         <View style={{
-          shadowColor: '#000',
+          shadowColor: themeColors.cardShadow,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.1,
           shadowRadius: 4,
           elevation: 2
         }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity activeOpacity={0.8} style={{
+            shadowColor: themeColors.cardShadow,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 2,
+            marginRight: 10
+          }} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={28} color={themeColors.primary} />
+          </TouchableOpacity>
           <Image
             source={require('../../../assets/images/kadiir.png')}
             style={{ 
-              width: 80, 
-              height: 80, 
+              width: 50, 
+              height: 50, 
               marginRight: 16, 
               borderRadius: 20,
               borderWidth: 3,
-              borderColor: '#E8F5F4'
+              borderColor: themeColors.cardBorder
             }}
             resizeMode="cover"
           />
+          </View>
         </View>
         <View style={{ flex: 1 }}>
           <Text style={{ 
             fontSize: 20, 
             fontWeight: '700', 
-            color: '#166d67',
+            color: themeColors.textPrimary,
             marginBottom: 4
           }}>
             Kadiir Abdulaxif
           </Text>
           <View style={{
-            backgroundColor: 'rgba(22, 109, 103, 0.1)',
+            backgroundColor: themeColors.backgroundLight,
             paddingHorizontal: 12,
             paddingVertical: 4,
             borderRadius: 12,
@@ -89,7 +95,7 @@ export default function AuthorInfo() {
           }}>
             <Text style={{ 
               fontSize: 14, 
-              color: '#166d67', 
+              color: themeColors.textPrimary, 
               fontWeight: '500'
             }}>
               Author and Blogger
@@ -100,7 +106,7 @@ export default function AuthorInfo() {
       
       <Text style={{ 
         fontSize: 15, 
-        color: '#4A5568', 
+        color: themeColors.textSecondary, 
         marginBottom: 20, 
         textAlign: 'center',
         lineHeight: 22
@@ -109,7 +115,7 @@ export default function AuthorInfo() {
       </Text>
       
       {/* Contact Options */}
-      <View style={{ width: '100%' }}>
+  <View style={{ width: '100%' }}>
         <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
           <TouchableOpacity
             onPress={handleEmail}
@@ -118,16 +124,16 @@ export default function AuthorInfo() {
             style={{ 
               flexDirection: 'row', 
               alignItems: 'center', 
-              backgroundColor: '#F5FDFC', 
+              backgroundColor: themeColors.cardBackground, 
               borderRadius: 14, 
               padding: 16, 
               marginBottom: 12,
               borderWidth: 1,
-              borderColor: '#E0F7FA'
+              borderColor: themeColors.cardBorder
             }}
           >
             <View style={{
-              backgroundColor: 'rgba(22, 109, 103, 0.1)',
+              backgroundColor: themeColors.backgroundLight,
               width: 44,
               height: 44,
               borderRadius: 12,
@@ -135,11 +141,11 @@ export default function AuthorInfo() {
               alignItems: 'center',
               marginRight: 16
             }}>
-              <Ionicons name="mail" size={22} color="#166d67" />
+              <Ionicons name="mail" size={22} color={themeColors.textPrimary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ 
-                color: '#166d67', 
+                color: themeColors.primary, 
                 fontWeight: '600', 
                 fontSize: 16,
                 marginBottom: 2
@@ -147,13 +153,13 @@ export default function AuthorInfo() {
                 Email
               </Text>
               <Text style={{ 
-                color: '#4A5568', 
+                color: themeColors.textPrimary, 
                 fontSize: 14 
               }}>
                 kadiirabdullaxif@gmail.com
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#166d67" />
+            <Ionicons name="chevron-forward" size={20} color={themeColors.primary} />
           </TouchableOpacity>
         </Animated.View>
         
@@ -165,16 +171,16 @@ export default function AuthorInfo() {
             style={{ 
               flexDirection: 'row', 
               alignItems: 'center', 
-              backgroundColor: '#F5FDFC', 
+              backgroundColor: themeColors.cardBackground, 
               borderRadius: 14, 
               padding: 16, 
               marginBottom: 12,
               borderWidth: 1,
-              borderColor: '#E0F7FA'
+              borderColor: themeColors.cardBorder
             }}
           >
             <View style={{
-              backgroundColor: 'rgba(22, 109, 103, 0.1)',
+              backgroundColor: themeColors.backgroundLight,
               width: 44,
               height: 44,
               borderRadius: 12,
@@ -182,11 +188,11 @@ export default function AuthorInfo() {
               alignItems: 'center',
               marginRight: 16
             }}>
-              <Ionicons name="call" size={22} color="#166d67" />
+              <Ionicons name="call" size={22} color={themeColors.textPrimary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ 
-                color: '#166d67', 
+                color: themeColors.primary, 
                 fontWeight: '600', 
                 fontSize: 16,
                 marginBottom: 2
@@ -194,13 +200,13 @@ export default function AuthorInfo() {
                 Phone
               </Text>
               <Text style={{ 
-                color: '#4A5568', 
+                color: themeColors.textPrimary, 
                 fontSize: 14 
               }}>
                 +251 92 875 3295
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#166d67" />
+            <Ionicons name="chevron-forward" size={20} color={themeColors.primary} />
           </TouchableOpacity>
         </Animated.View>
         
@@ -212,15 +218,15 @@ export default function AuthorInfo() {
             style={{ 
               flexDirection: 'row', 
               alignItems: 'center', 
-              backgroundColor: '#F5FDFC', 
+              backgroundColor: themeColors.cardBackground, 
               borderRadius: 14, 
               padding: 16,
               borderWidth: 1,
-              borderColor: '#E0F7FA'
+              borderColor: themeColors.cardBorder
             }}
           >
             <View style={{
-              backgroundColor: 'rgba(37, 211, 102, 0.1)',
+              backgroundColor: themeColors.backgroundLight,
               width: 44,
               height: 44,
               borderRadius: 12,
@@ -228,11 +234,11 @@ export default function AuthorInfo() {
               alignItems: 'center',
               marginRight: 16
             }}>
-              <Ionicons name="logo-whatsapp" size={22} color="#25D366" />
+              <Ionicons name="logo-whatsapp" size={22} color={themeColors.textPrimary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ 
-                color: '#166d67', 
+                color: themeColors.primary, 
                 fontWeight: '600', 
                 fontSize: 16,
                 marginBottom: 2
@@ -240,13 +246,13 @@ export default function AuthorInfo() {
                 WhatsApp
               </Text>
               <Text style={{ 
-                color: '#4A5568', 
+                color: themeColors.textPrimary, 
                 fontSize: 14 
               }}>
                 Message me directly
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#166d67" />
+            <Ionicons name="chevron-forward" size={20} color={themeColors.primary} />
           </TouchableOpacity>
         </Animated.View>
       </View>
@@ -259,7 +265,7 @@ export default function AuthorInfo() {
         width: '100%'
       }}>
         <TouchableOpacity style={{
-          backgroundColor: 'rgba(22, 109, 103, 0.1)',
+          backgroundColor: themeColors.backgroundLight,
           width: 44,
           height: 44,
           borderRadius: 22,
@@ -267,10 +273,10 @@ export default function AuthorInfo() {
           alignItems: 'center',
           marginHorizontal: 8
         }}>
-          <Ionicons name="logo-twitter" size={22} color="#166d67" />
+          <Ionicons name="logo-twitter" size={22} color={themeColors.primary} />
         </TouchableOpacity>
         <TouchableOpacity style={{
-          backgroundColor: 'rgba(22, 109, 103, 0.1)',
+          backgroundColor: themeColors.backgroundLight,
           width: 44,
           height: 44,
           borderRadius: 22,
@@ -278,10 +284,10 @@ export default function AuthorInfo() {
           alignItems: 'center',
           marginHorizontal: 8
         }}>
-          <Ionicons name="logo-linkedin" size={22} color="#166d67" />
+          <Ionicons name="logo-linkedin" size={22} color={themeColors.primary} />
         </TouchableOpacity>
         <TouchableOpacity style={{
-          backgroundColor: 'rgba(22, 109, 103, 0.1)',
+          backgroundColor: themeColors.backgroundLight,
           width: 44,
           height: 44,
           borderRadius: 22,
@@ -289,7 +295,7 @@ export default function AuthorInfo() {
           alignItems: 'center',
           marginHorizontal: 8
         }}>
-          <Ionicons name="logo-instagram" size={22} color="#166d67" />
+          <Ionicons name="logo-instagram" size={22} color={themeColors.primary} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>

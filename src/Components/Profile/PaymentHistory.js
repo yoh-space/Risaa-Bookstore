@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { themeColors } from '../Utils/color';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const payments = [
   // Example data, replace with real data from backend
@@ -9,9 +11,19 @@ const payments = [
   { id: 'TXN12347', date: '2025-08-10', amount: '₦2000', status: 'Completed' },
 ];
 
-const PaymentHistory = () => (
-  <ScrollView contentContainerStyle={styles.container}>
+const PaymentHistory = ({ navigation }) => (
+<SafeAreaView   style={styles.container}>
+    <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10, padding: 20, backgroundColor: themeColors.backgroundDark}}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.backArrow}
+      onPress={() => navigation.goBack()}
+    >
+      <Ionicons name="arrow-back" size={28} color={themeColors.primary} />
+    </TouchableOpacity>
     <Text style={styles.header}>Payment History</Text>
+  </View>
+  <ScrollView contentContainerStyle={{flex: 1, padding: 20, backgroundColor: themeColors.backgroundDark}}>
     {payments.length === 0 ? (
       <Text style={styles.empty}>No payment history found.</Text>
     ) : (
@@ -25,13 +37,26 @@ const PaymentHistory = () => (
       ))
     )}
   </ScrollView>
+</SafeAreaView>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
     backgroundColor: themeColors.backgroundDark,
+  },
+  backArrow: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    backgroundColor: themeColors.backgroundDark,
+    borderRadius: 16,
+    padding: 4,
+    shadowColor: themeColors.cardShadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    marginRight: 10,
   },
   header: {
     fontSize: 22,
