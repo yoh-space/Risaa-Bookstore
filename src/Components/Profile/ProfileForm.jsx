@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
     marginBottom: 8,
-    backgroundColor: themeColors.backgroundLight,
+    backgroundColor: themeColors.backgroundDark,
     color: themeColors.textPrimary,
   },
   profileImage: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 12,
     borderWidth: 2,
-    borderColor: themeColors.primary,
+    borderColor: themeColors.backgroundDark,
   },
   saveButton: {
     backgroundColor: themeColors.primary,

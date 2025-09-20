@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingTop: 22,
     paddingBottom: 10,
-    backgroundColor: themeColors.background,
+    backgroundColor: themeColors.backgroundDark,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: themeColors.primary,
+    color: themeColors.textPrimary,
     letterSpacing: 0.5,
   },
   divider: {

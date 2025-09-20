@@ -3,8 +3,9 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Alert,
-  Platform,
+  Modal,
+  Text,
+  Pressable,
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
@@ -19,8 +20,9 @@ const ImagePickerComponent = ({
   disabled = false 
 }) => {
   const [uploading, setUploading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const selectImage = async () => {
+  const handleImage = async (action) => {
     if (disabled || uploading) return;
 
     const options = {
@@ -32,93 +34,31 @@ const ImagePickerComponent = ({
     };
 
     try {
-      const result = await ImagePicker.launchImageLibrary(options);
-      
-      if (result.didCancel) {
-        return;
+      let result;
+      if (action === 'camera') {
+        result = await ImagePicker.launchCamera({ ...options, cameraType: 'front' });
+      } else {
+        result = await ImagePicker.launchImageLibrary(options);
       }
 
-      if (result.errorCode) {
-        Alert.alert('Error', 'Failed to select image');
-        return;
-      }
-
-      if (result.assets && result.assets.length > 0) {
+      if (result?.assets?.length > 0) {
         const selectedImage = result.assets[0];
         setUploading(true);
         onImageSelected(selectedImage);
         setUploading(false);
       }
     } catch (error) {
-      console.error('Image picker error:', error);
-      Alert.alert('Error', 'Failed to select image');
+      console.error(`${action} error:`, error);
       setUploading(false);
+    } finally {
+      setModalVisible(false);
     }
-  };
-
-  const takePhoto = async () => {
-    if (disabled || uploading) return;
-
-    const options = {
-      mediaType: 'photo',
-      quality: 0.8,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      includeBase64: false,
-      cameraType: 'front',
-    };
-
-    try {
-      const result = await ImagePicker.launchCamera(options);
-      
-      if (result.didCancel) {
-        return;
-      }
-
-      if (result.errorCode) {
-        Alert.alert('Error', 'Failed to take photo');
-        return;
-      }
-
-      if (result.assets && result.assets.length > 0) {
-        const selectedImage = result.assets[0];
-        setUploading(true);
-        onImageSelected(selectedImage);
-        setUploading(false);
-      }
-    } catch (error) {
-      console.error('Camera error:', error);
-      Alert.alert('Error', 'Failed to take photo');
-      setUploading(false);
-    }
-  };
-
-  const showImageOptions = () => {
-    Alert.alert(
-      'Profile Picture',
-      'Choose an option',
-      [
-        {
-          text: 'Take Photo',
-          onPress: takePhoto,
-        },
-        {
-          text: 'Choose from Library',
-          onPress: selectImage,
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ],
-      { cancelable: true }
-    );
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={showImageOptions}
+        onPress={() => setModalVisible(true)}
         disabled={disabled || uploading}
         style={[styles.imageContainer, { width: size, height: size }]}
       >
@@ -138,24 +78,43 @@ const ImagePickerComponent = ({
           </>
         )}
       </TouchableOpacity>
+
+      {/* Modal for Image Options */}
+      <Modal
+        transparent
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Profile Picture</Text>
+
+            <Pressable style={styles.modalButton} onPress={() => handleImage('camera')}>
+              <Icon name="photo-camera" size={20} color={themeColors.primary} />
+              <Text style={styles.modalButtonText}>Take Photo</Text>
+            </Pressable>
+
+            <Pressable style={styles.modalButton} onPress={() => handleImage('gallery')}>
+              <Icon name="photo-library" size={20} color={themeColors.primary} />
+              <Text style={styles.modalButtonText}>Choose from Library</Text>
+            </Pressable>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  container: { alignItems: 'center', justifyContent: 'center' },
   imageContainer: {
     position: 'relative',
     borderRadius: 60,
     overflow: 'hidden',
-    backgroundColor: themeColors.backgroundLight,
+    backgroundColor: themeColors.backgroundDark,
   },
-  image: {
-    resizeMode: 'cover',
-  },
+  image: { resizeMode: 'cover' },
   editOverlay: {
     position: 'absolute',
     bottom: 0,
@@ -172,8 +131,41 @@ const styles = StyleSheet.create({
   loadingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: themeColors.backgroundLight,
+    backgroundColor: themeColors.backgroundDark,
     borderRadius: 60,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContainer: {
+    backgroundColor: themeColors.backgroundDark,
+    padding: 20,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: themeColors.textPrimary,
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+  },
+  modalButtonText: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: themeColors.textPrimary,
+  },
+  cancelButton: {
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: themeColors.border,
   },
 });
 
