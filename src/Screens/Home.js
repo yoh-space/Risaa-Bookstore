@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { auth, app } from '../../firebase';
 import {
   View,
   Text,
@@ -30,13 +32,35 @@ const { width, height } = Dimensions.get('window');
 import { themeColors } from '../Components/Utils/color';
 
 export default function Home({ navigation }) {
-  // Example: get user info (replace with actual auth state)
+  // User state and profile image
   const [user, setUser] = useState(null);
+  const [profileImageURL, setProfileImageURL] = useState('');
 
-  // Simulate user state (replace with real auth logic)
   useEffect(() => {
-    // TODO: Replace with actual auth state listener
-    setUser({ avatar: 'https://i.pravatar.cc/150?img=12' }); // or null if not logged in
+    const fetchUserProfile = async () => {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        setUser(currentUser);
+        try {
+          const firestore = getFirestore(app);
+          const userDocRef = doc(firestore, 'users', currentUser.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setProfileImageURL(data.profileImageURL || '');
+          } else {
+            setProfileImageURL('');
+          }
+        } catch {
+          setProfileImageURL('');
+        }
+      } else {
+        setUser(null);
+        setProfileImageURL('');
+      }
+    };
+    fetchUserProfile();
+    // Optionally, add a listener for auth state changes if needed
   }, []);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -442,9 +466,9 @@ export default function Home({ navigation }) {
               )}
             </TouchableOpacity>            
             <TouchableOpacity style={styles.cartIcon} onPress={() => {navigation.navigate('Profile');}}>
-              {user && user.avatar ? (
+              {user && profileImageURL ? (
                 <Image
-                  source={{ uri: user.avatar }}
+                  source={{ uri: profileImageURL }}
                   style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: themeColors.backgroundLight }}
                 />
               ) : (

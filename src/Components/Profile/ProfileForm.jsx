@@ -44,17 +44,17 @@ export default function ProfileForm({ onSaveComplete }) {
       const user = auth.currentUser;
       if (!user) throw new Error('User not authenticated');
       const userDocRef = doc(firestore, 'users', user.uid);
-      console.log('Saving profile for:', user.uid, displayName, bio, profileImageURL);
+    //   console.log('Saving profile for:', user.uid, displayName, bio, profileImageURL);
       await setDoc(userDocRef, {
         displayName,
         bio,
         profileImageURL,
       }, { merge: true });
-      console.log('Profile saved!');
+    //   console.log('Profile saved!');
       if (onSaveComplete) onSaveComplete();
     } catch (err) {
       setError(err.message || 'Failed to save profile');
-      console.log('Error saving profile:', err);
+    //   console.log('Error saving profile:', err);
     } finally {
       setIsLoading(false);
     }

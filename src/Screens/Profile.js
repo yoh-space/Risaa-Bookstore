@@ -138,18 +138,25 @@ export default function Profile({ navigation }) {
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <View style={styles.profileCard}>
             <View style={styles.avatarWrapper}>
-              <Image
-                source={{ uri: profile?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
-                style={styles.avatar}
-              />
+              {authUser ? (
+                <Image
+                  source={{ uri: profile?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
+                  style={styles.avatar}
+                />
+              ) : (
+                <View style={[styles.avatar, { justifyContent: 'center', alignItems: 'center', backgroundColor: themeColors.backgroundLight }]}> 
+                  <Icon name="person" size={48} color={themeColors.textSecondary} />
+                </View>
+              )}
               <TouchableOpacity
                 style={styles.editAvatarBtn}
                 onPress={() => setEditModalVisible(true)}
+                disabled={!authUser}
               >
                 <Text style={styles.editText}>Edit</Text>
               </TouchableOpacity>
             </View>
-            <Text style={styles.userName}>{profile?.displayName || authUser?.displayName || 'No Name'}</Text>
+            <Text style={styles.userName}>{profile?.displayName || authUser?.displayName || 'Please Login in'}</Text>
             <Text style={styles.userEmail}>{authUser?.email || ''}</Text>
             {profile?.bio && (
               <Text style={styles.userBio}>Bio: {profile.bio}</Text>
