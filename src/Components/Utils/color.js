@@ -11,7 +11,7 @@ export const themeColors = {
   backgroundAlt: '#233D91',   // Mid-tone blue
 
   // 📦 Cards & Surfaces
-  cardBackground: '#3a6293ff',  // Card blue
+  cardBackground: '#203d4fff',  // Card blue
   cardBorder: '#4d5471ff',      // Card border/outline
   cardShadow: 'rgba(0,0,0,0.2)',
 
@@ -28,7 +28,7 @@ export const themeColors = {
 
   // 🌈 Gradients
   gradientEnd: '#21323bff',   // Light sky blue
-  gradientMiddle: 'darkblue',  // Royal blue (ties in main bg)
+  gradientMiddle: '#0a434bff',  // Royal blue (ties in main bg)
   gradientStart: '#0a204bff',     // Dark navy depth
 
   // 🚦 States

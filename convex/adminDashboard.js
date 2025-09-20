@@ -1,5 +1,67 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+// Query to fetch all books
+export const getAllBooks = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("books").collect();
+  },
+});
+
+// Query to fetch all categories
+export const getAllCategories = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("categories").collect();
+  },
+});
+
+// Mutation to create a new book
+export const createBook = mutation({
+  args: {
+    title: v.string(),
+    author: v.string(),
+    description: v.optional(v.string()),
+    categoryId: v.id("categories"),
+    pdfUrl: v.string(),
+    price: v.number(),
+    isFeatured: v.optional(v.boolean()),
+    createdAt: v.number(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("books", args);
+  },
+});
+
+// Mutation to delete a book
+export const deleteBook = mutation({
+  args: { bookId: v.id("books") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.bookId);
+    return args.bookId;
+  },
+});
+
+// Mutation to create a new category
+export const createCategory = mutation({
+  args: {
+    name: v.string(),
+    description: v.optional(v.string()),
+    createdAt: v.number(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("categories", args);
+  },
+});
+
+// Mutation to delete a category
+export const deleteCategory = mutation({
+  args: { categoryId: v.id("categories") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.categoryId);
+    return args.categoryId;
+  },
+});
 
 // Admin mutation to update app settings
 export const updateAppSetting = mutation({
