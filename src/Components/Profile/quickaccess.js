@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-nati
 import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { themeColors } from "../Utils/color";
 
 const { width } = Dimensions.get("window");
 
-export default function QuickActionModal() {
+export default function QuickAccess() {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleModal = () => {
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F9FAFB",
+    backgroundColor: themeColors.backgroundDark,
   },
   openButton: {
     paddingHorizontal: 20,

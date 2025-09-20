@@ -9,6 +9,10 @@ import SignUp from '../Components/Login/sign-up';
 import { AuthProvider } from '../Provider/AuthProvider';
 import Notification from '../Screens/Notification';
 import Profile from '../Screens/Profile';
+import HelpSupport from '../Components/Profile/HelpSupport';
+import FAQ from '../Components/Profile/FAQ';
+import TermsConditions from '../Components/Profile/TermsConditions';
+import PaymentHistory from '../Components/Profile/PaymentHistory';
 const Stack = createStackNavigator();
 
 export default function RootStack() {
@@ -23,6 +27,10 @@ export default function RootStack() {
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="Notification" component={Notification} />
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="HelpSupport" component={HelpSupport} />
+      <Stack.Screen name="FAQ" component={FAQ} />
+      <Stack.Screen name="TermsConditions" component={TermsConditions} />
+      <Stack.Screen name="PaymentHistory" component={PaymentHistory} />
     </Stack.Navigator>      
     </AuthProvider>
 

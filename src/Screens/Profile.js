@@ -84,7 +84,7 @@ export default function Profile({ navigation }) {
   // Handler for option press
   const handleOptionPress = (item) => {
     if (item.route) {
-      navigation.navigate(item.route);
+      navigation.navigate('RootStack', { screen: item.route });
     } else if (item.modal) {
       // Example: set modal state, e.g. setQuickAccessModalVisible(true)
     } else if (item.action) {
@@ -107,7 +107,7 @@ export default function Profile({ navigation }) {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={themeColors.primary} />
+        <ActivityIndicator size="large" color={themeColors.backgroundDark} />
         <Text style={styles.loadingText}>Loading profile...</Text>
       </View>
     );
