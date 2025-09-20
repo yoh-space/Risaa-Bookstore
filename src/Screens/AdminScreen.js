@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: themeColors.cardBorder,
-    backgroundColor: themeColors.background,
+    backgroundColor: themeColors.backgroundDark,
   },
   headerTitle: {
     fontSize: 22,
