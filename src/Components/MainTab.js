@@ -11,6 +11,7 @@ import Quotes from '../Screens/Quotes';
 import Category from '../Components/Categories/Category';
 import Favorite from '../Screens/Favorite';
 import Profile from '../Screens/Profile';
+import AdminDashboard from '../Screens/AdminScreen';
 
 export default function MainTabs() {
     const Tab = createBottomTabNavigator();
@@ -84,6 +85,7 @@ export default function MainTabs() {
                 },
               ]}
             >
+              <SystemBars style="light" />
               <LottieView
                 source={animationSource}
                 autoPlay
@@ -126,10 +128,15 @@ export default function MainTabs() {
           tabBarInactiveTintColor: themeColors.textSecondary,
         })}
       >
-  <Tab.Screen name="Home" component={Home} options={{ unmountOnBlur: true }} />
-  <Tab.Screen name="Category" component={Category} options={{ unmountOnBlur: true }} />
-  <Tab.Screen name="Favorite" component={Favorite} options={{ unmountOnBlur: true }} />
-  <Tab.Screen name="Profile" component={Profile} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name="Home" component={Home} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name="Category" component={Category} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name="Favorite" component={Favorite} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name="Profile" component={Profile} options={{ unmountOnBlur: true }} />
+            {user?.uid === ADMIN_UID && (
+            <Tab.Screen name="AdminDashboard" component={AdminDashboard} options={{ unmountOnBlur: true, tabBarIcon: ({ color, size }) => (
+              <Ionicons name="shield-checkmark" size={size} color={color} />
+            ) }} />
+          )}
       </Tab.Navigator>
     </SafeAreaView>
   );
