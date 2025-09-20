@@ -12,12 +12,15 @@ import Category from '../Components/Categories/Category';
 import Favorite from '../Screens/Favorite';
 import Profile from '../Screens/Profile';
 import AdminDashboard from '../Screens/AdminScreen';
+import { useAuth } from '../Provider/AuthProvider';
 
 export default function MainTabs() {
-    const Tab = createBottomTabNavigator();
-    const TabBarIcon = ({ route, focused, color, size }) => {
-      const scaleValue = React.useRef(new Animated.Value(1)).current;
-      const translateYValue = React.useRef(new Animated.Value(0)).current;
+  const { user } = useAuth();
+  const ADMIN_UID = "QpOJnUEvyAZV5TWoQ1pcClWq9462" || "EI0iQUdqAaYFP5quGdntJ3IHUID3"; // Replace with actual admin UID
+  const Tab = createBottomTabNavigator();
+  const TabBarIcon = ({ route, focused, color, size }) => {
+    const scaleValue = React.useRef(new Animated.Value(1)).current;
+    const translateYValue = React.useRef(new Animated.Value(0)).current;
     
       React.useEffect(() => {
         if (focused) {

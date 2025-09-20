@@ -28,7 +28,6 @@ export default defineConfig([
         "import/no-unresolved": "error",
         "import/named": "error",
         "import/default": "error",
-        "import/order": ["warn", { "alphabetize": { "order": "asc" } }],
         "no-unused-vars": "warn",
       },
     extends: [],
