@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { themeColors } from '../Utils/color';
 import ProfileForm from '../Profile/ProfileForm';
 
-export default function EditProfileModal({ visible, onClose, initialData, onSaveComplete }) {
+export default function EditProfileModal({ visible, onClose, onSaveComplete }) {
   return (
     <Modal
       visible={visible}
@@ -21,7 +21,6 @@ export default function EditProfileModal({ visible, onClose, initialData, onSave
           <View style={{ width: 24 }} />
         </View>
         <ProfileForm
-          initialData={initialData}
           onSaveComplete={onSaveComplete}
         />
       </View>

@@ -393,28 +393,6 @@ export default function Home({ navigation }) {
     }
   };
 
-  const renderBookItem = ({ item }) => (
-    <View style={{ margin: 8, padding: 8, backgroundColor: '#fff', borderRadius: 8, flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
-      {/* Favorite icon in top right corner */}
-      <TouchableOpacity
-        onPress={() => handleToggleFavorite(item.id)}
-        style={styles.favoriteButton}
-        accessibilityLabel={isFavorite(item.id) ? 'Remove from favorites' : 'Add to favorites'}
-      >
-        <Ionicons
-          name={isFavorite(item.id) ? 'heart' : 'heart-outline'}
-          size={24}
-          style={styles.favoriteIcon}
-          color={isFavorite(item.id) ? themeColors.primary : 'gray'}
-        />
-      </TouchableOpacity>
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.title}</Text>
-        {/* ...other book details... */}
-      </View>
-    </View>
-  );
-
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient

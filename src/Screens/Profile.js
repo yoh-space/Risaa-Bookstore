@@ -18,7 +18,10 @@ import { themeColors } from '../Components/Utils/color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { options } from '../Components/Utils/profileOptions';
 import EditProfileModal from '../Components/Modals/EditProfileModal';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { auth, app } from '../../firebase';
 
+const firestore = getFirestore(app);
 const { width, height } = Dimensions.get('window');
 export default function Profile({ navigation }) {
   const { user: authUser } = useAuth();
@@ -27,34 +30,46 @@ export default function Profile({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (authUser) {
-      setProfile({
-        displayName: authUser.displayName,
-        email: authUser.email,
-        photoURL: authUser.photoURL,
-        bio: authUser.bio || '',
-        preferences: authUser.preferences || {},
-      });
-    } else {
-      setProfile(null);
-    }
-    setLoading(false);
-  }, [authUser]);
+    const fetchProfile = async () => {
+      setLoading(true);
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          setProfile(null);
+          setLoading(false);
+          return;
+        }
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setProfile({
+            displayName: data.displayName || user.displayName,
+            email: user.email,
+            photoURL: data.profileImageURL || user.photoURL,
+            bio: data.bio || '',
+            preferences: data.preferences || {},
+          });
+        } else {
+          setProfile({
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            bio: '',
+            preferences: {},
+          });
+        }
+      } catch (err) {
+        setProfile(null);
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, [authUser, editModalVisible]);
 
   const handleEditComplete = () => {
     setEditModalVisible(false);
-    // Refresh profile data from authUser
-    if (authUser) {
-      setProfile({
-        displayName: authUser.displayName,
-        email: authUser.email,
-        photoURL: authUser.photoURL,
-        bio: authUser.bio || '',
-        preferences: authUser.preferences || {},
-      });
-    } else {
-      setProfile(null);
-    }
+    // No need to manually refresh, useEffect will refetch profile
   };
 
   const handleLogout = async () => {
@@ -124,7 +139,7 @@ export default function Profile({ navigation }) {
           <View style={styles.profileCard}>
             <View style={styles.avatarWrapper}>
               <Image
-                source={{ uri: authUser?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
+                source={{ uri: profile?.photoURL || 'https://i.pravatar.cc/150?img=12' }}
                 style={styles.avatar}
               />
               <TouchableOpacity
