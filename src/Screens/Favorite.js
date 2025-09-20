@@ -27,7 +27,6 @@ export default function Favorite() {
             favoriteBooks.map(book => (
               <View key={book.id} style={{ margin: 8, padding: 8, backgroundColor: '#fff', borderRadius: 8 }}>
                 <Text style={{ fontWeight: 'bold' }}>{book.title}</Text>
-                {/* Add more book details here if needed */}
               </View>
             ))
           )}
