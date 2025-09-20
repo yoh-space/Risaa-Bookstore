@@ -18,7 +18,7 @@ import { themeColors } from '../Utils/color';
 
 const { width } = Dimensions.get('window');
 
-export default function SignUp() {
+export default function SignUp({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -39,28 +39,37 @@ export default function SignUp() {
       return;
     }
     try {
-  // Pass name to AuthProvider's signup
-  await signup(email, password, name);
+      // Pass name to AuthProvider's signup
+      await signup(email, password, name);
+      navigation.goBack();
       // TODO: Navigate to main app screen after successful sign up
     } catch (err) {
-      setError(err.message || 'Sign up failed');
+      if (err.message && err.message.includes('auth/invalid-credential')) {
+        setError('Unable to create account with these credentials. Please check your email and password and try again.');
+      } else {
+        setError(err.message || 'Sign up failed');
+      }
     }
     setLoading(false);
   };
 
   return (
     <View style={{flex:1, backgroundColor: themeColors.backgroundDark}}>
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <LinearGradient
-        colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
-        style={styles.gradient}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
       >
-        <SystemBars style="light" />
+        <LinearGradient
+          colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
+          style={styles.gradient}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+        >
+          <SystemBars style="light" />
+          {/* Back Arrow */}
+          <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack() }>
+            <Ionicons name="arrow-back" size={28} color="#fff" />
+          </TouchableOpacity>
           <View style={styles.logoContainer}>
             <Image 
               source={{ uri: 'https://placehold.co/100x100/6a11cb/FFFFFF/png?text=Logo' }} 
@@ -152,6 +161,15 @@ export default function SignUp() {
 }
 
 const styles = StyleSheet.create({
+  backArrow: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 20,
+    padding: 4,
+  },
   container: {
     flex: 1,
   },

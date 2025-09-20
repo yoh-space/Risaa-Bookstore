@@ -40,7 +40,7 @@ export default function Login({ navigation }) {
     try {
       if (isSignIn) {
         await signIn(email, password);
-        navigation.navigate('RootStack', { screen: 'Profile' });
+        navigation.goBack();
       } else {
         if (password !== confirmPassword) {
           setError('Passwords do not match');
@@ -51,7 +51,13 @@ export default function Login({ navigation }) {
       }
       // TODO: Navigate to main app screen after successful login
     } catch (err) {
-      setError(err.message || 'Authentication failed');
+      if (err.message && err.message.includes('auth/invalid-credential')) {
+        setError(isSignIn
+          ? 'Invalid email or password. Please check your credentials and try again.'
+          : 'Unable to create account with these credentials. Please check your email and password and try again.');
+      } else {
+        setError(err.message || (isSignIn ? 'Authentication failed' : 'Sign up failed'));
+      }
     }
     setLoading(false);
   };
@@ -67,28 +73,32 @@ export default function Login({ navigation }) {
 
   return (
     <View style={{flex:1, backgroundColor: themeColors.backgroundDark }}>
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
         <LinearGradient
           colors={[themeColors.gradientStart, themeColors.gradientMiddle, themeColors.gradientEnd]}
           style={styles.background}
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
-         >
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <SystemBars style="light" />
-          <View style={styles.logoContainer}>
-            <Image 
-              source={{ uri: 'https://placehold.co/100x100/6a11cb/FFFFFF/png?text=Logo' }} 
-              style={styles.logo}
-            />
-            <Text style={styles.appName}>Risaa BookStore</Text>
-            <Text style={styles.tagline}>
-              {isSignIn ? 'Welcome back!' : 'Create your account'}
-            </Text>
-          </View>
+        >
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <SystemBars style="light" />
+            {/* Back Arrow */}
+            <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={28} color="#fff" />
+            </TouchableOpacity>
+            <View style={styles.logoContainer}>
+              <Image 
+                source={{ uri: 'https://placehold.co/100x100/6a11cb/FFFFFF/png?text=Logo' }} 
+                style={styles.logo}
+              />
+              <Text style={styles.appName}>Risaa BookStore</Text>
+              <Text style={styles.tagline}>
+                {isSignIn ? 'Welcome back!' : 'Create your account'}
+              </Text>
+            </View>
 
           <Animated.View 
             style={[
@@ -219,11 +229,19 @@ export default function Login({ navigation }) {
         </ScrollView>
       </LinearGradient>
     </KeyboardAvoidingView>              
-</View>
-  );
+    </View>    );
 }
 
 const styles = StyleSheet.create({
+  backArrow: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 20,
+    padding: 4,
+  },
   background: {
     flex: 1,
     backgroundColor: themeColors.backgroundDark,

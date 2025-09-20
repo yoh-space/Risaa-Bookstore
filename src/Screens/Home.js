@@ -152,27 +152,27 @@ export default function Home({ navigation }) {
       )
     : RisaaCollections;
 
-  // Back press handler
-  useEffect(() => {
-    let backPressTimer;
-    const onBackPress = () => {
-      if (exitModalVisible) return true;
-      if (backPressCount === 0) {
-        setBackPressCount(1);
-        ToastAndroid.show('Double press to exit', ToastAndroid.SHORT);
-        backPressTimer = setTimeout(() => setBackPressCount(0), 2000);
-        return true;
-      } else {
-        setExitModalVisible(true);
-        return true;
-      }
-    };
-    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    return () => {
-      subscription.remove();
-      clearTimeout(backPressTimer);
-    };
-  }, [backPressCount, exitModalVisible]);
+  // // Back press handler
+  // useEffect(() => {
+  //   let backPressTimer;
+  //   const onBackPress = () => {
+  //     if (exitModalVisible) return true;
+  //     if (backPressCount === 0) {
+  //       setBackPressCount(1);
+  //       ToastAndroid.show('Double press to exit', ToastAndroid.SHORT);
+  //       backPressTimer = setTimeout(() => setBackPressCount(0), 2000);
+  //       return true;
+  //     } else {
+  //       setExitModalVisible(true);
+  //       return true;
+  //     }
+  //   };
+  //   const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  //   return () => {
+  //     subscription.remove();
+  //     clearTimeout(backPressTimer);
+  //   };
+  // }, [backPressCount, exitModalVisible]);
 
   // Orientation lock
   useEffect(() => {
@@ -416,6 +416,9 @@ export default function Home({ navigation }) {
       addFavorite(bookId);
     }
   };
+  const handleNotification = () => {
+    navigation.navigate('RootStack', { screen: 'Notification' });
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -457,7 +460,7 @@ export default function Home({ navigation }) {
                 </View>
               )}
             </TouchableOpacity>              
-            <TouchableOpacity style={styles.cartIcon} onPress={() => setCartsModalVisible(true)}>
+            <TouchableOpacity style={styles.cartIcon} onPress={handleNotification}>
               <Ionicons name="notifications" size={24} color={themeColors.textPrimary} />
               {cartItems.length > 0 && (
                 <View style={styles.cartBadge}>

@@ -1,6 +1,6 @@
 export const themeColors = {
   // 🔥 Brand & Highlight
-  primary: '#ff7f50',   // Coral highlight (kept for contrast)
+  primary: '#ff875bff',   // Coral highlight (kept for contrast)
   secondary: '#0A2342', // Deep Navy anchor
   accent: '#efe9e7',    // Soft neutral for text/icons
 

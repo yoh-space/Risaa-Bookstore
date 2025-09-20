@@ -7,6 +7,8 @@ import React from 'react';
 import Login from '../Components/Login/sign-in';
 import SignUp from '../Components/Login/sign-up';
 import { AuthProvider } from '../Provider/AuthProvider';
+import Notification from '../Screens/Notification';
+import Profile from '../Screens/Profile';
 const Stack = createStackNavigator();
 
 export default function RootStack() {
@@ -19,6 +21,8 @@ export default function RootStack() {
       <Stack.Screen name="DeveloperInfoScreen" component={DeveloperInfo} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="Notification" component={Notification} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>      
     </AuthProvider>
 
