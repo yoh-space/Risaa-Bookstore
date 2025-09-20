@@ -1,4 +1,5 @@
 import React from 'react';
+import { themeColors } from '../Utils/color';
 import { ScrollView, View, Text, TouchableOpacity, Dimensions, Animated, Platform, Image, Linking} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -72,7 +73,7 @@ export default function DeveloperInfo() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#7e2803ff' }}>
+  <SafeAreaView style={{ flex: 1, backgroundColor: themeColors.backgroundDark }}>
       <SystemBars style='light' />
       
       {/* Animated Header Background */}
@@ -83,7 +84,7 @@ export default function DeveloperInfo() {
           left: 0,
           right: 0,
           height: Platform.OS === 'ios' ? 100 : 80,
-          backgroundColor: '#6C63FF',
+          backgroundColor: themeColors.background,
           opacity: headerBackgroundOpacity,
           zIndex: 10,
         }}
@@ -107,7 +108,7 @@ export default function DeveloperInfo() {
           }}
         >
           <View style={{ 
-            backgroundColor: 'white', 
+            backgroundColor: themeColors.cardBackground, 
             width: 120, 
             height: 120, 
             borderRadius: 60, 
@@ -115,12 +116,12 @@ export default function DeveloperInfo() {
             alignItems: 'center', 
             marginBottom: 20,
             borderWidth: 4, 
-            borderColor: '#6C63FF',
-            shadowColor: '#6C63FF',
+            borderColor: themeColors.primary,
+            shadowColor: themeColors.primary,
             shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
+            shadowOpacity: 0.2,
             shadowRadius: 8,
-            elevation: 6
+            elevation: 6,
           }}>
             <Image style={{ width: 110, height: 110, borderRadius: 55 }} source={require('../../../assets/images/yo-tech-logo.webp')} />
           </View>

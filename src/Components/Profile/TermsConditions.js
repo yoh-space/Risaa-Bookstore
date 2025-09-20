@@ -12,7 +12,7 @@ const TermsConditions = ({ navigation }) => (
       style={styles.backArrow}
       onPress={() => navigation.goBack()}
     >
-      <Ionicons name="arrow-back" size={28} color={themeColors.primary} />
+      <Ionicons name="arrow-back" size={28} color={themeColors.textPrimary} />
     </TouchableOpacity>
     <Text style={styles.header}>Terms & Conditions</Text>
   </View>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     marginBottom: 16,
-    color: themeColors.primary,
+    color: themeColors.textPrimary,
   },
   subHeader: {
     fontSize: 17,

@@ -12,7 +12,7 @@ const HelpSupport = ({ navigation }) => (
       style={styles.backArrow}
       onPress={() => navigation.goBack()}
     >
-      <Ionicons name="arrow-back" size={28} color={themeColors.primary} />
+      <Ionicons name="arrow-back" size={28} color={themeColors.textPrimary} />
     </TouchableOpacity>
     <Text style={styles.header}>Help & Support</Text>
   </View>

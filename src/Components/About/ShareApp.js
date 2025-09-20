@@ -1,4 +1,5 @@
 import React from "react";
+import { themeColors } from "../Utils/color";
 import { View, Text, TouchableOpacity, Platform,Share } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LottieView from "lottie-react-native";
@@ -30,7 +31,7 @@ export default function ShareApp({ navigation }) {
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-        backgroundColor: "#7e2803ff",
+        backgroundColor: themeColors.backgroundDark,
       }}
     >
       <SystemBars style="light" />
@@ -39,10 +40,10 @@ export default function ShareApp({ navigation }) {
           width: "100%",
           maxWidth: 380,
           alignItems: "center",
-          backgroundColor: "#d26334ff",
+          backgroundColor: themeColors.cardBackground,
           padding: 24,
           borderRadius: 20,
-          shadowColor: "#000",
+          shadowColor: themeColors.cardShadow,
           shadowOpacity: 0.08,
           shadowRadius: 6,
           shadowOffset: { width: 0, height: 3 },
@@ -61,7 +62,7 @@ export default function ShareApp({ navigation }) {
             fontSize: 20,
             fontWeight: "700",
             marginBottom: 6,
-            color: "white",
+            color: themeColors.textPrimary,
           }}
         >
           Share Our App
@@ -71,7 +72,7 @@ export default function ShareApp({ navigation }) {
           style={{
             fontSize: 14,
             textAlign: "center",
-            color: "white",
+            color: themeColors.textPrimary,
             marginBottom: 20,
             lineHeight: 20,
           }}
@@ -84,7 +85,7 @@ export default function ShareApp({ navigation }) {
           onPress={handleShare}
           activeOpacity={0.8}
           style={{
-            backgroundColor: "#e67e22",
+            backgroundColor: themeColors.primary,
             paddingVertical: 14,
             paddingHorizontal: 28,
             borderRadius: 12,
@@ -95,8 +96,8 @@ export default function ShareApp({ navigation }) {
               : { shadowOpacity: 0.15, shadowRadius: 4 }),
           }}
         >
-          <Text style={{ color: "#fff", fontWeight: "600", fontSize: 16 }}>
-            Share Now 🚀
+          <Text style={{ color: themeColors.textPrimary, fontWeight: "600", fontSize: 16 }}>
+            Share Now 
           </Text>
         </TouchableOpacity>
       </View>

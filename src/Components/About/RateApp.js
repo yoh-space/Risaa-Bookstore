@@ -1,4 +1,5 @@
 import React from "react";
+import { themeColors } from "../Utils/color";
 import { View, Text, TouchableOpacity, Linking, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { SystemBars } from "react-native-edge-to-edge";
@@ -6,21 +7,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RateApp() {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: themeColors.backgroundDark }] }>
       <SystemBars style="light" />
 
       {/* Stars */}
       <View style={styles.starsRow}>
         {[...Array(5)].map((_, index) => (
-          <Icon key={index} name="star" size={36} color="#f1c40f" />
+          <Icon key={index} name="star" size={36} color={themeColors.backgroundLight} />
         ))}
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Enjoying the App?</Text>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Enjoying the App?</Text>
 
       {/* Subtitle */}
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: themeColors.textSecondary }] }>
         Tap below to rate us on the Play Store. Your feedback helps us improve!
       </Text>
 
@@ -32,9 +33,9 @@ export default function RateApp() {
           )
         }
         activeOpacity={0.85}
-        style={styles.button}
+        style={[styles.button, { backgroundColor: themeColors.primary }]}
       >
-        <Text style={styles.buttonText}>⭐ Rate Now</Text>
+        <Text style={[styles.buttonText, { color: themeColors.textPrimary }] }> Rate Now</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 24,
-    backgroundColor: "#723000da",
   },
   starsRow: {
     flexDirection: "row",
@@ -55,30 +55,26 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "700",
-    color: "white",
     marginBottom: 8,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: "whitesmoke",
     textAlign: "center",
     marginBottom: 24,
     paddingHorizontal: 20,
   },
   button: {
-    backgroundColor: "#6b5600ff",
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 12,
     elevation: 4, // shadow for Android
-    shadowColor: "#000", // shadow for iOS
+    shadowColor: themeColors.cardShadow, // shadow for iOS
     shadowOpacity: 0.2,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
-    color: "#fff",
     fontWeight: "700",
     fontSize: 16,
   },
