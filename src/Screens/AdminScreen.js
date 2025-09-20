@@ -43,7 +43,7 @@ export default function AdminDashboard({ navigation }) {
       {/* Feature Cards or Selected Section */}
       {selectedFeature ? (
         <View style={{ flex: 1 }}>
-          <TouchableOpacity style={{ padding: 12 }} onPress={() => setSelectedFeature(null)}>
+          <TouchableOpacity style={{ padding: 5 }} onPress={() => setSelectedFeature(null)}>
             <Icon name="arrow-back" size={24} color={themeColors.textPrimary} />
           </TouchableOpacity>
           <SelectedComponent />
