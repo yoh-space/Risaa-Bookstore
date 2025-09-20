@@ -13,6 +13,8 @@ import HelpSupport from '../Components/Profile/HelpSupport';
 import FAQ from '../Components/Profile/FAQ';
 import TermsConditions from '../Components/Profile/TermsConditions';
 import PaymentHistory from '../Components/Profile/PaymentHistory';
+import RateApp from './About/RateApp';
+import ShareApp from './About/ShareApp';
 const Stack = createStackNavigator();
 
 export default function RootStack() {
@@ -31,6 +33,9 @@ export default function RootStack() {
       <Stack.Screen name="FAQ" component={FAQ} />
       <Stack.Screen name="TermsConditions" component={TermsConditions} />
       <Stack.Screen name="PaymentHistory" component={PaymentHistory} />
+      <Stack.Screen name="RateApp" component={RateApp} />
+      <Stack.Screen name="ShareApp" component={ShareApp} />
+    
     </Stack.Navigator>      
     </AuthProvider>
 

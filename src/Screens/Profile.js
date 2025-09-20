@@ -9,6 +9,7 @@ import {
   Modal,
   Image,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { logOut } from '../Auth/authService';
 import { useAuth } from '../Provider/AuthProvider';
@@ -92,11 +93,8 @@ export default function Profile({ navigation }) {
         case 'logout':
           handleLogout();
           break;
-        case 'rate':
-          // Implement app rating logic
-          break;
-        case 'share':
-          // Implement share logic
+        case 'PrivacyPolicy':
+          Linking.openURL('https://www.example.com/privacy-policy');
           break;
         default:
           break;
