@@ -1,27 +1,36 @@
-import pluginReactNative from "eslint-plugin-react-native";
-import { defineConfig } from "eslint/config";
 import babelParser from "@babel/eslint-parser";
+import { defineConfig } from "eslint/config";
+import pluginImport from "eslint-plugin-import";  // ✅ add this
+import pluginReactNative from "eslint-plugin-react-native";
 
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    plugins: { "react-native": pluginReactNative },
+    plugins: {
+      "react-native": pluginReactNative,
+      import: pluginImport,   // ✅ register plugin
+    },
     languageOptions: {
       parser: babelParser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
         ecmaFeatures: { jsx: true },
-        // requireConfigFile: false means we need to specify babel options here
         requireConfigFile: false,
         babelOptions: {
-          presets: ["@babel/preset-react"] // <-- Add this line
-        }
-      }
+          presets: ["@babel/preset-react"],
+        },
+      },
     },
-    rules: {
-      "react-native/no-raw-text": "error"
-    },
+      rules: {
+        "react-native/no-raw-text": "error",
+        "no-undef": "error",
+        "import/no-unresolved": "error",
+        "import/named": "error",
+        "import/default": "error",
+        "import/order": ["warn", { "alphabetize": { "order": "asc" } }],
+        "no-unused-vars": "warn",
+      },
     extends: [],
   },
 ]);
