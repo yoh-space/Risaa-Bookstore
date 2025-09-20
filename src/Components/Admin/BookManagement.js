@@ -17,9 +17,8 @@ import { convex } from '../../Services/convexClient';
 import { api } from '../../../convex/_generated/api';
 
 const BookManagement = () => {
-  // State for books and categories
+  // State for books
   const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -35,26 +34,15 @@ const BookManagement = () => {
   });
   const [editingBookId, setEditingBookId] = useState(null);
 
-  // Category form
-  const [categoryForm, setCategoryForm] = useState({ 
-    name: '', 
-    description: '' 
-  });
-  const [editingCategoryId, setEditingCategoryId] = useState(null);
-
-  // Fetch books and categories
-  const fetchData = async () => {
+  // Fetch books
+  const fetchBooks = async () => {
     try {
       setRefreshing(true);
-      const [booksRes, categoriesRes] = await Promise.all([
-        convex.query(api.adminDashboard.getAllBooks, {}),
-        convex.query(api.adminDashboard.getAllCategories, {})
-      ]);
+      const booksRes = await convex.query(api.adminDashboard.getAllBooks, {});
       setBooks(booksRes || []);
-      setCategories(categoriesRes || []);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      Alert.alert('Error', 'Failed to fetch data');
+      console.error('Error fetching books:', error);
+      Alert.alert('Error', 'Failed to fetch books');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -62,7 +50,7 @@ const BookManagement = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchBooks();
   }, []);
 
   // Reset book form
@@ -79,11 +67,6 @@ const BookManagement = () => {
     setEditingBookId(null);
   };
 
-  // Reset category form
-  const resetCategoryForm = () => {
-    setCategoryForm({ name: '', description: '' });
-    setEditingCategoryId(null);
-  };
 
   // Book CRUD operations
   const handleAddOrEditBook = async () => {
@@ -164,81 +147,6 @@ const BookManagement = () => {
     );
   };
 
-  // Category CRUD operations
-  const handleAddOrEditCategory = async () => {
-    try {
-      if (!categoryForm.name) {
-        Alert.alert('Error', 'Category name is required');
-        return;
-      }
-
-      if (editingCategoryId) {
-        // For simplicity, we'll delete and recreate since there's no update mutation
-        await convex.mutation(api.adminDashboard.deleteCategory, { categoryId: editingCategoryId });
-        await convex.mutation(api.adminDashboard.createCategory, {
-          name: categoryForm.name,
-          description: categoryForm.description,
-          createdAt: Date.now(),
-        });
-        Alert.alert('Success', 'Category updated successfully');
-      } else {
-        await convex.mutation(api.adminDashboard.createCategory, {
-          name: categoryForm.name,
-          description: categoryForm.description,
-          createdAt: Date.now(),
-        });
-        Alert.alert('Success', 'Category created successfully');
-      }
-      
-      resetCategoryForm();
-      await fetchData();
-    } catch (error) {
-      console.error('Error saving category:', error);
-      Alert.alert('Error', 'Failed to save category');
-    }
-  };
-
-  const handleEditCategory = (category) => {
-    setCategoryForm({ 
-      name: category.name, 
-      description: category.description || '' 
-    });
-    setEditingCategoryId(category._id);
-  };
-
-  const handleDeleteCategory = async (categoryId) => {
-    // Check if category is used by any books
-    const booksUsingCategory = books.filter(book => book.categoryId === categoryId);
-    if (booksUsingCategory.length > 0) {
-      Alert.alert(
-        'Cannot Delete',
-        `This category is used by ${booksUsingCategory.length} book(s). Please reassign or delete those books first.`
-      );
-      return;
-    }
-
-    Alert.alert(
-      'Confirm Delete',
-      'Are you sure you want to delete this category?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await convex.mutation(api.adminDashboard.deleteCategory, { categoryId });
-              Alert.alert('Success', 'Category deleted successfully');
-              await fetchData();
-            } catch (error) {
-              console.error('Error deleting category:', error);
-              Alert.alert('Error', 'Failed to delete category');
-            }
-          }
-        }
-      ]
-    );
-  };
 
 
   if (loading) {
@@ -252,44 +160,17 @@ const BookManagement = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{paddingBottom: 40}}>
-      <Text style={styles.header}>Book & Category Management</Text>
+      <Text style={styles.header}>Book Management</Text>
 
       {/* Book Form */}
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>{editingBookId ? 'Edit Book' : 'Add Book'}</Text>
         <Text style={styles.label}>Title *</Text>
         <TextInput style={styles.input} placeholder="Title" value={form.title} onChangeText={t => setForm(f => ({ ...f, title: t }))} />
-        <Text style={styles.label}>Author *</Text>
-        <TextInput style={styles.input} placeholder="Author" value={form.author} onChangeText={t => setForm(f => ({ ...f, author: t }))} />
-        <Text style={styles.label}>Description</Text>
-        <TextInput style={styles.input} placeholder="Description" value={form.description} onChangeText={t => setForm(f => ({ ...f, description: t }))} multiline />
-        <Text style={styles.label}>PDF URL *</Text>
-        <TextInput style={styles.input} placeholder="PDF URL" value={form.pdfUrl} onChangeText={t => setForm(f => ({ ...f, pdfUrl: t }))} />
-        <Text style={styles.label}>Price *</Text>
-        <TextInput style={styles.input} placeholder="Price" value={form.price} onChangeText={t => setForm(f => ({ ...f, price: t }))} keyboardType="numeric" />
-        <Text style={styles.label}>Category *</Text>
-        <ScrollView horizontal style={styles.categoryScroll} showsHorizontalScrollIndicator={false}>
-          {categories.map(cat => (
-            <TouchableOpacity
-              key={cat._id}
-              style={[styles.categoryBtn, form.categoryId === cat._id && styles.categoryBtnActive]}
-              onPress={() => setForm(f => ({ ...f, categoryId: cat._id }))}
-            >
-              <Text style={form.categoryId === cat._id ? styles.categoryBtnTextActive : styles.categoryBtnText}>{cat.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-        {form.categoryId ? (
-          <Text style={styles.selectedCategory}>Selected: {categories.find(c => c._id === form.categoryId)?.name}</Text>
-        ) : null}
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Featured</Text>
-          <Switch value={form.isFeatured} onValueChange={v => setForm(f => ({ ...f, isFeatured: v }))} />
-        </View>
-        <View style={styles.buttonRow}>
-          <Button title={editingBookId ? 'Update Book' : 'Add Book'} onPress={handleAddOrEditBook} color={editingBookId ? '#007AFF' : '#22c55e'} />
-          {editingBookId && <Button title="Cancel" onPress={resetBookForm} color="#999" />}
-        </View>
+        <Text style={styles.label}>Category ID *</Text>
+        <TextInput style={styles.input} placeholder="Category ID" value={form.categoryId} onChangeText={t => setForm(f => ({ ...f, categoryId: t }))} />
+        <Button title={editingBookId ? 'Update Book' : 'Add Book'} onPress={handleAddOrEditBook} color={editingBookId ? '#007AFF' : '#22c55e'} />
+        {editingBookId && <Button title="Cancel" onPress={resetBookForm} color="#999" />}
       </View>
 
       {/* Book List */}
@@ -306,52 +187,12 @@ const BookManagement = () => {
                 <View style={styles.listItemContent}>
                   <Text style={styles.listItemTitle}>{item.title}</Text>
                   <Text style={styles.listItemSubtitle}>by {item.author}</Text>
-                  <Text style={styles.listItemDetails}>Category: {categories.find(c => c._id === item.categoryId)?.name || 'Unknown'} | Price: ${item.price}</Text>
+                  <Text style={styles.listItemDetails}>Category ID: {item.categoryId} | Price: ${item.price}</Text>
                   {item.isFeatured && <Text style={[styles.listItemDetails, {color:'#007AFF'}]}>Featured</Text>}
                 </View>
                 <View style={styles.listActions}>
                   <Button title="Edit" onPress={() => handleEditBook(item)} color="#007AFF" />
                   <Button title="Delete" color="#d32f2f" onPress={() => handleDeleteBook(item._id)} />
-                </View>
-              </View>
-            )}
-            scrollEnabled={false}
-            ListFooterComponent={<View style={{height:10}}/>}
-          />
-        )}
-      </View>
-
-      {/* Category Form */}
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>{editingCategoryId ? 'Edit Category' : 'Add Category'}</Text>
-        <Text style={styles.label}>Name *</Text>
-        <TextInput style={styles.input} placeholder="Name" value={categoryForm.name} onChangeText={t => setCategoryForm(f => ({ ...f, name: t }))} />
-        <Text style={styles.label}>Description</Text>
-        <TextInput style={styles.input} placeholder="Description" value={categoryForm.description} onChangeText={t => setCategoryForm(f => ({ ...f, description: t }))} multiline />
-        <View style={styles.buttonRow}>
-          <Button title={editingCategoryId ? 'Update Category' : 'Add Category'} onPress={handleAddOrEditCategory} color={editingCategoryId ? '#007AFF' : '#22c55e'} />
-          {editingCategoryId && <Button title="Cancel" onPress={resetCategoryForm} color="#999" />}
-        </View>
-      </View>
-
-      {/* Category List */}
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>Categories</Text>
-        {categories.length === 0 ? (
-          <Text style={styles.emptyText}>No categories found.</Text>
-        ) : (
-          <FlatList
-            data={categories}
-            keyExtractor={item => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.listItem}>
-                <View style={styles.listItemContent}>
-                  <Text style={styles.listItemTitle}>{item.name}</Text>
-                  <Text style={styles.listItemDetails}>{item.description}</Text>
-                </View>
-                <View style={styles.listActions}>
-                  <Button title="Edit" onPress={() => handleEditCategory(item)} color="#007AFF" />
-                  <Button title="Delete" color="#d32f2f" onPress={() => handleDeleteCategory(item._id)} />
                 </View>
               </View>
             )}

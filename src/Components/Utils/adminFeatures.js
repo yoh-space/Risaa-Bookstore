@@ -56,4 +56,12 @@ export const adminFeatures = [
     color: themeColors.gradientEnd,
     component: "Analytics",
   },
+  {
+    id: "8",
+    title: "Category Management",
+    icon: "category",
+    description: "Manage book categories and metadata",
+    color: themeColors.textPrimary,
+    component: "CategoryManagement",
+  },
 ];

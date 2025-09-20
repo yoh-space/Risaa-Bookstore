@@ -7,6 +7,7 @@ import { themeColors } from "../Components/Utils/color";
 import { adminFeatures } from "../Components/Utils/adminFeatures";
 import UserManagement from "../Components/Admin/UserManagement";
 import BookManagement from "../Components/Admin/BookManagement";
+import CategoryManagement from "../Components/Admin/CategoryManagement";
 import Payments from "../Components/Admin/Payments";
 import Notifications from "../Components/Admin/Notifications";
 import AppSettings from "../Components/Admin/AppSettings";
@@ -16,6 +17,7 @@ import Analytics from "../Components/Admin/Analytics";
 const componentMap = {
   UserManagement,
   BookManagement,
+  CategoryManagement,
   Payments,
   Notifications,
   AppSettings,
