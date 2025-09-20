@@ -113,7 +113,7 @@ export default function Login({ navigation }) {
                     <Ionicons name="person-outline" size={20} color="#6a11cb" style={styles.inputIcon} />
                     <TextInput
                       style={styles.input}
-                      placeholder="Full Name"
+                      placeholder="Name"
                       value={name}
                       onChangeText={setName}
                       placeholderTextColor="#999"

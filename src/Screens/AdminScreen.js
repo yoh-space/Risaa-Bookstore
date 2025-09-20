@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: themeColors.backgroundDark,
   },
   header: {
-    paddingVertical: 18,
+    paddingVertical: 5,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: themeColors.cardBorder,

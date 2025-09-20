@@ -40,4 +40,42 @@ export default defineSchema({
     ),
     updatedAt: v.number(),
   }),
+
+  support: defineTable({
+    uid: v.string(),
+    subject: v.string(),
+    message: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
+
+  payment: defineTable({
+    uid: v.string(),
+    amount: v.number(),
+    method: v.string(),
+    status: v.string(),
+    transactionId: v.optional(v.string()),
+    createdAt: v.number(),
+  }),
+
+  notification: defineTable({
+    uid: v.string(),
+    type: v.string(),
+    message: v.string(),
+    read: v.boolean(),
+    createdAt: v.number(),
+  }),
+
+  appSettings: defineTable({
+    key: v.string(),
+    value: v.any(),
+    updatedAt: v.number(),
+  }),
+
+  analytics: defineTable({
+    event: v.string(),
+    uid: v.optional(v.string()),
+    data: v.optional(v.any()),
+    createdAt: v.number(),
+  }),
 });

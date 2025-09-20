@@ -1,11 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, StyleSheet,Animated } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { themeColors } from './Utils/color';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SystemBars } from 'react-native-edge-to-edge';
-import LottieView from 'lottie-react-native';
 import Home from '../Screens/Home';
 import Quotes from '../Screens/Quotes';
 import Category from '../Components/Categories/Category';
@@ -19,94 +18,32 @@ export default function MainTabs() {
   const ADMIN_UID ="EI0iQUdqAaYFP5quGdntJ3IHUID3"; // Replace with actual admin UID
   const Tab = createBottomTabNavigator();
   const TabBarIcon = ({ route, focused, color, size }) => {
-    const scaleValue = React.useRef(new Animated.Value(1)).current;
-    const translateYValue = React.useRef(new Animated.Value(0)).current;
-    
-      React.useEffect(() => {
-        if (focused) {
-          Animated.parallel([
-            Animated.spring(scaleValue, {
-              toValue: 1.2,
-              friction: 3,
-              useNativeDriver: true,
-            }),
-            Animated.sequence([
-              Animated.timing(translateYValue, {
-                toValue: -10,
-                duration: 100,
-                useNativeDriver: true,
-              }),
-              Animated.spring(translateYValue, {
-                toValue: 0,
-                friction: 5,
-                useNativeDriver: true,
-              }),
-            ]),
-          ]).start();
-        } else {
-          Animated.timing(scaleValue, {
-            toValue: 1,
-            duration: 150,
-            useNativeDriver: true,
-          }).start();
-        }
-      }, [focused]);
-    
-      let iconName;
-      let animationSource;
-    
-      switch (route.name) {
-        case 'Home':
-          iconName = 'home-outline';
-          animationSource = require('../../assets/animations/homeIcon.json');
-          break;
-        case 'Category':
-          iconName = 'grid-outline';
-          animationSource = require('../../assets/animations/favorite.json');
-          break;
-        case 'Favorite':
-          iconName = 'heart-outline';
-          animationSource = require('../../assets/animations/quotes.json');
-          break;
-        case 'Profile':
-          iconName = 'person-outline';
-          animationSource = require('../../assets/animations/profile.json'); // Add this animation if available
-          break;
-        case 'AdminDashboard':
-          iconName = 'shield-checkmark';
-          animationSource = require('../../assets/animations/profile.json'); // Add this animation if available 
-          break;
-      }
-    
-      return (
-        <View style={styles.iconContainer}>
-          {focused ? (
-            <Animated.View
-              style={[
-                styles.animatedIcon,
-                {
-                  transform: [
-                    { scale: scaleValue },
-                    { translateY: translateYValue },
-                  ],
-                },
-              ]}
-            >
-              <SystemBars style="light" />
-              <LottieView
-                source={animationSource}
-                autoPlay
-                loop
-                style={styles.lottieIcon}
-              />
-            </Animated.View>
-          ) : (
-            <Ionicons name={iconName} size={size} color={color} />
-          )}
-          {focused && <View style={[styles.activeIndicator, { backgroundColor: color }]} />}
-        </View>
-      );
-    };
+    let iconName;
+    switch (route.name) {
+      case 'Home':
+        iconName = 'home-outline';
+        break;
+      case 'Category':
+        iconName = 'grid-outline';
+        break;
+      case 'Favorite':
+        iconName = 'heart-outline';
+        break;
+      case 'Profile':
+        iconName = 'person-outline';
+        break;
+      case 'AdminDashboard':
+        iconName = 'shield-checkmark';
+        break;
+    }
+    // Change icon color for admin dashboard only
+    const iconColor = focused ? themeColors.primary : color;
+    return (
+      <View style={styles.iconContainer}>
+        <Ionicons name={iconName} size={size} color={iconColor} />
+      </View>
+    );
+  }; 
     
   return (
   <SafeAreaView style={styles.safeArea}>
@@ -140,9 +77,7 @@ export default function MainTabs() {
       <Tab.Screen name="Favorite" component={Favorite} options={{ unmountOnBlur: true }} />
       <Tab.Screen name="Profile" component={Profile} options={{ unmountOnBlur: true }} />
             {user?.uid === ADMIN_UID && (
-            <Tab.Screen name="AdminDashboard" component={AdminDashboard} options={{ unmountOnBlur: true, tabBarIcon: ({ color, size }) => (
-              <Ionicons name="shield-checkmark" size={size} color={color} />
-            ) }} />
+            <Tab.Screen name="AdminDashboard" component={AdminDashboard} options={{ unmountOnBlur: true }} />
           )}
       </Tab.Navigator>
     </SafeAreaView>
@@ -161,8 +96,5 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 50,
     },
-  lottieIcon: {
-    width: 40,
-    height: 40,
-  },
+// Removed lottieIcon style
 });

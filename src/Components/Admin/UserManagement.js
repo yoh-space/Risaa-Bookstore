@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image } from 'react-native';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from '../../../firebase';
 import { themeColors } from '../Utils/color';
@@ -37,8 +37,16 @@ export default function UserManagement() {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <View style={styles.userCard}>
-              <Text style={styles.userName}>{item.displayName || 'No Name'}</Text>
-              <Text style={styles.userEmail}>{item.email || 'No Email'}</Text>
+              <View style={styles.userRow}>
+                <Image
+                  source={item.profileImageURL ? { uri: item.profileImageURL } : require('../../../assets/images/kadiir.png')}
+                  style={styles.profileImage}
+                />
+                <View style={{ flex: 1, marginLeft: 12 }}>
+                  <Text style={styles.userName}>{item.displayName || 'No Name'}</Text>
+                  <Text style={styles.userEmail}>{item.email || 'No Email'}</Text>
+                </View>
+              </View>
             </View>
           )}
           ListEmptyComponent={<Text style={styles.empty}>No users found.</Text>}
@@ -70,6 +78,18 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  userRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: themeColors.backgroundLight,
+    borderWidth: 2,
+    borderColor: themeColors.primary,
+  },
   userName: {
     fontSize: 18,
     fontWeight: '600',
@@ -84,6 +104,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: themeColors.textMuted,
     marginTop: 32,
+  },
+  userRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: themeColors.backgroundLight,
+    borderWidth: 2,
+    borderColor: themeColors.primary,
   },
 });
 

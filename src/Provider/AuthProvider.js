@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onUserStateChange, signIn, signUp, logOut } from '../Auth/authService';
 import { updateProfile } from 'firebase/auth';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { app } from '../../firebase';
 
 const AuthContext = createContext();
 
@@ -28,6 +30,13 @@ export function AuthProvider({ children }) {
       const user = await signUp(email, password);
       // Update Firebase Auth profile with display name
       await updateProfile(user, { displayName: name });
+      // Push to Firestore users table
+      const firestore = getFirestore(app);
+      await setDoc(doc(firestore, 'users', user.uid), {
+        displayName: name,
+        email: user.email,
+        createdAt: new Date().toISOString(),
+      }, { merge: true });
       setLoading(false);
       return user;
     } catch (error) {

@@ -19,6 +19,8 @@ import { themeColors } from './src/Components/Utils/color';
 import { SystemBars } from 'react-native-edge-to-edge';
 // Google Mobile Ads
 import mobileAds, { InterstitialAd, AdEventType } from 'react-native-google-mobile-ads';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
+const convex = new ConvexReactClient('https://<your-convex-deployment>.convex.cloud');
 // Interstitial ad setup
 const INTERSTITIAL_AD_UNIT_ID = 'ca-app-pub-7604915619325589/3947033537';
 const interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_AD_UNIT_ID, {
@@ -59,8 +61,6 @@ interstitial.addAdEventListener(AdEventType.CLOSED, () => {
 });
 
 interstitial.load();
-
-
 mobileAds()
   .initialize()
   .then(adapterStatuses => {
@@ -83,6 +83,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
+        <ConvexProvider client={convex}>
         <FavoriteProvider>
           <SystemBars style="light"/>
           <NavigationContainer ref={navigationRef}>
@@ -166,6 +167,7 @@ export default function App() {
             </Stack.Navigator>
           </NavigationContainer>
         </FavoriteProvider>
+        </ConvexProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );
